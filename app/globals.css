@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --p50: #fff5eb;
+  --p100: #ffe5cc;
+  --p200: #ffc999;
+  --p300: #ffa866;
+  --p400: #ff8633;
+  --p500: #ff6b1a;
+  --p600: #ea580c;
+  --p700: #c2410c;
+  --p800: #1e3a8a;
+  --p900: #0f1e4a;
+  --ink: #0c1840;
+  --muted: #5b6b8a;
+  --soft: #94a3b8;
+  --border: #ffe2c4;
+  --bg: #fffaf3;
+  --white: #fff;
+  --amber: #fbbf24;
+  --r: 12px;
+  --r-lg: 18px;
+  --r-xl: 26px;
+  --font-serif: var(--font-fraunces), serif;
+  --font-sans: var(--font-instrument), sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.65;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-serif);
+  line-height: 1.13;
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+::selection {
+  background: var(--p200);
+}
