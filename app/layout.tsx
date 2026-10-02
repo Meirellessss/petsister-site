@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Fraunces, Instrument_Sans } from "next/font/google";
+iimport { Fraunces, Roboto } from "next/font/google";
+
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -9,10 +10,10 @@ const fraunces = Fraunces({
   weight: ["300", "400", "600", "900"],
 });
 
-const instrumentSans = Instrument_Sans({
-  variable: "--font-instrument",
+const roboto = Roboto({
+  variable: "--font-roboto",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "700"],
 });
 
 export const metadata: Metadata = {
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" className={`${fraunces.variable} ${instrumentSans.variable}`}>
+   <html lang="pt-BR" className={`${fraunces.variable} ${roboto.variable}`}>
       <body>{children}</body>
     </html>
   );
