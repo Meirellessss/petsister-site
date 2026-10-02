@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { Categoria, Perfil, Produto } from "@/lib/types";
 import { adicionarAoCarrinho } from "./carrinho/actions";
@@ -69,6 +69,8 @@ export default function Landing({
   usuario: { nome: string; perfil: Perfil } | null;
 }) {
   const [busca, setBusca] = useState("");
+  const [showNav, setShowNav] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const [catAtiva, setCatAtiva] = useState("");
   const [produtoAberto, setProdutoAberto] = useState<Produto | null>(null);
   const [qty, setQty] = useState(1);
@@ -92,6 +94,20 @@ export default function Landing({
     return produtos.filter((p) => catAtiva === "" || p.categoria === catAtiva);
   }, [produtos, busca, catAtiva]);
 
+    useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 150) {
+        setShowNav(false); // Rolando para baixo, esconde
+      } else {
+        setShowNav(true); // Rolando para cima, mostra
+      }
+      setLastScrollY(currentScrollY);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+  
   function filtrarCat(cat: string) {
     setCatAtiva(cat);
     setBusca("");
@@ -133,7 +149,7 @@ export default function Landing({
         · Tudo para cães e gatos
       </div>
 
-      <nav className={styles.nav}>
+     <nav className={`${styles.nav} ${!showNav ? styles.navHidden : ""}`}>
         <div className={styles.navInner}>
           <Link href="/" className={styles.logo} aria-label="Pet Sister - página inicial">
           <img src="/logo.jpg" alt="Pet Sister" />
@@ -144,7 +160,10 @@ export default function Landing({
               type="text"
               placeholder="Buscar ração, brinquedos, acessórios..."
               value={busca}
-              onChange={(e) => setBusca(e.target.value)}
+              onChange={(e) => {
+                setBusca(e.target.value);
+                document.getElementById("produtos")?.scrollIntoView({ behavior: "smooth" });
+              }}
             />
           </div>
           <div className={styles.navRight}>
