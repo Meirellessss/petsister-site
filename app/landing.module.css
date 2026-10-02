@@ -14,11 +14,17 @@
 
 /* ══ NAV ══ */
 .nav {
-  
+  position: sticky;
+  top: 0;
   z-index: 300;
   background: var(--white);
   border-bottom: 1px solid var(--border);
   box-shadow: 0 1px 12px rgba(234, 88, 12, 0.04);
+  transition: transform 0.3s ease-in-out;
+}
+
+.navHidden {
+  transform: translateY(-100%);
 }
 .navInner {
   max-width: 1220px;
