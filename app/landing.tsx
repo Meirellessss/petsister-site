@@ -467,12 +467,21 @@ export default function Landing({
               );
             })}
           </div>
-          {visiveis.length === 0 && (
+         {visiveis.length === 0 && (
             <div style={{ textAlign: "center", padding: "3rem", color: "var(--muted)" }}>
               <div style={{ marginBottom: ".6rem", color: "var(--soft)", display: "flex", justifyContent: "center" }}>
                 <Icon name="busca" size={48} />
               </div>
-              Nenhum produto encontrado.
+              <h3 style={{ fontFamily: "var(--font-serif)", fontSize: "1.3rem", marginBottom: ".5rem", color: "var(--ink)" }}>
+                Ops! Não encontramos nada.
+              </h3>
+              <p style={{ fontSize: ".9rem" }}>Tente buscar por outro nome ou navegue pelas categorias acima.</p>
+              <button 
+                onClick={() => { setBusca(""); setCatAtiva(""); }}
+                style={{ marginTop: "1rem", background: "var(--p600)", color: "#fff", border: "none", padding: ".6rem 1.2rem", borderRadius: "8px", fontWeight: "600", cursor: "pointer" }}
+              >
+                Ver todos os produtos
+              </button>
             </div>
           )}
         </div>
