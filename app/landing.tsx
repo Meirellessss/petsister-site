@@ -207,12 +207,7 @@ export default function Landing({
         </div>
         <div className={styles.catbar}>
           <div className={styles.catbarInner}>
-            <a href="#categorias" className={styles.catbarLink}>
-              <span className={styles.ce}>
-                <Icon name="cao" size={18} />
-              </span>
-              Cães e Gatos
-            </a>
+        
               {categorias.map((c) => (
               <button
                 key={c.id}
