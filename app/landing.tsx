@@ -89,9 +89,13 @@ export default function Landing({
   const visiveis = useMemo(() => {
     if (busca.trim()) {
       const q = busca.toLowerCase().trim();
-      return produtos.filter((p) => p.nome.toLowerCase().includes(q));
+      return produtos.filter((p) => p.nome?.toLowerCase().includes(q));
     }
-    return produtos.filter((p) => catAtiva === "" || p.categoria === catAtiva);
+    if (catAtiva === "") return produtos;
+    // Compara ignorando maiúsculas, minúsculas e espaços extras
+    return produtos.filter(
+      (p) => p.categoria?.toLowerCase().trim() === catAtiva.toLowerCase().trim()
+    );
   }, [produtos, busca, catAtiva]);
 
     useEffect(() => {
