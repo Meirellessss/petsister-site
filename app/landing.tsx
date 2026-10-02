@@ -213,8 +213,15 @@ export default function Landing({
               </span>
               Cães e Gatos
             </a>
-            {categorias.map((c) => (
-              <button key={c.id} className={styles.catbarLink} onClick={() => filtrarCat(c.nome)}>
+              {categorias.map((c) => (
+              <button
+                key={c.id}
+                className={styles.catbarLink}
+                onClick={() => {
+                  filtrarCat(c.nome);
+                  document.getElementById("produtos")?.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
                 <span className={styles.ce}>
                   <Icon name={CATEGORIA_ICON[c.nome] ?? "petiscos"} size={18} />
                 </span>
