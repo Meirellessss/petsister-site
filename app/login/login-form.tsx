@@ -45,7 +45,6 @@ export default function LoginForm({ redirectTo }: { redirectTo: string }) {
               alignItems: "center",
               color: "#5b6b8a"
             }}
-            aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
           >
             {mostrarSenha ? "🙈" : "👁️"}
           </button>
