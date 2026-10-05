@@ -25,11 +25,7 @@ export default async function LoginPage({
         <div className={styles.linkRow}>
           Não tem conta? <Link href="/cadastro">Cadastre-se grátis</Link>
         </div>
-        <div className={styles.hint}>
-          <strong>Conta de teste:</strong>
-          <br />
-          Admin: admin@petsister.com
-        </div>
+        
       </div>
     </div>
   );
