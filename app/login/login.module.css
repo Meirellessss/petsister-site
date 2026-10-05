@@ -149,3 +149,19 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+.forgotRow {
+  text-align: right;
+  margin-top: -0.35rem;
+  margin-bottom: 0.8rem;
+  font-size: 0.82rem;
+}
+
+.forgotRow a {
+  color: var(--p600);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.forgotRow a:hover {
+  text-decoration: underline;
+}
