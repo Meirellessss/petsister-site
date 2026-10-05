@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useActionState } from "react";
+import Link from "next/link";
 import { entrar } from "./actions";
 import styles from "./login.module.css";
 
@@ -70,6 +71,9 @@ export default function LoginForm({ redirectTo }: { redirectTo: string }) {
             <EyeIcon off={mostrarSenha} />
           </button>
         </div>
+      </div>
+      <div className={styles.forgotRow}>
+        <Link href="/esqueci-a-senha">Esqueci a senha?</Link>
       </div>
 
       <button
