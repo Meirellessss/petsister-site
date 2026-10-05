@@ -59,6 +59,7 @@ const HORARIOS = Array.from(
 
 function dataLocal(date: Date) {
   const ano = date.getFullYear();
+
   const mes = String(
     date.getMonth() + 1,
   ).padStart(2, "0");
@@ -161,7 +162,9 @@ export default function AgendamentoForm() {
           servicoAtual.grupo,
         );
 
-      if (cancelado) return;
+      if (cancelado) {
+        return;
+      }
 
       setHorariosOcupados(
         ocupados,
@@ -190,11 +193,19 @@ export default function AgendamentoForm() {
 
       {state?.sucesso && (
         <div className={styles.alertOk}>
-          ✓ Agendamento realizado
-          com sucesso!
+          ✓ Agendamento realizado com sucesso!
         </div>
       )}
 
+      {/* IMPORTANTE:
+          envia o serviço escolhido para o servidor */}
+      <input
+        type="hidden"
+        name="servico"
+        value={servico}
+      />
+
+      {/* envia a data e o horário escolhidos */}
       <input
         type="hidden"
         name="data_hora"
@@ -355,8 +366,7 @@ export default function AgendamentoForm() {
           <div
             className={styles.emptyTime}
           >
-            Primeiro escolha o atendimento
-            acima.
+            Primeiro escolha o atendimento acima.
           </div>
         ) : carregando ? (
           <div
@@ -517,6 +527,8 @@ export default function AgendamentoForm() {
           </div>
         </div>
       </section>
+
+      {/* BOTÃO */}
 
       <button
         type="submit"
