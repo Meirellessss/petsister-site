@@ -43,7 +43,30 @@ export default function AgendamentoForm() {
       </div>
       <div className={styles.fg}>
         <label>Data e hora *</label>
-        <input type="datetime-local" name="data_hora" required min={minDate} />
+        <input
+  type="datetime-local"
+  name="data_hora"
+  required
+  min={minDate}
+  onChange={(e) => {
+    const valor = e.target.value;
+    if (!valor) return;
+
+    const hora = valor.split("T")[1];
+
+    if (!hora) return;
+
+    const [h, m] = hora.split(":").map(Number);
+
+    if (h < 8 || h > 18 || (h === 18 && m > 0)) {
+      e.target.setCustomValidity(
+        "O agendamento deve ser entre 08:00 e 18:00."
+      );
+    } else {
+      e.target.setCustomValidity("");
+    }
+  }}
+/>
       </div>
       <div className={styles.fg}>
         <label>Observações</label>
