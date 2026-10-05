@@ -176,3 +176,460 @@
   color: var(--muted);
   font-size: 0.9rem;
 }
+
+/* =========================================
+   PETSISTER - NOVO AGENDAMENTO
+   ========================================= */
+
+.modernForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: #fffaf3;
+}
+
+.stepBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.stepTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.stepTitle > span {
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #0f1e4a;
+  color: #ffffff;
+
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.stepTitle strong {
+  display: block;
+
+  color: #0f1e4a;
+
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.stepTitle small {
+  display: block;
+
+  margin-top: 2px;
+
+  color: #64748b;
+
+  font-size: 0.74rem;
+}
+
+/* SERVIÇOS */
+
+.serviceGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.serviceCard {
+  min-height: 115px;
+
+  padding: 1rem;
+
+  border: 1.5px solid #eadfd2;
+  border-radius: 15px;
+
+  background: #ffffff;
+
+  text-align: left;
+
+  color: #0f1e4a;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.serviceCard:hover {
+  transform: translateY(-2px);
+
+  border-color: #ea580c;
+
+  box-shadow:
+    0 8px 20px
+    rgba(15, 30, 74, 0.08);
+}
+
+.serviceCardActive {
+  border-color: #ea580c;
+
+  background: #fff7ed;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(234, 88, 12, 0.08);
+}
+
+.serviceIcon {
+  display: block;
+
+  margin-bottom: 0.5rem;
+
+  font-size: 1.55rem;
+}
+
+.serviceCard strong {
+  display: block;
+
+  font-size: 0.88rem;
+}
+
+.serviceCard small {
+  display: block;
+
+  margin-top: 0.2rem;
+
+  color: #64748b;
+
+  font-size: 0.72rem;
+}
+
+/* DATAS */
+
+.dateScroller {
+  display: grid;
+
+  grid-template-columns:
+    repeat(7, 1fr);
+
+  gap: 0.5rem;
+}
+
+.dateCard {
+  padding: 0.65rem 0.3rem;
+
+  border: 1.5px solid #eadfd2;
+  border-radius: 12px;
+
+  background: #ffffff;
+
+  color: #0f1e4a;
+
+  cursor: pointer;
+
+  transition: 0.18s ease;
+}
+
+.dateCard:hover {
+  border-color: #ea580c;
+}
+
+.dateCard span,
+.dateCard small {
+  display: block;
+
+  color: #64748b;
+
+  font-size: 0.65rem;
+
+  text-transform: uppercase;
+}
+
+.dateCard strong {
+  display: block;
+
+  margin: 0.15rem 0;
+
+  font-size: 1rem;
+}
+
+.dateCardActive {
+  background: #0f1e4a;
+
+  border-color: #0f1e4a;
+
+  color: #ffffff;
+}
+
+.dateCardActive span,
+.dateCardActive small {
+  color: #cbd5e1;
+}
+
+/* HORÁRIOS */
+
+.timeGrid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 0.55rem;
+}
+
+.timeButton {
+  min-height: 48px;
+
+  border: 1.5px solid #eadfd2;
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  color: #0f1e4a;
+
+  font-size: 0.85rem;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition: 0.18s ease;
+}
+
+.timeButton:hover:not(:disabled) {
+  border-color: #ea580c;
+
+  transform: translateY(-1px);
+}
+
+.timeButtonActive {
+  background: #ea580c;
+
+  border-color: #ea580c;
+
+  color: #ffffff;
+}
+
+.timeButtonOccupied {
+  background: #f1f5f9;
+
+  border-color: #e2e8f0;
+
+  color: #94a3b8;
+
+  cursor: not-allowed;
+}
+
+.timeButton small {
+  display: block;
+
+  margin-top: 2px;
+
+  font-size: 0.57rem;
+
+  font-weight: 600;
+}
+
+/* LEGENDA */
+
+.legend {
+  display: flex;
+
+  gap: 1rem;
+
+  color: #64748b;
+
+  font-size: 0.7rem;
+}
+
+.legend span {
+  display: flex;
+
+  align-items: center;
+
+  gap: 0.35rem;
+}
+
+.legend i {
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+}
+
+.dotAvailable {
+  background: #22c55e;
+}
+
+.dotOccupied {
+  background: #94a3b8;
+}
+
+/* PET */
+
+.petGrid {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 0.8rem;
+}
+
+.fg {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 0.35rem;
+}
+
+.fg label {
+  color: #0f1e4a;
+
+  font-size: 0.73rem;
+
+  font-weight: 700;
+}
+
+.fg input,
+.fg select {
+  width: 100%;
+
+  padding: 0.75rem 0.8rem;
+
+  border: 1.5px solid #eadfd2;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  color: #0f1e4a;
+
+  font-family: inherit;
+
+  outline: none;
+}
+
+.fg input:focus,
+.fg select:focus {
+  border-color: #ea580c;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(234, 88, 12, 0.08);
+}
+
+/* BOTÃO */
+
+.modernSubmit {
+  width: 100%;
+
+  padding: 0.9rem 1rem;
+
+  border: none;
+
+  border-radius: 11px;
+
+  background: #ea580c;
+
+  color: #ffffff;
+
+  font-size: 0.9rem;
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition: 0.18s ease;
+}
+
+.modernSubmit:hover:not(:disabled) {
+  background: #c2410c;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 8px 20px
+    rgba(234, 88, 12, 0.18);
+}
+
+.modernSubmit:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+/* AVISOS */
+
+.alertErr {
+  padding: 0.8rem 1rem;
+
+  border: 1px solid #fecaca;
+
+  border-radius: 10px;
+
+  background: #fef2f2;
+
+  color: #b91c1c;
+
+  font-size: 0.8rem;
+}
+
+.alertOk {
+  padding: 0.8rem 1rem;
+
+  border: 1px solid #bbf7d0;
+
+  border-radius: 10px;
+
+  background: #f0fdf4;
+
+  color: #15803d;
+
+  font-size: 0.8rem;
+}
+
+.emptyTime {
+  padding: 1.2rem;
+
+  border: 1.5px dashed #eadfd2;
+
+  border-radius: 12px;
+
+  background: #ffffff;
+
+  text-align: center;
+
+  color: #64748b;
+
+  font-size: 0.8rem;
+}
+
+/* CELULAR */
+
+@media (max-width: 720px) {
+  .serviceGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .petGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .dateScroller {
+    grid-template-columns:
+      repeat(4, 1fr);
+  }
+
+  .timeGrid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+}
