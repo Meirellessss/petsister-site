@@ -380,9 +380,8 @@ textarea.fc {
     grid-template-columns: 1fr;
   }
 }
-/* =========================================
-   PETSISTER - AGENDA ADMIN
-   ========================================= */
+
+
 
 .scheduleStats {
   display: grid;
