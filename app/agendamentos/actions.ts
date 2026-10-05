@@ -4,7 +4,11 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import type { PortePet } from "@/lib/types";
 
-const PORTES: PortePet[] = ["Pequeno", "Medio", "Grande"];
+const PORTES: PortePet[] = [
+  "Pequeno",
+  "Medio",
+  "Grande",
+];
 
 const SERVICOS_BANHO_TOSA = [
   "Banho",
@@ -17,15 +21,22 @@ const SERVICOS_VETERINARIO = [
   "Vacinação",
 ];
 
-const HORARIOS = Array.from({ length: 21 }, (_, index) => {
-  const minutos = 8 * 60 + index * 30;
-  const hora = Math.floor(minutos / 60);
-  const minuto = minutos % 60;
+const HORARIOS = Array.from(
+  { length: 21 },
+  (_, index) => {
+    const minutos = 8 * 60 + index * 30;
+    const hora = Math.floor(minutos / 60);
+    const minuto = minutos % 60;
 
-  return `${String(hora).padStart(2, "0")}:${String(minuto).padStart(2, "0")}`;
-});
+    return `${String(hora).padStart(2, "0")}:${String(
+      minuto
+    ).padStart(2, "0")}`;
+  }
+);
 
-function obterCategoriaServico(servico: string) {
+function obterCategoriaServico(
+  servico: string
+): "banho_tosa" | "veterinario" | "outro" {
   if (SERVICOS_BANHO_TOSA.includes(servico)) {
     return "banho_tosa";
   }
@@ -39,7 +50,7 @@ function obterCategoriaServico(servico: string) {
 
 export async function obterHorariosOcupados(
   data: string,
-  categoria: "banho_tosa" | "veterinario",
+  categoria: "banho_tosa" | "veterinario"
 ): Promise<string[]> {
   const supabase = await createClient();
 
@@ -47,17 +58,26 @@ export async function obterHorariosOcupados(
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return [];
+  if (!user) {
+    return [];
+  }
 
   const inicio = `${data}T08:00`;
   const fim = `${data}T18:00`;
 
-  const { data: registros, error } = await supabase
+  const {
+    data: registros,
+    error,
+  } = await supabase
     .from("petsister_agendamentos")
     .select("data_hora, servico, status")
     .gte("data_hora", inicio)
     .lte("data_hora", fim);
 
+  /*
+   * Se houver problema de permissão no SELECT,
+   * não derruba a tela do cliente.
+   */
   if (error || !registros) {
     return [];
   }
@@ -69,19 +89,30 @@ export async function obterHorariosOcupados(
       }
 
       return (
-        obterCategoriaServico(registro.servico) === categoria
+        obterCategoriaServico(registro.servico) ===
+        categoria
       );
     })
-    .map((registro) => {
-      return String(registro.data_hora).slice(11, 16);
-    })
-    .filter((horario) => HORARIOS.includes(horario));
+    .map((registro) =>
+      String(registro.data_hora).slice(11, 16)
+    )
+    .filter((horario) =>
+      HORARIOS.includes(horario)
+    );
 }
 
 export async function criarAgendamento(
-  _prev: { erro?: string; sucesso?: boolean } | undefined,
-  formData: FormData,
-): Promise<{ erro?: string; sucesso?: boolean }> {
+  _prev:
+    | {
+        erro?: string;
+        sucesso?: boolean;
+      }
+    | undefined,
+  formData: FormData
+): Promise<{
+  erro?: string;
+  sucesso?: boolean;
+}> {
   const supabase = await createClient();
 
   const {
@@ -89,34 +120,51 @@ export async function criarAgendamento(
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { erro: "Não autenticado." };
+    return {
+      erro:
+        "Sua sessão expirou. Entre novamente na sua conta.",
+    };
   }
 
-  const servico = String(formData.get("servico") ?? "").trim();
-  const dataHora = String(formData.get("data_hora") ?? "").trim();
-  const petNome = String(formData.get("pet_nome") ?? "").trim();
-  const petRaca = String(formData.get("pet_raca") ?? "").trim();
+  const servico = String(
+    formData.get("servico") ?? ""
+  ).trim();
+
+  const dataHora = String(
+    formData.get("data_hora") ?? ""
+  ).trim();
+
+  const petNome = String(
+    formData.get("pet_nome") ?? ""
+  ).trim();
+
+  const petRaca = String(
+    formData.get("pet_raca") ?? ""
+  ).trim();
+
   const observacoes = String(
-    formData.get("observacoes") ?? "",
+    formData.get("observacoes") ?? ""
   ).trim();
 
   const petPorteRaw = String(
-    formData.get("pet_porte") ?? "",
-  );
+    formData.get("pet_porte") ?? ""
+  ).trim();
 
   const petPorte: PortePet = PORTES.includes(
-    petPorteRaw as PortePet,
+    petPorteRaw as PortePet
   )
     ? (petPorteRaw as PortePet)
     : "Medio";
 
   if (!servico || !dataHora) {
     return {
-      erro: "Preencha o serviço e o horário.",
+      erro:
+        "Preencha o serviço e escolha um horário.",
     };
   }
 
-  const [data, horario] = dataHora.split("T");
+  const [data, horario] =
+    dataHora.split("T");
 
   if (!data || !horario) {
     return {
@@ -126,11 +174,13 @@ export async function criarAgendamento(
 
   if (!HORARIOS.includes(horario)) {
     return {
-      erro: "Escolha um horário entre 08:00 e 18:00, de 30 em 30 minutos.",
+      erro:
+        "Escolha um horário entre 08:00 e 18:00, de 30 em 30 minutos.",
     };
   }
 
-  const categoria = obterCategoriaServico(servico);
+  const categoria =
+    obterCategoriaServico(servico);
 
   if (categoria === "outro") {
     return {
@@ -138,36 +188,52 @@ export async function criarAgendamento(
     };
   }
 
-  // Verifica no servidor se o horário já está ocupado
-  // dentro da mesma categoria.
+  /*
+   * Verifica se o horário já está ocupado
+   * dentro da mesma categoria.
+   */
   const inicio = `${data}T${horario}`;
   const fim = `${data}T${horario}:59`;
 
-  const { data: existentes, error: consultaError } =
-    await supabase
-      .from("petsister_agendamentos")
-      .select("data_hora, servico, status")
-      .gte("data_hora", inicio)
-      .lte("data_hora", fim);
+  const {
+    data: existentes,
+    error: consultaError,
+  } = await supabase
+    .from("petsister_agendamentos")
+    .select("data_hora, servico, status")
+    .gte("data_hora", inicio)
+    .lte("data_hora", fim);
 
+  /*
+   * IMPORTANTE:
+   * Não escondemos mais o erro do Supabase.
+   * Assim conseguimos descobrir exatamente
+   * o que está impedindo o salvamento.
+   */
   if (consultaError) {
     return {
-      erro: "Não foi possível verificar o horário.",
+      erro:
+        `Erro ao verificar o horário: ${consultaError.message}`,
     };
   }
 
-  const horarioOcupado = (existentes ?? []).some(
-    (registro) => {
-      if (registro.status === "cancelado") {
-        return false;
-      }
+  const horarioOcupado =
+    (existentes ?? []).some(
+      (registro) => {
+        if (
+          registro.status ===
+          "cancelado"
+        ) {
+          return false;
+        }
 
-      return (
-        obterCategoriaServico(registro.servico) ===
-        categoria
-      );
-    },
-  );
+        return (
+          obterCategoriaServico(
+            registro.servico
+          ) === categoria
+        );
+      }
+    );
 
   if (horarioOcupado) {
     return {
@@ -176,7 +242,12 @@ export async function criarAgendamento(
     };
   }
 
-  const { error } = await supabase
+  /*
+   * Salva o agendamento.
+   */
+  const {
+    error: insertError,
+  } = await supabase
     .from("petsister_agendamentos")
     .insert({
       usuario_id: user.id,
@@ -185,13 +256,15 @@ export async function criarAgendamento(
       pet_raca: petRaca || null,
       pet_porte: petPorte,
       data_hora: dataHora,
-      observacoes: observacoes || null,
+      status: "agendado",
+      observacoes:
+        observacoes || null,
     });
 
-  if (error) {
+  if (insertError) {
     return {
       erro:
-        "Não foi possível agendar. Tente novamente.",
+        `Erro ao salvar o agendamento: ${insertError.message}`,
     };
   }
 
