@@ -25,7 +25,22 @@ export async function criarAgendamento(
   const petPorte: PortePet = PORTES.includes(petPorteRaw as PortePet) ? (petPorteRaw as PortePet) : "Medio";
 
   if (!servico || !dataHora) return { erro: "Preencha serviço e data." };
+const partesDataHora = dataHora.split("T");
+const horario = partesDataHora[1] ?? "";
 
+const [hora, minuto] = horario.split(":").map(Number);
+
+if (
+  Number.isNaN(hora) ||
+  Number.isNaN(minuto) ||
+  hora < 8 ||
+  hora > 18 ||
+  (hora === 18 && minuto > 0)
+) {
+  return {
+    erro: "Os agendamentos podem ser feitos somente entre 08:00 e 18:00.",
+  };
+}
   const { error } = await supabase.from("petsister_agendamentos").insert({
     usuario_id: user.id,
     servico,
