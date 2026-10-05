@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-iimport { Fraunces, Roboto } from "next/font/google";
+import { Fraunces, Roboto } from "next/font/google";
 
 import "./globals.css";
 
