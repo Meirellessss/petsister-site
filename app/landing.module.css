@@ -654,7 +654,7 @@
   font-size: 0.68rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   color: #f45b1b;
   margin-bottom: 0.35rem;
 }
@@ -672,9 +672,10 @@
   align-items: center;
   gap: 0.3rem;
   width: fit-content;
-  padding: 0.32rem 0.55rem;
-  border-radius: 999px;
-  background: #fff0e5;
+  padding: 0.34rem 0.6rem;
+  border-radius: 8px;
+  background: rgba(244, 91, 27, 0.10);
+  border: 1px solid rgba(244, 91, 27, 0.16);
   color: #e65316;
   font-size: 0.72rem;
   font-weight: 700;
@@ -693,24 +694,24 @@
   margin-top: auto;
   padding-top: 1rem;
   color: #d9480f;
-  font-size: 1.35rem;
+  font-size: 1.4rem;
   font-weight: 800;
   line-height: 1;
+  letter-spacing: -0.02em;
 }
 .prodInstallments {
   margin-top: 0.4rem;
   font-size: 0.78rem;
-  color: #667085;
+  color: #52627a;
   line-height: 1.4;
 }
 .btnComprar {
   width: 100%;
-  margin-top: 1rem;
   background: #f45b1b;
   color: #fff;
   border: none;
   border-radius: 10px;
-  padding: 0.72rem 1rem;
+  padding: 0.72rem;
   font-size: 0.85rem;
   font-weight: 800;
   display: flex;
@@ -718,13 +719,14 @@
   justify-content: center;
   gap: 0.4rem;
   cursor: pointer;
+  box-shadow: 0 5px 12px rgba(244, 91, 27, 0.16);
   transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .btnComprar:hover {
   background: #e94f10;
   transform: translateY(-1px);
-  box-shadow: 0 6px 14px rgba(244, 91, 27, 0.18);
+  box-shadow: 0 8px 18px rgba(244, 91, 27, 0.22);
 }
 .prodStockLow {
   font-size: 0.72rem;
