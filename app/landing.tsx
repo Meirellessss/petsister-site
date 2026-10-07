@@ -69,7 +69,7 @@ export default function Landing({
   usuario: { nome: string; perfil: Perfil } | null;
 }) {
  
-  
+  const [busca, setBusca] = useState("");
   const [catAtiva, setCatAtiva] = useState("");
   const [produtoAberto, setProdutoAberto] = useState<Produto | null>(null);
   const [qty, setQty] = useState(1);
