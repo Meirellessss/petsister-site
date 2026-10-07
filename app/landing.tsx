@@ -77,14 +77,6 @@ export default function Landing({
   const [pending, startTransition] = useTransition();
   const router = useRouter();
 
-  const contagemPorCategoria = useMemo(() => {
-    const m: Record<string, number> = {};
-    produtos.forEach((p) => {
-      if (p.categoria) m[p.categoria] = (m[p.categoria] ?? 0) + 1;
-    });
-    return m;
-  }, [produtos]);
-
   const visiveis = useMemo(() => {
     if (busca.trim()) {
       const q = busca.toLowerCase().trim();
@@ -582,7 +574,7 @@ export default function Landing({
           <div className={styles.footCol}>
             <h4>Loja</h4>
             <a href="#produtos">Produtos</a>
-            <a href="#categorias">Categorias</a>
+           <a href="#produtos">Categorias</a>
             <a href="#servicos">Serviços</a>
             {usuario && <a href="/pedidos">Meus pedidos</a>}
           </div>
