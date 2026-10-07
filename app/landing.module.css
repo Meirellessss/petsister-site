@@ -702,8 +702,9 @@
 .prodInstallments {
   margin-top: 0.45rem;
   font-size: 0.8rem;
-  font-weight: 500;
-  color: #f1f5f9;
+  font-weight: 600;
+  color: #f1f5f9 !important;
+  opacity: 1 !important;
   line-height: 1.4;
 }
 .btnComprar {
