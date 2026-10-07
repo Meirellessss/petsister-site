@@ -640,8 +640,8 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  background: linear-gradient(180deg, #fffaf6 0%, #fff4eb 100%);
-  border-top: 1px solid #f7ddc9;
+  background: linear-gradient(180deg, #f8fafc 0%, #f3f6fa 100%);
+  border-top: 1px solid #e4eaf1;
 }
 .prodCat {
   font-size: 0.68rem;
