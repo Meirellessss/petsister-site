@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { Categoria, Perfil, Produto } from "@/lib/types";
 import { adicionarAoCarrinho } from "./carrinho/actions";
@@ -69,7 +69,7 @@ export default function Landing({
   usuario: { nome: string; perfil: Perfil } | null;
 }) {
  
-  const [lastScrollY, setLastScrollY] = useState(0);
+  
   const [catAtiva, setCatAtiva] = useState("");
   const [produtoAberto, setProdutoAberto] = useState<Produto | null>(null);
   const [qty, setQty] = useState(1);
