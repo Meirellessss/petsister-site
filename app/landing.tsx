@@ -369,38 +369,6 @@ export default function Landing({
         </div>
       </div>
 
-      <section className={styles.section} id="categorias">
-        <div className={styles.sectionInner}>
-          <div className={styles.secHead}>
-            <div className={styles.secLabel}>Navegue por categoria</div>
-            <h2 className={styles.secTitle}>
-              Tudo para o seu <em>pet</em>
-            </h2>
-            <p className={styles.secSub}>Do filhote ao idoso, encontramos o que o seu melhor amigo precisa.</p>
-          </div>
-          <div className={styles.catGrid}>
-            {categorias.map((c) => (
-              <div
-                key={c.id}
-                className={styles.catCard}
-                onClick={() => {
-                  filtrarCat(c.nome);
-                  document.getElementById("produtos")?.scrollIntoView({ behavior: "smooth" });
-                }}
-              >
-                <div className={styles.catCardIc}>
-                  <Icon name={CATEGORIA_ICON[c.nome] ?? "petiscos"} size={30} />
-                </div>
-                <div className={styles.catCardName}>{c.nome}</div>
-                <div className={styles.catCardCount}>
-                  {contagemPorCategoria[c.nome] ?? 0} produto{(contagemPorCategoria[c.nome] ?? 0) !== 1 ? "s" : ""}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <section className={styles.section} id="produtos" style={{ paddingTop: "1rem" }}>
         <div className={styles.sectionInner}>
           <div className={styles.secHead}>
