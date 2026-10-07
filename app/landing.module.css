@@ -644,18 +644,18 @@
   overflow: hidden;
 
   background:
-    radial-gradient(circle at 92% 8%, rgba(244, 91, 27, 0.12) 0 2px, transparent 2.5px),
-    linear-gradient(145deg, #eef5ff 0%, #f7faff 58%, #edf3fb 100%);
+    radial-gradient(circle at 92% 8%, rgba(244, 91, 27, 0.18) 0 2px, transparent 2.5px),
+    linear-gradient(145deg, #08163d 0%, #0d1f52 60%, #101f49 100%);
 
   border-top: 3px solid #f45b1b;
-  box-shadow: inset 4px 0 0 rgba(12, 24, 64, 0.08);
+  box-shadow: inset 4px 0 0 rgba(255, 255, 255, 0.06);
 }
 .prodCat {
   font-size: 0.68rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.09em;
-  color: #f45b1b;
+  color: #ff6a2a;
   margin-bottom: 0.35rem;
 }
 .prodName {
@@ -663,7 +663,7 @@
   font-size: 1rem;
   font-weight: 700;
   line-height: 1.35;
-  color: #0c1840;
+  color: #ffffff;
   margin-bottom: 0.5rem;
   min-height: 2.7rem;
 }
@@ -674,9 +674,9 @@
   width: fit-content;
   padding: 0.34rem 0.6rem;
   border-radius: 8px;
-  background: rgba(244, 91, 27, 0.10);
-  border: 1px solid rgba(244, 91, 27, 0.16);
-  color: #e65316;
+  background: rgba(244, 91, 27, 0.16);
+  border: 1px solid rgba(244, 91, 27, 0.28);
+  color: #ff8a55;
   font-size: 0.72rem;
   font-weight: 700;
   margin-top: 0.15rem;
@@ -693,7 +693,7 @@
 .prodPrice {
   margin-top: auto;
   padding-top: 1rem;
-  color: #d9480f;
+  color: #ff7040;
   font-size: 1.4rem;
   font-weight: 800;
   line-height: 1;
@@ -702,7 +702,7 @@
 .prodInstallments {
   margin-top: 0.4rem;
   font-size: 0.78rem;
-  color: #52627a;
+  color: #cbd5e1;
   line-height: 1.4;
 }
 .btnComprar {
@@ -724,7 +724,7 @@
 }
 
 .btnComprar:hover {
-  background: #e94f10;
+  background: #ff6828;
   transform: translateY(-1px);
   box-shadow: 0 8px 18px rgba(244, 91, 27, 0.22);
 }
