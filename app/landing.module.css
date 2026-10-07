@@ -613,6 +613,7 @@
   height: 100%;
   object-fit: contain;
   display: block;
+  mix-blend-mode: multiply;
 }
 .phIc {
   transition: transform 0.3s;
