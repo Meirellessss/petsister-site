@@ -68,8 +68,7 @@ export default function Landing({
   cartCount: number;
   usuario: { nome: string; perfil: Perfil } | null;
 }) {
-  const [busca, setBusca] = useState("");
-  const [showNav, setShowNav] = useState(true);
+ 
   const [lastScrollY, setLastScrollY] = useState(0);
   const [catAtiva, setCatAtiva] = useState("");
   const [produtoAberto, setProdutoAberto] = useState<Produto | null>(null);
@@ -98,19 +97,6 @@ export default function Landing({
     );
   }, [produtos, busca, catAtiva]);
 
-    useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY && currentScrollY > 150) {
-        setShowNav(false); // Rolando para baixo, esconde
-      } else {
-        setShowNav(true); // Rolando para cima, mostra
-      }
-      setLastScrollY(currentScrollY);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
   
   function filtrarCat(cat: string) {
     setCatAtiva(cat);
@@ -153,7 +139,7 @@ export default function Landing({
         · Tudo para cães e gatos
       </div>
 
-     <nav className={`${styles.nav} ${!showNav ? styles.navHidden : ""}`}>
+    <nav className={styles.nav}>
         <div className={styles.navInner}>
           <Link href="/" className={styles.logo} aria-label="Pet Sister - página inicial">
           <img src="/logo.jpg" alt="Pet Sister" />
