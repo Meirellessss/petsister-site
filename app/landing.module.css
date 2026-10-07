@@ -1197,3 +1197,71 @@
   border-color: var(--p300);
   transform: rotate(8deg) scale(1.05);
 }
+
+:global([data-theme="dark"]) .nav {
+  background: #111a2c;
+  border-color: #2b3a58;
+}
+
+:global([data-theme="dark"]) .navSearch {
+  background: #17213a;
+  border-color: #304466;
+}
+
+:global([data-theme="dark"]) .navSearch input {
+  color: #f8fafc;
+}
+
+:global([data-theme="dark"]) .navSearch input::placeholder {
+  color: #94a3b8;
+}
+
+:global([data-theme="dark"]) .navIcoBtn {
+  color: #cbd5e1;
+}
+
+:global([data-theme="dark"]) .navIcoBtn:hover {
+  background: #17213a;
+  color: #ff985f;
+}
+
+:global([data-theme="dark"]) .catbar {
+  background: #111a2c;
+  border-color: #2b3a58;
+}
+
+:global([data-theme="dark"]) .catbarLink {
+  color: #cbd5e1;
+}
+
+:global([data-theme="dark"]) .catbarLink:hover {
+  color: #ff985f;
+  background: #17213a;
+}
+:global([data-theme="dark"]) .topbar {
+  background: #050b19;
+  color: #f8fafc;
+}
+
+:global([data-theme="dark"]) .prodBody {
+  background: linear-gradient(
+    145deg,
+    #071126 0%,
+    #0b1940 60%,
+    #0d1d46 100%
+  );
+}
+
+:global([data-theme="dark"]) .prodName {
+  color: #ffffff;
+}
+
+:global([data-theme="dark"]) .prodInstallment {
+  color: #ffffff !important;
+}
+
+:global([data-theme="dark"]) .prodPorte {
+  background: rgba(244, 91, 27, 0.16);
+  border-color: rgba(244, 91, 27, 0.3);
+  color: #ff985f;
+}
