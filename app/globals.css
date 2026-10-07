@@ -32,7 +32,26 @@
    --font-serif: var(--font-roboto), sans-serif;
   --font-sans: var(--font-roboto), sans-serif;
 }
+[data-theme="dark"] {
+  --p50: #17213a;
+  --p100: #202d49;
+  --p200: #304466;
+  --p300: #58729f;
+  --p400: #ff985f;
+  --p500: #ff6b1a;
+  --p600: #f15a16;
+  --p700: #ff7a38;
+  --p800: #9eb6ff;
+  --p900: #071126;
 
+  --ink: #f8fafc;
+  --muted: #cbd5e1;
+  --soft: #94a3b8;
+  --border: #2b3a58;
+  --bg: #090f1d;
+  --white: #111a2c;
+  --amber: #fbbf24;
+}
 html {
   scroll-behavior: smooth;
 }
@@ -42,6 +61,7 @@ body {
   background: var(--bg);
   color: var(--ink);
   line-height: 1.65;
+  transition: background 0.25s ease, color 0.25s ease;
 }
 
 h1,
