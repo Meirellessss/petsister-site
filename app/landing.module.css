@@ -697,21 +697,26 @@
 }
 .btnComprar {
   width: 100%;
-  background: var(--p600);
+  margin-top: 1rem;
+  background: #f45b1b;
   color: #fff;
   border: none;
-  border-radius: 9px;
-  padding: 0.6rem;
-  font-size: 0.87rem;
-  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.72rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  transition: background 0.18s;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
+
 .btnComprar:hover {
-  background: var(--p700);
+  background: #e94f10;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(244, 91, 27, 0.18);
 }
 .prodStockLow {
   font-size: 0.72rem;
