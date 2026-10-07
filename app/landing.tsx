@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { Categoria, Perfil, Produto } from "@/lib/types";
 import { adicionarAoCarrinho } from "./carrinho/actions";
@@ -71,11 +71,36 @@ export default function Landing({
  
   const [busca, setBusca] = useState("");
   const [catAtiva, setCatAtiva] = useState("");
+  const [darkMode, setDarkMode] = useState(false);
   const [produtoAberto, setProdutoAberto] = useState<Produto | null>(null);
   const [qty, setQty] = useState(1);
   const [msg, setMsg] = useState<{ tipo: "ok" | "err"; texto: string } | null>(null);
   const [pending, startTransition] = useTransition();
   const router = useRouter();
+  useEffect(() => {
+  const temaSalvo = localStorage.getItem("petsister-theme");
+  const escuro = temaSalvo === "dark";
+
+  setDarkMode(escuro);
+  document.documentElement.dataset.theme = escuro ? "dark" : "light";
+}, []);
+
+function alternarTema() {
+  setDarkMode((atual) => {
+    const novoModo = !atual;
+
+    document.documentElement.dataset.theme = novoModo
+      ? "dark"
+      : "light";
+
+    localStorage.setItem(
+      "petsister-theme",
+      novoModo ? "dark" : "light"
+    );
+
+    return novoModo;
+  });
+}
 
   const visiveis = useMemo(() => {
     if (busca.trim()) {
@@ -149,6 +174,15 @@ export default function Landing({
             />
           </div>
           <div className={styles.navRight}>
+            <button
+  type="button"
+  className={styles.themeBtn}
+  onClick={alternarTema}
+  aria-label={darkMode ? "Ativar modo claro" : "Ativar modo escuro"}
+  title={darkMode ? "Modo claro" : "Modo escuro"}
+>
+  {darkMode ? "☀" : "☾"}
+</button>
             {usuario ? (
               <>
                 <a href="/pedidos">
