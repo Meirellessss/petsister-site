@@ -77,6 +77,23 @@ export default function Landing({
   const [msg, setMsg] = useState<{ tipo: "ok" | "err"; texto: string } | null>(null);
   const [pending, startTransition] = useTransition();
   const router = useRouter();
+  const [scrolled, setScrolled] = useState(false);
+
+useEffect(() => {
+  const handleScroll = () => {
+    setScrolled(window.scrollY > 40);
+  };
+
+  handleScroll();
+
+  window.addEventListener("scroll", handleScroll, {
+    passive: true,
+  });
+
+  return () => {
+    window.removeEventListener("scroll", handleScroll);
+  };
+}, []);
   useEffect(() => {
   const temaSalvo = localStorage.getItem("petsister-theme");
   const escuro = temaSalvo === "dark";
@@ -144,7 +161,11 @@ function alternarTema() {
 
   return (
     <div>
-      <div className={styles.topbar}>
+      <div
+  className={`${styles.topbar} ${
+    scrolled ? styles.topbarHidden : ""
+  }`}
+>
   <div className={styles.topbarInner}>
     <div className={styles.topbarMessage}>
       <span className={styles.topbarPaw}>
@@ -176,7 +197,11 @@ function alternarTema() {
   </div>
 </div>
 
-<nav className={styles.nav}>
+<nav
+  className={`${styles.nav} ${
+    scrolled ? styles.navScrolled : ""
+  }`}
+>
   <div className={styles.navMain}>
     <div className={styles.navInner}>
 
@@ -363,7 +388,11 @@ function alternarTema() {
   </div>
 
   {/* MENU DE CATEGORIAS */}
-  <div className={styles.catbar}>
+  <div
+  className={`${styles.catbar} ${
+    scrolled ? styles.catbarHidden : ""
+  }`}
+>
     <div className={styles.catbarInner}>
 
       {/* INÍCIO */}
