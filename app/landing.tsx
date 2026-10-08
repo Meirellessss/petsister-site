@@ -171,35 +171,31 @@ function alternarTema() {
     scrolled ? styles.topbarHidden : ""
   }`}
 >
-  <div className={styles.topbarInner}>
-    <div className={styles.topbarMessage}>
-      <span className={styles.topbarPaw}>
-        <Icon name="pata" size={15} />
-      </span>
+ <div className={styles.topbarInner}>
 
-      <strong>Cuidando de quem sempre te faz bem</strong>
-    </div>
+  <span className={styles.topbarItem}>
+    <Icon name="caminhao" size={15} />
+    <strong>Disk Entrega</strong>
+  </span>
 
-    <div className={styles.topbarLinks}>
-      <span>
-        <Icon name="caminhao" size={15} />
-        Entrega para o seu pet
-      </span>
+  <span className={styles.topbarSeparator}>•</span>
 
-      <span>
-        <Icon name="cadeado" size={15} />
-        Compra segura
-      </span>
+  <span className={styles.topbarItem}>
+    <Icon name="cadeado" size={15} />
+    Compra segura
+  </span>
 
-      <a
-        href={`https://wa.me/${WHATSAPP}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Atendimento pelo WhatsApp
-      </a>
-    </div>
-  </div>
+  <span className={styles.topbarSeparator}>•</span>
+
+  <a
+    href={`https://wa.me/${WHATSAPP}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    className={styles.topbarItem}
+  >
+    Atendimento pelo WhatsApp
+  </a>
+
 </div>
 
 <nav
