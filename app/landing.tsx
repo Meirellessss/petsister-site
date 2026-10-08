@@ -37,7 +37,7 @@ const SERVICOS: [string, string, string, string][] = [
 
 const DEPOIMENTOS: [string, string, string][] = [
   [
-    '"O pedido chegou no dia seguinte e a ração é de ótima qualidade. A Luna aprovou na primeira mordida!"',
+    '"O pedido chegou muito rápido e a ração é de ótima qualidade. A Luna aprovou na primeira mordida!"',
     "Maria Clara",
     "Tutora da Luna · Golden Retriever",
   ],
@@ -145,128 +145,293 @@ function alternarTema() {
   return (
     <div>
       <div className={styles.topbar}>
-        <strong>Disk Entrega</strong> ·{" "}
-        <a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener" style={{ color: "#fff", textDecoration: "underline" }}>
-          {WHATSAPP_LABEL}
-        </a>{" "}
-        ·{" "}
-        <a href={`https://instagram.com/${INSTAGRAM}`} target="_blank" rel="noopener" style={{ color: "#fff", textDecoration: "underline" }}>
-          @{INSTAGRAM}
-        </a>{" "}
-        · Tudo para cães e gatos
+  <div className={styles.topbarInner}>
+    <div className={styles.topbarMessage}>
+      <span className={styles.topbarPaw}>
+        <Icon name="pata" size={15} />
+      </span>
+
+      <strong>Cuidando de quem sempre te faz bem</strong>
+    </div>
+
+    <div className={styles.topbarLinks}>
+      <span>
+        <Icon name="caminhao" size={15} />
+        Entrega para cães e gatos
+      </span>
+
+      <span>
+        <Icon name="cadeado" size={15} />
+        Compra segura
+      </span>
+
+      <a
+        href={`https://wa.me/${WHATSAPP}`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Atendimento pelo WhatsApp
+      </a>
+    </div>
+  </div>
+</div>
+
+<nav className={styles.nav}>
+  <div className={styles.navMain}>
+    <div className={styles.navInner}>
+
+      {/* LOGO ORIGINAL */}
+      <Link
+        href="/"
+        className={styles.logo}
+        aria-label="Pet Sister - página inicial"
+      >
+        <img src="/logo.jpg" alt="Pet Sister" />
+      </Link>
+
+      {/* BUSCA */}
+      <div className={styles.navSearch}>
+        <span className={styles.searchIcon}>
+          <Icon name="busca" size={21} />
+        </span>
+
+        <input
+          type="text"
+          placeholder="O que seu pet precisa?"
+          value={busca}
+          onChange={(e) => {
+            setBusca(e.target.value);
+
+            document
+              .getElementById("produtos")
+              ?.scrollIntoView({
+                behavior: "smooth",
+              });
+          }}
+        />
+
+        <span className={styles.searchHint}>
+          Buscar produtos
+        </span>
       </div>
 
-    <nav className={styles.nav}>
-        <div className={styles.navInner}>
-          <Link href="/" className={styles.logo} aria-label="Pet Sister - página inicial">
-          <img src="/logo.jpg" alt="Pet Sister" />
-          </Link>
-          <div className={styles.navSearch}>
-            <Icon name="busca" size={18} />
-            <input
-              type="text"
-              placeholder="Buscar ração, brinquedos, acessórios..."
-              value={busca}
-              onChange={(e) => {
-                setBusca(e.target.value);
-                document.getElementById("produtos")?.scrollIntoView({ behavior: "smooth" });
-              }}
-            />
-          </div>
-          <div className={styles.navRight}>
-            <button
-  type="button"
-  className={styles.themeBtn}
-  onClick={alternarTema}
-  aria-label={darkMode ? "Ativar modo claro" : "Ativar modo escuro"}
-  title={darkMode ? "Modo claro" : "Modo escuro"}
->
-  {darkMode ? "☀" : "☾"}
-</button>
-            {usuario ? (
-              <>
-                <a href="/pedidos">
-                  <button className={styles.navIcoBtn}>
-                    <span className={styles.ic}>
-                      <Icon name="pedidos" size={20} />
-                    </span>
-                    Pedidos
-                  </button>
-                </a>
-                <a href="/agendamentos">
-                  <button className={styles.navIcoBtn}>
-                    <span className={styles.ic}>
-                      <Icon name="agendar" size={20} />
-                    </span>
-                    Agendar
-                  </button>
-                </a>
-                <a href="/carrinho">
-                  <button className={`${styles.navIcoBtn} ${styles.navCart}`}>
-                    <span className={styles.ic}>
-                      <Icon name="carrinho" size={20} />
-                    </span>
-                    Carrinho
-                    {cartCount > 0 && <span className={styles.cartDot}>{cartCount}</span>}
-                  </button>
-                </a>
-                {usuario.perfil === "admin" && (
-                  <a href="/admin">
-                    <button className={styles.btnEntrar} style={{ background: "var(--p800)", display: "inline-flex", alignItems: "center", gap: ".4rem" }}>
-                      <Icon name="admin" size={16} /> Admin
-                    </button>
-                  </a>
-                )}
-                <form action={sair}>
-                  <button type="submit" className={styles.btnEntrar}>
-                    {usuario.nome.split(" ")[0]} →
-                  </button>
-                </form>
-              </>
-            ) : (
-              <>
-                <a href="/login">
-                  <button className={styles.navIcoBtn}>
-                    <span className={styles.ic}>
-                      <Icon name="usuario" size={20} />
-                    </span>
-                    Entrar
-                  </button>
-                </a>
-                <a href="/cadastro">
-                  <button className={styles.btnEntrar}>Criar conta</button>
-                </a>
-              </>
-            )}
-          </div>
-        </div>
-        <div className={styles.catbar}>
-          <div className={styles.catbarInner}>
-        
-              {categorias.map((c) => (
-              <button
-                key={c.id}
-                className={styles.catbarLink}
-                onClick={() => {
-                  filtrarCat(c.nome);
-                  document.getElementById("produtos")?.scrollIntoView({ behavior: "smooth" });
-                }}
-              >
-                <span className={styles.ce}>
-                  <Icon name={CATEGORIA_ICON[c.nome] ?? "petiscos"} size={18} />
-                </span>
-                {c.nome}
-              </button>
-            ))}
-            <a href="#servicos" className={styles.catbarLink}>
-              <span className={styles.ce}>
-                <Icon name="banho" size={18} />
+      {/* AÇÕES DO LADO DIREITO */}
+      <div className={styles.navRight}>
+
+        {/* MODO ESCURO */}
+        <button
+          type="button"
+          className={styles.themeBtn}
+          onClick={alternarTema}
+          aria-label={
+            darkMode
+              ? "Ativar modo claro"
+              : "Ativar modo escuro"
+          }
+          title={
+            darkMode
+              ? "Modo claro"
+              : "Modo escuro"
+          }
+        >
+          {darkMode ? "☀" : "☾"}
+        </button>
+
+        {usuario ? (
+          <>
+            {/* PEDIDOS */}
+            <Link
+              href="/pedidos"
+              className={styles.navAction}
+            >
+              <span className={styles.navActionIcon}>
+                <Icon name="pedidos" size={21} />
               </span>
-              Banho & Tosa
-            </a>
-          </div>
-        </div>
-      </nav>
+
+              <span className={styles.navActionText}>
+                <small>Meus</small>
+                Pedidos
+              </span>
+            </Link>
+
+            {/* AGENDAMENTO */}
+            <Link
+              href="/agendamentos"
+              className={styles.navAction}
+            >
+              <span className={styles.navActionIcon}>
+                <Icon name="agendar" size={21} />
+              </span>
+
+              <span className={styles.navActionText}>
+                <small>Serviço</small>
+                Agendar
+              </span>
+            </Link>
+
+            {/* CARRINHO */}
+            <Link
+              href="/carrinho"
+              className={`${styles.navAction} ${styles.cartAction}`}
+            >
+              <span className={styles.navActionIcon}>
+                <Icon name="carrinho" size={21} />
+              </span>
+
+              <span className={styles.navActionText}>
+                <small>Meu</small>
+                Carrinho
+              </span>
+
+              {cartCount > 0 && (
+                <span className={styles.cartDot}>
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+
+            {/* ADMIN */}
+            {usuario.perfil === "admin" && (
+              <Link
+                href="/admin"
+                className={styles.accountButton}
+              >
+                <Icon name="admin" size={16} />
+                Admin
+              </Link>
+            )}
+
+            {/* SAIR */}
+            <form action={sair}>
+              <button
+                type="submit"
+                className={styles.accountButton}
+              >
+                {usuario.nome.split(" ")[0]} →
+              </button>
+            </form>
+          </>
+        ) : (
+          <>
+            {/* LOGIN */}
+            <Link
+              href="/login"
+              className={styles.accountArea}
+            >
+              <span className={styles.accountIcon}>
+                <Icon name="usuario" size={21} />
+              </span>
+
+              <span>
+                <small>Minha conta</small>
+                Entrar
+              </span>
+            </Link>
+
+            {/* CADASTRO */}
+            <Link
+              href="/cadastro"
+              className={styles.createAccount}
+            >
+              Criar conta
+            </Link>
+
+            {/* CARRINHO */}
+            <Link
+              href="/carrinho"
+              className={`${styles.navAction} ${styles.cartAction}`}
+            >
+              <span className={styles.navActionIcon}>
+                <Icon name="carrinho" size={21} />
+              </span>
+
+              <span className={styles.navActionText}>
+                <small>Meu</small>
+                Carrinho
+              </span>
+
+              {cartCount > 0 && (
+                <span className={styles.cartDot}>
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+          </>
+        )}
+      </div>
+    </div>
+  </div>
+
+  {/* MENU DE CATEGORIAS */}
+  <div className={styles.catbar}>
+    <div className={styles.catbarInner}>
+
+      {/* INÍCIO */}
+      <Link
+        href="/"
+        className={`${styles.catbarLink} ${styles.catbarHighlight}`}
+      >
+        <span className={styles.ce}>
+          <Icon name="pata" size={19} />
+        </span>
+
+        Início
+      </Link>
+
+      {/* BANHO E TOSA */}
+      <a
+        href="#servicos"
+        className={`${styles.catbarLink} ${styles.serviceLink}`}
+      >
+        <span className={styles.ce}>
+          <Icon name="banho" size={19} />
+        </span>
+
+        Banho e Tosa
+      </a>
+
+      {/* VETERINÁRIO */}
+      <Link
+        href="/agendamentos"
+        className={`${styles.catbarLink} ${styles.serviceLink}`}
+      >
+        <span className={styles.ce}>
+          <Icon name="veterinario" size={19} />
+        </span>
+
+        Veterinário
+      </Link>
+
+      {/* CATEGORIAS DOS PRODUTOS */}
+      {categorias.map((c) => (
+        <button
+          key={c.id}
+          type="button"
+          className={styles.catbarLink}
+          onClick={() => {
+            filtrarCat(c.nome);
+
+            document
+              .getElementById("produtos")
+              ?.scrollIntoView({
+                behavior: "smooth",
+              });
+          }}
+        >
+          <span className={styles.ce}>
+            <Icon
+              name={CATEGORIA_ICON[c.nome] ?? "petiscos"}
+              size={19}
+            />
+          </span>
+
+          {c.nome}
+        </button>
+      ))}
+
+    </div>
+  </div>
+</nav>
 
       <section className={styles.hero}>
         <div className={styles.heroGlow}></div>
