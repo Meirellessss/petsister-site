@@ -393,80 +393,196 @@ function alternarTema() {
   </div>
 
   {/* MENU DE CATEGORIAS */}
-  <div
+<div
   className={`${styles.catbar} ${
     scrolled ? styles.catbarHidden : ""
   }`}
 >
-    <div className={styles.catbarInner}>
+  <div className={styles.catbarInner}>
 
-      {/* INÍCIO */}
-      <Link
-        href="/"
-        className={`${styles.catbarLink} ${styles.catbarHighlight}`}
-      >
-        <span className={styles.ce}>
-          <Icon name="pata" size={19} />
-        </span>
+    {/* RAÇÃO CACHORRO */}
+    <button
+      type="button"
+      className={styles.catbarLink}
+      onClick={() => {
+        filtrarCat("Ração Cachorro");
 
-        Início
-      </Link>
+        document
+          .getElementById("produtos")
+          ?.scrollIntoView({
+            behavior: "smooth",
+          });
+      }}
+    >
+      <span className={styles.ce}>
+        <Icon name="racao" size={19} />
+      </span>
 
-      {/* BANHO E TOSA */}
-      <a
-        href="#servicos"
-        className={`${styles.catbarLink} ${styles.serviceLink}`}
-      >
-        <span className={styles.ce}>
-          <Icon name="banho" size={19} />
-        </span>
+      Ração Cachorro
+    </button>
 
-        Banho e Tosa
-      </a>
+    {/* RAÇÃO GATO */}
+    <button
+      type="button"
+      className={styles.catbarLink}
+      onClick={() => {
+        filtrarCat("Ração Gato");
 
-      {/* VETERINÁRIO */}
-      <Link
-        href="/agendamentos"
-        className={`${styles.catbarLink} ${styles.serviceLink}`}
-      >
-        <span className={styles.ce}>
-          <Icon name="veterinario" size={19} />
-        </span>
+        document
+          .getElementById("produtos")
+          ?.scrollIntoView({
+            behavior: "smooth",
+          });
+      }}
+    >
+      <span className={styles.ce}>
+        <Icon name="gato" size={19} />
+      </span>
 
-        Veterinário
-      </Link>
+      Ração Gato
+    </button>
 
-      {/* CATEGORIAS DOS PRODUTOS */}
-      {categorias.map((c) => (
-        <button
-          key={c.id}
-          type="button"
-          className={styles.catbarLink}
-          onClick={() => {
-            filtrarCat(c.nome);
+    {/* BRINQUEDOS */}
+    <button
+      type="button"
+      className={styles.catbarLink}
+      onClick={() => {
+        filtrarCat("Brinquedos");
 
-            document
-              .getElementById("produtos")
-              ?.scrollIntoView({
-                behavior: "smooth",
-              });
-          }}
-        >
-          <span className={styles.ce}>
-            <Icon
-              name={CATEGORIA_ICON[c.nome] ?? "petiscos"}
-              size={19}
-            />
-          </span>
+        document
+          .getElementById("produtos")
+          ?.scrollIntoView({
+            behavior: "smooth",
+          });
+      }}
+    >
+      <span className={styles.ce}>
+        <Icon name="brinquedos" size={19} />
+      </span>
 
-          {c.nome}
-        </button>
-      ))}
+      Brinquedos
+    </button>
 
-    </div>
+    {/* CONFORTO */}
+    <button
+      type="button"
+      className={styles.catbarLink}
+      onClick={() => {
+        filtrarCat("Conforto");
+
+        document
+          .getElementById("produtos")
+          ?.scrollIntoView({
+            behavior: "smooth",
+          });
+      }}
+    >
+      <span className={styles.ce}>
+        <Icon name="conforto" size={19} />
+      </span>
+
+      Conforto
+    </button>
+
+    {/* FARMÁCIA */}
+    <button
+      type="button"
+      className={styles.catbarLink}
+      onClick={() => {
+        filtrarCat("Farmácia");
+
+        document
+          .getElementById("produtos")
+          ?.scrollIntoView({
+            behavior: "smooth",
+          });
+      }}
+    >
+      <span className={styles.ce}>
+        <Icon name="farmacia" size={19} />
+      </span>
+
+      Farmácia
+    </button>
+
+    {/* HIGIENE */}
+    <button
+      type="button"
+      className={styles.catbarLink}
+      onClick={() => {
+        filtrarCat("Higiene");
+
+        document
+          .getElementById("produtos")
+          ?.scrollIntoView({
+            behavior: "smooth",
+          });
+      }}
+    >
+      <span className={styles.ce}>
+        <Icon name="higiene" size={19} />
+      </span>
+
+      Higiene
+    </button>
+
+    {/* PASSEIO */}
+    <button
+      type="button"
+      className={styles.catbarLink}
+      onClick={() => {
+        filtrarCat("Passeio");
+
+        document
+          .getElementById("produtos")
+          ?.scrollIntoView({
+            behavior: "smooth",
+          });
+      }}
+    >
+      <span className={styles.ce}>
+        <Icon name="passeio" size={19} />
+      </span>
+
+      Passeio
+    </button>
+
+    {/* PETISCOS */}
+    <button
+      type="button"
+      className={styles.catbarLink}
+      onClick={() => {
+        filtrarCat("Petiscos");
+
+        document
+          .getElementById("produtos")
+          ?.scrollIntoView({
+            behavior: "smooth",
+          });
+      }}
+    >
+      <span className={styles.ce}>
+        <Icon name="petiscos" size={19} />
+      </span>
+
+      Petiscos
+    </button>
+
+    {/* BANHO E TOSA — ÚLTIMO */}
+    <a
+      href="#servicos"
+      className={`${styles.catbarLink} ${styles.serviceLink}`}
+    >
+      <span className={styles.ce}>
+        <Icon name="banho" size={19} />
+      </span>
+
+      Banho e Tosa
+    </a>
+
   </div>
+</div>
 </nav>
-
       <section className={styles.hero}>
         <div className={styles.heroGlow}></div>
         <div className={`${styles.heroGlow} ${styles.heroGlowG2}`}></div>
