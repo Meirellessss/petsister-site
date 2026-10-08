@@ -16,14 +16,19 @@ const INSTAGRAM = "petsisterracoes";
 // Ícone por categoria — mantém o mesmo mapeamento (levemente peculiar) do site original,
 // onde "Ração" mostra o ícone de cão em vez de ração.
 const CATEGORIA_ICON: Record<string, string> = {
-  Ração: "cao",
+  "Ração Cachorro": "racao",
   "Ração Gato": "gato",
+  Ração: "racao",
+
+  Brinquedos: "brinquedos",
+  Conforto: "conforto",
   Farmácia: "farmacia",
   Higiene: "higiene",
-  Conforto: "conforto",
-  Brinquedos: "brinquedos",
   Passeio: "passeio",
   Petiscos: "petiscos",
+
+  "Banho e Tosa": "banho",
+  "Banho & Tosa": "banho",
 };
 
 const SERVICOS: [string, string, string, string][] = [
