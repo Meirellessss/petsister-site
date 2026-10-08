@@ -419,6 +419,44 @@
 }
 
 .accountButton {
+   .logoutButton {
+  min-height: 36px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.4rem;
+
+  padding: 0.45rem 0.7rem;
+
+  border: 1px solid var(--border);
+  border-radius: 8px;
+
+  background: transparent;
+  color: var(--ink);
+
+  font-family: inherit;
+  font-size: 0.76rem;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.logoutButton svg {
+  color: var(--p500);
+}
+
+.logoutButton:hover {
+  background: var(--p50);
+  border-color: var(--p300);
+  color: var(--p700);
+}
   min-height: 35px;
 
   display: inline-flex;
@@ -1774,5 +1812,21 @@
 :global([data-theme="dark"]) .prodPorte {
   background: rgba(244, 91, 27, 0.16);
   border-color: rgba(244, 91, 27, 0.3);
+  color: #ff985f;
+}
+
+:global([data-theme="dark"]) .logoutButton {
+  background: transparent;
+  border-color: #304466;
+  color: #f8fafc;
+}
+
+:global([data-theme="dark"]) .logoutButton:hover {
+  background: #17213a;
+  border-color: #3f5275;
+  color: #ff985f;
+}
+
+:global([data-theme="dark"]) .logoutButton svg {
   color: #ff985f;
 }
