@@ -643,7 +643,7 @@
 }
 
 :global([data-theme="dark"]) .navSearch {
-  background: #17213a;
+  background: #ffffff;
   border-color: #304466;
 }
 
