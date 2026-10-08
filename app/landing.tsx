@@ -183,7 +183,7 @@ function alternarTema() {
     <div className={styles.topbarLinks}>
       <span>
         <Icon name="caminhao" size={15} />
-        Entrega para cães e gatos
+        Entrega para o seu pet
       </span>
 
       <span>
