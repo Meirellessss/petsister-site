@@ -333,13 +333,15 @@ function alternarTema() {
 
             {/* SAIR */}
             <form action={sair}>
-              <button
-                type="submit"
-                className={styles.accountButton}
-              >
-                {usuario.nome.split(" ")[0]} →
-              </button>
-            </form>
+  <button
+    type="submit"
+    className={styles.logoutButton}
+    title="Sair"
+  >
+    <Icon name="sair" size={18} />
+    <span>Sair</span>
+  </button>
+</form>
           </>
         ) : (
           <>
