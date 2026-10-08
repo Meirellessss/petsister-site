@@ -15,6 +15,15 @@
   color: #fff;
 
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+   transition:
+  opacity 0.25s ease,
+  transform 0.25s ease;
+}
+.topbarHidden {
+  opacity: 0;
+  transform: translateY(-100%);
+  pointer-events: none;
 }
 
 .topbarInner {
@@ -109,6 +118,12 @@
 
   box-shadow:
     0 5px 18px rgba(15, 30, 74, 0.06);
+
+   transition: top 0.25s ease;
+}
+
+.navScrolled {
+  top: 0;
 }
 
 .navMain {
@@ -441,6 +456,22 @@
   border-top: 1px solid rgba(15, 30, 74, 0.035);
 
   border-bottom: 1px solid var(--border);
+
+  max-height: 100px;
+  overflow: hidden;
+
+  transition:
+    max-height 0.25s ease,
+    opacity 0.2s ease,
+    border-color 0.25s ease;
+}
+
+.catbarHidden {
+  max-height: 0;
+  opacity: 0;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  pointer-events: none;
 }
 
 .catbarInner {
