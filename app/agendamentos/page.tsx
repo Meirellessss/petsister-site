@@ -1,3 +1,4 @@
+import AreaHeader from "@/components/AreaHeader";
 import Link from "next/link";
 import { getMeusAgendamentos, getUsuarioAtual } from "@/lib/queries";
 import AgendamentoForm from "./agendamento-form";
@@ -27,14 +28,7 @@ export default async function AgendamentosPage() {
 
   return (
     <div>
-      <nav className={styles.nav}>
-        <Link href="/" className={styles.logo}>
-          <img src="/logo.jpg" alt="Pet Sister" />
-        </Link>
-        <Link href="/">Loja</Link>
-        <Link href="/pedidos">Meus pedidos</Link>
-        <Link href="/carrinho">Carrinho</Link>
-      </nav>
+      <AreaHeader />
       <div className={styles.page}>
         <div className={styles.ph}>
           <h1>Agendamentos</h1>
