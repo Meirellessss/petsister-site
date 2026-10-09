@@ -1866,3 +1866,13 @@ a.topbarItem:hover {
 :global([data-theme="dark"]) .logoutButton svg {
   color: #ff985f;
 }
+
+:global([data-theme="dark"]) .heroOrbit {
+  background: #111a2c;
+  color: #f8fafc;
+  border: 1px solid #304466;
+}
+
+:global([data-theme="dark"]) .heroOrbit svg {
+  color: #ff985f;
+}
