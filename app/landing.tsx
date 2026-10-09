@@ -599,7 +599,7 @@ function alternarTema() {
   Tudo para o seu pet em um só lugar.
 </h1>
            <p className={styles.heroSub}>
-  PetSister — Para quem ama seu pet.
+   O cuidado que ele merece, pertinho de você. 🐾
 </p>
             <div className={styles.heroActions}>
               <a href="#produtos">
