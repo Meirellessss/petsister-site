@@ -592,18 +592,15 @@ function alternarTema() {
         </span>
         <div className={styles.heroInner}>
           <div>
-            <span className={styles.heroTag}>Cães · Gatos · Farmácia</span>
-            <h1>
-              Tudo para o seu pet,
-              <br />
-              do jeito que <em>ele</em>
-              <br />
-              merece.
-            </h1>
-            <p className={styles.heroSub}>
-              Rações premium, farmácia veterinária e acessórios para cães e gatos. Disk entrega no mesmo dia pra
-              você ficar tranquilo e seu bichinho satisfeito.
-            </p>
+           <span className={styles.heroTag}>
+  RAÇÕES • CÃES E GATOS • FARMÁCIA VETERINÁRIA • ACESSÓRIOS
+</span>
+           <h1>
+  Tudo para o seu pet em um só lugar.
+</h1>
+           <p className={styles.heroSub}>
+  PetSister — Para quem ama seu pet.
+</p>
             <div className={styles.heroActions}>
               <a href="#produtos">
                 <button className={`${styles.btnHero} ${styles.btnHeroMain}`} style={{ display: "inline-flex", alignItems: "center", gap: ".55rem" }}>
@@ -657,7 +654,7 @@ function alternarTema() {
         <div className={styles.advInner}>
           <div className={styles.advItem}>
             <div className={styles.advIc}>
-              <Icon name="caminhao" size={22} />
+             <div className={styles.advIc}>🚚</div>
             </div>
             <div>
               <div className={styles.advT}>Entrega rápida</div>
@@ -666,7 +663,7 @@ function alternarTema() {
           </div>
           <div className={styles.advItem}>
             <div className={styles.advIc}>
-              <Icon name="cartao" size={22} />
+             <div className={styles.advIc}>💊</div>
             </div>
             <div>
               <div className={styles.advT}>Até 3x sem juros</div>
@@ -675,7 +672,7 @@ function alternarTema() {
           </div>
           <div className={styles.advItem}>
             <div className={styles.advIc}>
-              <Icon name="reload" size={22} />
+             <div className={styles.advIc}>🥣</div>
             </div>
             <div>
               <div className={styles.advT}>Troca facilitada</div>
@@ -684,7 +681,7 @@ function alternarTema() {
           </div>
           <div className={styles.advItem}>
             <div className={styles.advIc}>
-              <Icon name="pata" size={22} />
+              <div className={styles.advIc}>❤️</div>
             </div>
             <div>
               <div className={styles.advT}>Cães e gatos</div>
