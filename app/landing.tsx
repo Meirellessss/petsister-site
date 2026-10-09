@@ -676,7 +676,7 @@ function alternarTema() {
             </div>
             <div>
               <div className={styles.advT}>Troca facilitada</div>
-              <div className={styles.advS}>em até 7 dias úteis</div>
+              <div className={styles.advS}>Em até 7 dias úteis</div>
             </div>
           </div>
           <div className={styles.advItem}>
