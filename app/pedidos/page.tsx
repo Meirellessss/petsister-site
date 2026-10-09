@@ -1,3 +1,4 @@
+import AreaHeader from "@/components/AreaHeader";
 import Link from "next/link";
 import { getMeusPedidos, getUsuarioAtual } from "@/lib/queries";
 import PedidosLista from "./pedidos-lista";
@@ -16,14 +17,7 @@ export default async function PedidosPage({
 
   return (
     <div>
-      <nav className={styles.nav}>
-        <Link href="/" className={styles.logo}>
-          <img src="/logo.jpg" alt="Pet Sister" />
-        </Link>
-        <Link href="/">Loja</Link>
-        <Link href="/agendamentos">Agendamentos</Link>
-        <Link href="/carrinho">Carrinho</Link>
-      </nav>
+     <AreaHeader />
       <div className={styles.page}>
         <div className={styles.ph}>
           <h1>Meus pedidos</h1>
