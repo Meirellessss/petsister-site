@@ -197,7 +197,7 @@ function alternarTema() {
   </a>
 
 </div>
-
+</div>
 <nav
   className={`${styles.nav} ${
     scrolled ? styles.navScrolled : ""
