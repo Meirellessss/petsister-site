@@ -327,6 +327,22 @@ function alternarTema() {
               </Link>
             )}
 
+{/* MEU PERFIL */}
+<Link
+  href="/perfil"
+  className={styles.navAction}
+  title="Meu Perfil"
+>
+  <span className={styles.navActionIcon}>
+    <Icon name="usuario" size={21} />
+  </span>
+
+  <span className={styles.navActionText}>
+    <small>Minha</small>
+    Perfil
+  </span>
+</Link>
+            
             {/* SAIR */}
             <form action={sair}>
   <button
