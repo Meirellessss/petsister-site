@@ -633,3 +633,94 @@
       repeat(2, 1fr);
   }
 }
+
+
+.page {
+  width: 100%;
+  max-width: 1120px;
+  min-height: calc(100vh - 76px);
+  padding: clamp(24px, 4vw, 48px) 20px 60px;
+}
+
+.ph {
+  padding: 26px 28px;
+  margin-bottom: 24px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: linear-gradient(135deg, var(--white), var(--p50));
+  box-shadow: 0 10px 30px rgba(12, 24, 64, 0.05);
+}
+
+.ph h1 {
+  color: var(--ink);
+  font-size: clamp(1.8rem, 3vw, 2.35rem);
+  font-weight: 800;
+}
+
+.ph p {
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+.card {
+  border-color: var(--border);
+  border-radius: 18px;
+  box-shadow: 0 12px 32px rgba(12, 24, 64, 0.06);
+}
+
+.cardHead {
+  background: var(--p50);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.modernForm {
+  background: var(--white);
+  color: var(--ink);
+}
+
+.stepTitle strong {
+  color: var(--ink);
+}
+
+.stepTitle small {
+  color: var(--muted);
+}
+
+.stepTitle > span {
+  background: var(--p900);
+  color: #fff;
+}
+
+.serviceCard {
+  background: var(--white);
+  color: var(--ink);
+  border-color: var(--border);
+}
+
+.serviceCardActive {
+  background: var(--p50);
+  border-color: var(--p600);
+}
+
+.fg input,
+.fg select,
+.fg textarea {
+  background: var(--white);
+  color: var(--ink);
+  border-color: var(--border);
+}
+
+.agItem {
+  transition: background 0.18s ease;
+}
+
+.agItem:hover {
+  background: var(--p50);
+}
+
+@media (max-width: 600px) {
+  .ph {
+    padding: 21px 18px;
+  }
+}
