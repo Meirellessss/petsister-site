@@ -9,8 +9,8 @@ import Icon from "@/components/Icon";
 import styles from "./landing.module.css";
 import Link from "next/link";
 
-const WHATSAPP = "5521968934951";
-const WHATSAPP_LABEL = "(21) 96893-4951";
+const WHATSAPP = "552124900947";
+const WHATSAPP_LABEL = "2490-0947";
 const INSTAGRAM = "petsisterracoes";
 
 // Ícone por categoria — mantém o mesmo mapeamento (levemente peculiar) do site original,
