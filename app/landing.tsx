@@ -338,7 +338,7 @@ function alternarTema() {
   </span>
 
   <span className={styles.navActionText}>
-    <small>Minha</small>
+    <small>Meu</small>
     Perfil
   </span>
 </Link>
