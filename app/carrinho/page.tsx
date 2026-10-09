@@ -1,3 +1,4 @@
+import AreaHeader from "@/components/AreaHeader";
 import Link from "next/link";
 import { getPedidoPendente, getUsuarioAtual } from "@/lib/queries";
 import CarrinhoInterativo from "./carrinho-interativo";
@@ -12,12 +13,7 @@ export default async function CarrinhoPage() {
 
   return (
     <div>
-      <nav className={styles.nav}>
-        <Link href="/" className={styles.logo}>
-          <img src="/logo.jpg" alt="Pet Sister" />
-        </Link>
-        <Link href="/">← Continuar comprando</Link>
-      </nav>
+     <AreaHeader />
       <div className={styles.page}>
         <div className={styles.ph}>
           <h1>Seu carrinho</h1>
