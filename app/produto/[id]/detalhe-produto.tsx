@@ -32,9 +32,11 @@ function nomePorte(porte: Produto["porte"]) {
 export default function DetalheProduto({
   produto,
   logado,
+  produtosRelacionados,
 }: {
   produto: Produto;
   logado: boolean;
+  produtosRelacionados: Produto[];
 }) {
   const [quantidade, setQuantidade] = useState(1);
   const [abaAtiva, setAbaAtiva] = useState<"descricao" | "informacoes">(
@@ -314,6 +316,61 @@ export default function DetalheProduto({
             </div>
           )}
         </section>
+        
+{produtosRelacionados.length > 0 && (
+  <section className={styles.relatedSection}>
+    <div className={styles.relatedHeading}>
+      <div>
+        <span className={styles.relatedEyebrow}>
+          MAIS PARA O SEU PET
+        </span>
+        <h2>Seu pet também pode gostar</h2>
+        <p>Confira outros produtos selecionados para você.</p>
+      </div>
+
+      <Link href="/#produtos" className={styles.relatedAll}>
+        Ver todos →
+      </Link>
+    </div>
+
+    <div className={styles.relatedGrid}>
+      {produtosRelacionados.map((item) => (
+        <Link
+          key={item.id}
+          href={`/produto/${item.id}`}
+          className={styles.relatedCard}
+        >
+          <div className={styles.relatedImage}>
+            {item.imagem ? (
+              <img src={item.imagem} alt={item.nome} />
+            ) : (
+              <span className={styles.relatedPlaceholder}>
+                <Icon name="pata" size={38} />
+              </span>
+            )}
+          </div>
+
+          <div className={styles.relatedInfo}>
+            <span className={styles.relatedCategory}>
+              {item.categoria || "PetSister"}
+            </span>
+
+            <h3>{item.nome}</h3>
+
+            <span className={styles.relatedPrice}>
+              R$ {formatarPreco(item.preco)}
+            </span>
+
+            <span className={styles.relatedAction}>
+              Ver produto →
+            </span>
+          </div>
+        </Link>
+      ))}
+    </div>
+  </section>
+)}
+
       </div>
     </main>
   );
