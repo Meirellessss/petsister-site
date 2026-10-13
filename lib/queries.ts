@@ -96,3 +96,22 @@ export async function getMeusAgendamentos(usuarioId: string): Promise<Agendament
     .order("data_hora", { ascending: false });
   return (data as Agendamento[]) ?? [];
 }
+
+
+export async function getProdutoPorId(
+  id: number
+): Promise<Produto | null> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("petsister_produtos")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error || !data) {
+    return null;
+  }
+
+  return data as Produto;
+}
