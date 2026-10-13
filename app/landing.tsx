@@ -754,7 +754,7 @@ function adicionarDireto(p: Produto) {
         )}
 
         {p.imagem ? (
-          <img src={p.imagem} alt={p.nome} />
+          src={p.imagem.split(/\r?\n/)[0]}
         ) : (
           <span className={styles.phIc}>
             <Icon
