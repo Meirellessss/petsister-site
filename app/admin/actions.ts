@@ -37,7 +37,11 @@ export async function salvarProduto(formData: FormData): Promise<Resultado> {
   const categoria = String(formData.get("categoria") ?? "").trim();
   const porteRaw = String(formData.get("porte") ?? "Todos");
   const porte: Porte = PORTES.includes(porteRaw as Porte) ? (porteRaw as Porte) : "Todos";
-  const imagem = String(formData.get("imagem") ?? "").trim();
+  const imagem = String(formData.get("imagem") ?? "")
+  .split(/\r?\n/)
+  .map((url) => url.trim())
+  .filter(Boolean)
+  .join("\n");
   const destaque = formData.get("destaque") === "1";
 
   if (!nome) return { ok: false, error: "Nome é obrigatório" };
