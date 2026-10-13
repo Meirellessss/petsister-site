@@ -1251,6 +1251,8 @@ a.topbarItem:hover {
   color: #ffffff;
   margin-bottom: 0.5rem;
   min-height: 2.7rem;
+  text-decoration: none;
+  display: block; 
 }
 .prodPorte {
   display: inline-flex;
