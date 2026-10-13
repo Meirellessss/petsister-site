@@ -77,9 +77,8 @@ export default function Landing({
   const [busca, setBusca] = useState("");
   const [catAtiva, setCatAtiva] = useState("");
   const [darkMode, setDarkMode] = useState(false);
-  const [produtoAberto, setProdutoAberto] = useState<Produto | null>(null);
-  const [qty, setQty] = useState(1);
-  const [msg, setMsg] = useState<{ tipo: "ok" | "err"; texto: string } | null>(null);
+  const [produtoAdicionando, setProdutoAdicionando] = useState<number | null>(null);
+  const [erroCarrinho, setErroCarrinho] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
@@ -142,27 +141,29 @@ function alternarTema() {
     setBusca("");
   }
 
-  function abrirCompra(p: Produto) {
-    setProdutoAberto(p);
-    setQty(1);
-    setMsg(null);
-  }
+ 
+function adicionarDireto(p: Produto) {
+  setErroCarrinho(null);
+  setProdutoAdicionando(p.id);
 
-  function confirmarCompra() {
-    if (!produtoAberto) return;
-    startTransition(async () => {
-      const res = await adicionarAoCarrinho(produtoAberto.id, qty);
-      if (res.ok) {
-        setMsg({ tipo: "ok", texto: "Adicionado ao carrinho!" });
-        setTimeout(() => {
-          setProdutoAberto(null);
-          router.refresh();
-        }, 900);
-      } else {
-        setMsg({ tipo: "err", texto: res.error });
+  startTransition(async () => {
+    try {
+      const res = await adicionarAoCarrinho(p.id, 1);
+
+      if (!res.ok) {
+        setErroCarrinho(res.error);
+        return;
       }
-    });
-  }
+
+      router.refresh();
+    } catch {
+      setErroCarrinho("Não foi possível adicionar o produto. Tente novamente.");
+    } finally {
+      setProdutoAdicionando(null);
+    }
+  });
+}
+
 
   return (
     <div>
@@ -731,6 +732,11 @@ function alternarTema() {
               </button>
             ))}
           </div>
+          {erroCarrinho && (
+  <p role="alert" style={{ color: "#c2410c", marginBottom: "1rem" }}>
+    {erroCarrinho}
+  </p>
+)}
           <div className={styles.prodGrid}>
             {visiveis.map((p) => {
               const parcela = p.preco / 3;
@@ -773,9 +779,14 @@ function alternarTema() {
                       </div>
                       <div className={styles.prodInstallment}>ou 3x de R$ {formatarPreco(parcela)} sem juros</div>
                       {usuario ? (
-                        <button className={styles.btnComprar} onClick={() => abrirCompra(p)}>
-                          <Icon name="carrinho" size={16} /> Adicionar
-                        </button>
+                        <button
+  className={styles.btnComprar}
+  onClick={() => adicionarDireto(p)}
+  disabled={pending && produtoAdicionando === p.id}
+>
+  <Icon name="carrinho" size={16} />
+  {produtoAdicionando === p.id ? "Adicionando..." : "Adicionar"}
+</button>
                       ) : (
                         <a href="/login">
                           <button className={styles.btnComprar}>Entrar para comprar</button>
@@ -978,59 +989,6 @@ function alternarTema() {
           © {new Date().getFullYear()} Pet Sister · Cães e gatos · Feito com carinho · {WHATSAPP_LABEL}
         </div>
       </footer>
-
-      {produtoAberto && (
-        <div className={styles.overlay} onClick={() => setProdutoAberto(null)}>
-          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHead}>
-              <h3>{produtoAberto.nome}</h3>
-              <button className={styles.modalClose} onClick={() => setProdutoAberto(null)} aria-label="Fechar">
-                <Icon name="fechar" size={14} />
-              </button>
-            </div>
-            <div className={styles.modalBody}>
-              <p style={{ fontSize: ".9rem", color: "var(--muted)" }}>{produtoAberto.descricao}</p>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <div className={styles.priceBig}>R$ {formatarPreco(produtoAberto.preco)}</div>
-                <div style={{ fontSize: ".82rem", color: "var(--muted)" }}>{produtoAberto.estoque} em estoque</div>
-              </div>
-              <div className={styles.qtyRow}>
-                <label style={{ fontSize: ".78rem", fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: ".05em" }}>
-                  Quantidade
-                </label>
-                <button className={styles.qtyBtn} onClick={() => setQty((q) => Math.max(1, q - 1))}>
-                  −
-                </button>
-                <span style={{ width: 34, textAlign: "center", fontWeight: 700, fontSize: "1.05rem" }}>{qty}</span>
-                <button
-                  className={styles.qtyBtn}
-                  onClick={() => setQty((q) => Math.min(produtoAberto.estoque, q + 1))}
-                >
-                  +
-                </button>
-              </div>
-              {msg && (
-                <div className={`${styles.alert} ${msg.tipo === "ok" ? styles.alertOk : styles.alertErr}`}>
-                  {msg.tipo === "ok" ? <Icon name="check" size={16} /> : <Icon name="alerta" size={16} />}
-                  {msg.texto}
-                </div>
-              )}
-              <button
-                className={`${styles.btnPrimary} ${styles.btnFull}`}
-                style={{ padding: ".8rem", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: ".5rem" }}
-                onClick={confirmarCompra}
-                disabled={pending}
-              >
-                {pending ? "Adicionando…" : (
-                  <>
-                    Adicionar ao carrinho <Icon name="carrinho" size={18} />
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
