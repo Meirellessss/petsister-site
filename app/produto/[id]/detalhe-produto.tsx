@@ -366,7 +366,7 @@ const imagemAtual = imagens[indiceSeguro];
         >
           <div className={styles.relatedImage}>
             {item.imagem ? (
-              <img src={item.imagem} alt={item.nome} />
+              <img src={item.imagem.split(/\r?\n/)[0]} alt={item.nome} />
             ) : (
               <span className={styles.relatedPlaceholder}>
                 <Icon name="pata" size={38} />
