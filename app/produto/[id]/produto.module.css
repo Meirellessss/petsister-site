@@ -710,3 +710,153 @@
     padding: 11px;
   }
 }
+
+
+.relatedSection {
+  margin-top: 28px;
+  padding: 26px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--white);
+}
+
+.relatedHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.relatedEyebrow {
+  color: var(--p600);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.relatedHeading h2 {
+  margin-top: 5px;
+  color: var(--ink);
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.relatedHeading p {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.relatedAll {
+  flex-shrink: 0;
+  color: var(--p600);
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.relatedGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.relatedCard {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--white);
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.relatedCard:hover {
+  border-color: var(--p500);
+  transform: translateY(-3px);
+}
+
+.relatedImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 185px;
+  padding: 13px;
+  background: var(--bg);
+}
+
+.relatedImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.relatedPlaceholder {
+  color: var(--p600);
+}
+
+.relatedInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 14px;
+}
+
+.relatedCategory {
+  color: var(--p600);
+  font-size: 0.69rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.relatedInfo h3 {
+  display: -webkit-box;
+  min-height: 2.6em;
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.relatedPrice {
+  color: var(--p600);
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+
+.relatedAction {
+  margin-top: 3px;
+  color: var(--p700);
+  font-size: 0.79rem;
+  font-weight: 800;
+}
+
+@media (max-width: 680px) {
+  .relatedSection {
+    padding: 16px;
+  }
+
+  .relatedHeading h2 {
+    font-size: 1.15rem;
+  }
+
+  .relatedGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .relatedImage {
+    height: 135px;
+  }
+
+  .relatedInfo {
+    padding: 11px;
+  }
+}
