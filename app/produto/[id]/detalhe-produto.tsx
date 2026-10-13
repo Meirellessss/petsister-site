@@ -39,6 +39,19 @@ export default function DetalheProduto({
   produtosRelacionados: Produto[];
 }) {
   const [quantidade, setQuantidade] = useState(1);
+  const [indiceImagem, setIndiceImagem] = useState(0);
+
+const imagens = (produto.imagem ?? "")
+  .split(/\r?\n/)
+  .map((url) => url.trim())
+  .filter(Boolean);
+
+const indiceSeguro = Math.min(
+  indiceImagem,
+  Math.max(imagens.length - 1, 0)
+);
+
+const imagemAtual = imagens[indiceSeguro];
   const [abaAtiva, setAbaAtiva] = useState<"descricao" | "informacoes">(
     "descricao"
   );
@@ -85,38 +98,49 @@ export default function DetalheProduto({
         </Link>
 
         <section className={styles.productLayout}>
-          <div className={styles.gallery}>
-            <div className={styles.thumbRail}>
-              {produto.imagem ? (
-                <div className={styles.thumbActive}>
-                  <img src={produto.imagem} alt="" />
-                </div>
-              ) : (
-                <div className={styles.thumbPlaceholder}>
-                  <Icon name="pata" size={26} />
-                </div>
-              )}
-            </div>
+         
+<div className={styles.gallery}>
+  <div className={styles.thumbRail}>
+    {imagens.map((url, index) => (
+      <button
+        key={`${url}-${index}`}
+        type="button"
+        className={`${styles.thumbButton} ${
+          index === indiceSeguro ? styles.thumbSelected : ""
+        }`}
+        onClick={() => setIndiceImagem(index)}
+        aria-label={`Mostrar foto ${index + 1}`}
+        aria-pressed={index === indiceSeguro}
+      >
+        <img
+          src={url}
+          alt={`${produto.nome} - foto ${index + 1}`}
+        />
+      </button>
+    ))}
+  </div>
 
-            <div className={styles.imagePanel}>
-              {produto.destaque && (
-                <span className={styles.tag}>Destaque</span>
-              )}
+  <div className={styles.imagePanel}>
+    {produto.destaque && (
+      <span className={styles.tag}>Destaque</span>
+    )}
 
-              {produto.imagem ? (
-                <img
-                  className={styles.productImage}
-                  src={produto.imagem}
-                  alt={produto.nome}
-                />
-              ) : (
-                <div className={styles.noImage}>
-                  <Icon name="pata" size={76} />
-                  <span>Imagem não cadastrada</span>
-                </div>
-              )}
-            </div>
-          </div>
+    {imagemAtual ? (
+      <img
+        key={imagemAtual}
+        className={styles.productImage}
+        src={imagemAtual}
+        alt={produto.nome}
+      />
+    ) : (
+      <div className={styles.noImage}>
+        <Icon name="pata" size={76} />
+        <span>Imagem não cadastrada</span>
+      </div>
+    )}
+  </div>
+</div>
+
 
           <section className={styles.info}>
             <div className={styles.category}>
