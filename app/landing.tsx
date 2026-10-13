@@ -754,8 +754,11 @@ function adicionarDireto(p: Produto) {
         )}
 
         {p.imagem ? (
-          src={p.imagem.split(/\r?\n/)[0]}
-        ) : (
+  <img
+    src={p.imagem.split(/\r?\n/)[0]}
+    alt={p.nome}
+  />
+) : (
           <span className={styles.phIc}>
             <Icon
               name={CATEGORIA_ICON[p.categoria ?? ""] ?? "pata"}
