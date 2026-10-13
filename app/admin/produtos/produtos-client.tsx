@@ -203,10 +203,21 @@ export default function ProdutosClient({
                   </select>
                 </div>
               </div>
-              <div className={styles.fg}>
-                <label>URL da imagem</label>
-                <input type="text" name="imagem" className={styles.fc} placeholder="https://…" defaultValue={editando?.imagem ?? ""} />
-              </div>
+              
+<div className={styles.fg}>
+  <label>Fotos do produto (uma URL por linha)</label>
+  <textarea
+    name="imagem"
+    className={styles.fc}
+    rows={4}
+    placeholder={"https://site.com/foto-frente.jpg\nhttps://site.com/foto-lateral.jpg\nhttps://site.com/foto-detalhe.jpg"}
+    defaultValue={editando?.imagem ?? ""}
+  />
+  <small style={{ color: "var(--muted)" }}>
+    Cole uma URL por linha. A primeira será a foto principal.
+  </small>
+</div>
+
               <div style={{ display: "flex", gap: ".7rem" }}>
                 <button type="submit" className={`${styles.btn} ${styles.btnPrimary} ${styles.btnFull}`} disabled={pending}>
                   {pending ? "Salvando…" : "Salvar"}
