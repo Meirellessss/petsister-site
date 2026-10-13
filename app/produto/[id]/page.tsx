@@ -1,4 +1,6 @@
+
 import { notFound } from "next/navigation";
+import AreaHeader from "@/components/AreaHeader";
 import { getProdutoPorId, getUsuarioAtual } from "@/lib/queries";
 import DetalheProduto from "./detalhe-produto";
 
@@ -24,9 +26,12 @@ export default async function PaginaProduto({
   }
 
   return (
-    <DetalheProduto
-      produto={produto}
-      logado={Boolean(usuario)}
-    />
+    <>
+      <AreaHeader />
+      <DetalheProduto
+        produto={produto}
+        logado={Boolean(usuario)}
+      />
+    </>
   );
 }
