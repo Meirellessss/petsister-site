@@ -134,7 +134,7 @@ a.topbarItem:hover {
 .nav {
   position: fixed;
 
-  top: 33px;
+  top: 21px;
   left: 0;
   right: 0;
 
@@ -678,7 +678,7 @@ a.topbarItem:hover {
   }
 
   .navInner {
-    padding: 0.7rem 0.8rem;
+    padding: 0.15rem 1.5rem;
   }
 
   .logo img {
