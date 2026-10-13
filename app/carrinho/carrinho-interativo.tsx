@@ -50,7 +50,7 @@ export default function CarrinhoInterativo({
         {itens.map((it) => (
           <div className={styles.item} key={it.id}>
             <div className={styles.itemIcon}>
-              {it.imagem ? <img src={it.imagem} alt="" /> : "🐾"}
+              {it.imagem ?<img src={it.imagem.split(/\r?\n/)[0]} alt="" /> : "🐾"}
             </div>
             <div className={styles.itemInfo}>
               <strong>{it.nome}</strong>
