@@ -735,20 +735,30 @@ function alternarTema() {
             {visiveis.map((p) => {
               const parcela = p.preco / 3;
               return (
-                <div className={styles.prodCard} key={p.id}>
-                  <div className={styles.prodThumb}>
-                    {p.destaque && <span className={styles.prodTag}>Destaque</span>}
-                    {p.imagem ? (
-                      <img src={p.imagem} alt="" />
-                    ) : (
-                      <span className={styles.phIc}>
-                        <Icon name={CATEGORIA_ICON[p.categoria ?? ""] ?? "pata"} size={64} />
-                      </span>
-                    )}
-                  </div>
+                
+<Link
+  href={`/produto/${p.id}`}
+  className={styles.prodThumb}
+  aria-label={`Ver detalhes de ${p.nome}`}
+>
+  {p.destaque && <span className={styles.prodTag}>Destaque</span>}
+  {p.imagem ? (
+    <img src={p.imagem} alt={p.nome} />
+  ) : (
+    <span className={styles.phIc}>
+      <Icon name={CATEGORIA_ICON[p.categoria ?? ""] ?? "pata"} size={64} />
+    </span>
+  )}
+</Link>
+
                   <div className={styles.prodBody}>
                     <div className={styles.prodCat}>{p.categoria}</div>
-                    <div className={styles.prodName}>{p.nome}</div>
+                    <Link
+  href={`/produto/${p.id}`}
+  className={styles.prodName}
+>
+  {p.nome}
+</Link>
                     <span className={styles.prodPorte}>
                       <Icon name="cao" size={12} /> Porte {p.porte === "Medio" ? "Médio" : p.porte}
                     </span>
