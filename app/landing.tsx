@@ -738,65 +738,88 @@ function adicionarDireto(p: Produto) {
   </p>
 )}
           <div className={styles.prodGrid}>
-            {visiveis.map((p) => {
-              const parcela = p.preco / 3;
-              return (
-                
-<Link
-  href={`/produto/${p.id}`}
-  className={styles.prodThumb}
-  aria-label={`Ver detalhes de ${p.nome}`}
->
-  {p.destaque && <span className={styles.prodTag}>Destaque</span>}
-  {p.imagem ? (
-    <img src={p.imagem} alt={p.nome} />
-  ) : (
-    <span className={styles.phIc}>
-      <Icon name={CATEGORIA_ICON[p.categoria ?? ""] ?? "pata"} size={64} />
-    </span>
-  )}
-</Link>
+            
+{visiveis.map((p) => {
+  const parcela = p.preco / 3;
 
-                  <div className={styles.prodBody}>
-                    <div className={styles.prodCat}>{p.categoria}</div>
-                    <Link
-  href={`/produto/${p.id}`}
-  className={styles.prodName}
->
-  {p.nome}
-</Link>
-                    <span className={styles.prodPorte}>
-                      <Icon name="cao" size={12} /> Porte {p.porte === "Medio" ? "Médio" : p.porte}
-                    </span>
-                    <div className={styles.prodFoot}>
-                      {p.estoque <= 8 && (
-                        <div className={styles.prodStockLow}>
-                          <Icon name="raio" size={13} /> Últimas {p.estoque} unidades
-                        </div>
-                      )}
-                      <div className={styles.prodPriceRow}>
-                        <span className={styles.prodPrice}>R$ {formatarPreco(p.preco)}</span>
-                      </div>
-                      <div className={styles.prodInstallment}>ou 3x de R$ {formatarPreco(parcela)} sem juros</div>
-                      {usuario ? (
-                        <button
-  className={styles.btnComprar}
-  onClick={() => adicionarDireto(p)}
-  disabled={pending && produtoAdicionando === p.id}
->
-  <Icon name="carrinho" size={16} />
-  {produtoAdicionando === p.id ? "Adicionando..." : "Adicionar"}
-</button>
-                      ) : (
-                        <a href="/login">
-                          <button className={styles.btnComprar}>Entrar para comprar</button>
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+  return (
+    <div className={styles.prodCard} key={p.id}>
+      <Link
+        href={`/produto/${p.id}`}
+        className={styles.prodThumb}
+        aria-label={`Ver detalhes de ${p.nome}`}
+      >
+        {p.destaque && (
+          <span className={styles.prodTag}>Destaque</span>
+        )}
+
+        {p.imagem ? (
+          <img src={p.imagem} alt={p.nome} />
+        ) : (
+          <span className={styles.phIc}>
+            <Icon
+              name={CATEGORIA_ICON[p.categoria ?? ""] ?? "pata"}
+              size={64}
+            />
+          </span>
+        )}
+      </Link>
+
+      <div className={styles.prodBody}>
+        <div className={styles.prodCat}>{p.categoria}</div>
+
+        <Link
+          href={`/produto/${p.id}`}
+          className={styles.prodName}
+        >
+          {p.nome}
+        </Link>
+
+        <span className={styles.prodPorte}>
+          <Icon name="cao" size={12} /> Porte{" "}
+          {p.porte === "Medio" ? "Médio" : p.porte}
+        </span>
+
+        <div className={styles.prodFoot}>
+          {p.estoque <= 8 && (
+            <div className={styles.prodStockLow}>
+              <Icon name="raio" size={13} /> Últimas {p.estoque} unidades
+            </div>
+          )}
+
+          <div className={styles.prodPriceRow}>
+            <span className={styles.prodPrice}>
+              R$ {formatarPreco(p.preco)}
+            </span>
+          </div>
+
+          <div className={styles.prodInstallment}>
+            ou 3x de R$ {formatarPreco(parcela)} sem juros
+          </div>
+
+          {usuario ? (
+            <button
+              type="button"
+              className={styles.btnComprar}
+              onClick={() => adicionarDireto(p)}
+              disabled={pending && produtoAdicionando === p.id}
+            >
+              <Icon name="carrinho" size={16} />
+              {produtoAdicionando === p.id
+                ? "Adicionando..."
+                : "Adicionar"}
+            </button>
+          ) : (
+            <Link href="/login" className={styles.btnComprar}>
+              Entrar para comprar
+            </Link>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+})}
+
           </div>
          {visiveis.length === 0 && (
             <div style={{ textAlign: "center", padding: "3rem", color: "var(--muted)" }}>
