@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useTransition } from "react";
@@ -15,6 +16,19 @@ function formatarPreco(valor: number) {
   });
 }
 
+function nomePorte(porte: Produto["porte"]) {
+  switch (porte) {
+    case "Pequeno":
+      return "Pequeno";
+    case "Medio":
+      return "Médio";
+    case "Grande":
+      return "Grande";
+    default:
+      return "Todos os portes";
+  }
+}
+
 export default function DetalheProduto({
   produto,
   logado,
@@ -23,34 +37,32 @@ export default function DetalheProduto({
   logado: boolean;
 }) {
   const [quantidade, setQuantidade] = useState(1);
-  const [mensagem, setMensagem] = useState<{
-    tipo: "ok" | "erro";
-    texto: string;
-  } | null>(null);
-
+  const [abaAtiva, setAbaAtiva] = useState<"descricao" | "informacoes">(
+    "descricao"
+  );
+  const [erro, setErro] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const router = useRouter();
 
   function adicionar() {
-    setMensagem(null);
+    setErro(null);
 
     startTransition(async () => {
-      const resultado = await adicionarAoCarrinho(
-        produto.id,
-        quantidade
-      );
+      try {
+        const resultado = await adicionarAoCarrinho(
+          produto.id,
+          quantidade
+        );
 
-      if (resultado.ok) {
-        setMensagem({
-          tipo: "ok",
-          texto: "Produto adicionado ao carrinho!",
-        });
+        if (!resultado.ok) {
+          setErro(resultado.error);
+          return;
+        }
+
+        // Adiciona diretamente ao carrinho, sem janela de confirmação.
         router.refresh();
-      } else {
-        setMensagem({
-          tipo: "erro",
-          texto: resultado.error,
-        });
+      } catch {
+        setErro("Não foi possível adicionar o produto. Tente novamente.");
       }
     });
   }
@@ -58,49 +70,76 @@ export default function DetalheProduto({
   return (
     <main className={styles.page}>
       <div className={styles.container}>
+        <nav className={styles.breadcrumb} aria-label="Navegação">
+          <Link href="/">Início</Link>
+          <span>/</span>
+          <Link href="/#produtos">Produtos</Link>
+          <span>/</span>
+          <span>{produto.categoria || "PetSister"}</span>
+        </nav>
+
         <Link href="/#produtos" className={styles.back}>
           ← Voltar aos produtos
         </Link>
 
-        <div className={styles.layout}>
-          <div className={styles.imagePanel}>
-            {produto.destaque && (
-              <span className={styles.tag}>Destaque</span>
-            )}
+        <section className={styles.productLayout}>
+          <div className={styles.gallery}>
+            <div className={styles.thumbRail}>
+              {produto.imagem ? (
+                <div className={styles.thumbActive}>
+                  <img src={produto.imagem} alt="" />
+                </div>
+              ) : (
+                <div className={styles.thumbPlaceholder}>
+                  <Icon name="pata" size={26} />
+                </div>
+              )}
+            </div>
 
-            {produto.imagem ? (
-              <img
-                className={styles.productImage}
-                src={produto.imagem}
-                alt={produto.nome}
-              />
-            ) : (
-              <div className={styles.noImage}>
-                <Icon name="pata" size={76} />
-                <span>Imagem indisponível</span>
-              </div>
-            )}
+            <div className={styles.imagePanel}>
+              {produto.destaque && (
+                <span className={styles.tag}>Destaque</span>
+              )}
+
+              {produto.imagem ? (
+                <img
+                  className={styles.productImage}
+                  src={produto.imagem}
+                  alt={produto.nome}
+                />
+              ) : (
+                <div className={styles.noImage}>
+                  <Icon name="pata" size={76} />
+                  <span>Imagem não cadastrada</span>
+                </div>
+              )}
+            </div>
           </div>
 
           <section className={styles.info}>
-            <span className={styles.category}>
+            <div className={styles.category}>
               {produto.categoria || "Produtos para pets"}
-            </span>
-
-            <h1 className={styles.title}>
-              {produto.nome}
-            </h1>
-
-            <div className={styles.price}>
-              R$ {formatarPreco(produto.preco)}
             </div>
 
-            <p className={styles.installment}>
-              Ou 3x de R${" "}
-              {formatarPreco(produto.preco / 3)} sem juros
-            </p>
+            <h1 className={styles.title}>{produto.nome}</h1>
 
-            <div className={styles.stock}>
+            <div className={styles.productMeta}>
+              <span>Código: {produto.id}</span>
+              <span className={styles.metaDivider}>•</span>
+              <span>Avaliações ainda não disponíveis</span>
+            </div>
+
+            <div className={styles.priceBlock}>
+              <div className={styles.price}>
+                R$ {formatarPreco(produto.preco)}
+              </div>
+
+              <p className={styles.installment}>
+                Em até 3x de R$ {formatarPreco(produto.preco / 3)} sem juros
+              </p>
+            </div>
+
+            <div className={styles.stockRow}>
               <span
                 className={
                   produto.estoque > 0
@@ -108,43 +147,24 @@ export default function DetalheProduto({
                     : styles.stockUnavailable
                 }
               >
+                <span className={styles.stockDot} />
                 {produto.estoque > 0
-                  ? `${produto.estoque} unidade(s) em estoque`
+                  ? "Disponível em estoque"
                   : "Produto indisponível no momento"}
               </span>
+
+              {produto.estoque > 0 && (
+                <span className={styles.stockQuantity}>
+                  {produto.estoque} unidade(s)
+                </span>
+              )}
             </div>
 
-            <div className={styles.divider} />
-
-            <div className={styles.descriptionTitle}>
-              Sobre o produto
-            </div>
-
-            <p className={styles.description}>
-              {produto.descricao ||
-                "Entre em contato com nosso atendimento para saber mais sobre este produto."}
-            </p>
-
-            <div className={styles.details}>
-              <span className={styles.detailLabel}>
-                Indicação
-              </span>
-              <span>
-                {produto.porte === "Medio"
-                  ? "Porte médio"
-                  : produto.porte === "Todos"
-                    ? "Todos os portes"
-                    : produto.porte === "Pequeno"
-                      ? "Porte pequeno"
-                      : "Porte grande"}
-              </span>
-            </div>
+            <div className={styles.purchaseDivider} />
 
             {produto.estoque > 0 && logado && (
-              <div className={styles.purchase}>
-                <span className={styles.quantityLabel}>
-                  Quantidade
-                </span>
+              <div className={styles.purchaseRow}>
+                <span className={styles.quantityLabel}>Quantidade</span>
 
                 <div className={styles.quantityControls}>
                   <button
@@ -159,21 +179,15 @@ export default function DetalheProduto({
                     −
                   </button>
 
-                  <span className={styles.quantityValue}>
-                    {quantidade}
-                  </span>
+                  <span className={styles.quantityValue}>{quantidade}</span>
 
                   <button
                     type="button"
                     className={styles.quantityButton}
                     onClick={() =>
-                      setQuantidade((q) =>
-                        Math.min(produto.estoque, q + 1)
-                      )
+                      setQuantidade((q) => Math.min(produto.estoque, q + 1))
                     }
-                    disabled={
-                      quantidade >= produto.estoque || pending
-                    }
+                    disabled={quantidade >= produto.estoque || pending}
                     aria-label="Aumentar quantidade"
                   >
                     +
@@ -182,16 +196,9 @@ export default function DetalheProduto({
               </div>
             )}
 
-            {mensagem && (
-              <div
-                className={`${styles.message} ${
-                  mensagem.tipo === "ok"
-                    ? styles.success
-                    : styles.error
-                }`}
-                role="status"
-              >
-                {mensagem.texto}
+            {erro && (
+              <div className={styles.error} role="alert">
+                {erro}
               </div>
             )}
 
@@ -215,13 +222,98 @@ export default function DetalheProduto({
               </Link>
             )}
 
-            <div className={styles.trust}>
-              <span>Compra segura</span>
-              <span>•</span>
-              <span>Atendimento PetSister</span>
+            <div className={styles.benefits}>
+              <div className={styles.benefit}>
+                <Icon name="cadeado" size={21} />
+                <div>
+                  <strong>Compra segura</strong>
+                  <span>Seus pedidos na PetSister</span>
+                </div>
+              </div>
+
+              <div className={styles.benefit}>
+                <Icon name="caminhao" size={23} />
+                <div>
+                  <strong>Disk Entrega</strong>
+                  <span>Consulte as condições de entrega</span>
+                </div>
+              </div>
+
+              <div className={styles.benefit}>
+                <Icon name="coracao" size={21} />
+                <div>
+                  <strong>Atendimento PetSister</strong>
+                  <span>Cuidado para o seu pet</span>
+                </div>
+              </div>
             </div>
           </section>
-        </div>
+        </section>
+
+        <section className={styles.detailSection}>
+          <h2 className={styles.sectionTitle}>Detalhes do produto</h2>
+
+          <div className={styles.tabs} role="tablist" aria-label="Detalhes">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={abaAtiva === "descricao"}
+              className={`${styles.tab} ${
+                abaAtiva === "descricao" ? styles.tabActive : ""
+              }`}
+              onClick={() => setAbaAtiva("descricao")}
+            >
+              Descrição
+            </button>
+
+            <button
+              type="button"
+              role="tab"
+              aria-selected={abaAtiva === "informacoes"}
+              className={`${styles.tab} ${
+                abaAtiva === "informacoes" ? styles.tabActive : ""
+              }`}
+              onClick={() => setAbaAtiva("informacoes")}
+            >
+              Especificações
+            </button>
+          </div>
+
+          {abaAtiva === "descricao" ? (
+            <div className={styles.descriptionContent} role="tabpanel">
+              <h3>Sobre o produto</h3>
+              <p>
+                {produto.descricao ||
+                  "Ainda não há uma descrição cadastrada para este produto."}
+              </p>
+            </div>
+          ) : (
+            <div className={styles.specifications} role="tabpanel">
+              <div className={styles.specRow}>
+                <span>Produto</span>
+                <strong>{produto.nome}</strong>
+              </div>
+              <div className={styles.specRow}>
+                <span>Categoria</span>
+                <strong>{produto.categoria || "Não informada"}</strong>
+              </div>
+              <div className={styles.specRow}>
+                <span>Indicação de porte</span>
+                <strong>{nomePorte(produto.porte)}</strong>
+              </div>
+              <div className={styles.specRow}>
+                <span>Disponibilidade</span>
+                <strong>
+                  {produto.estoque > 0 ? "Em estoque" : "Indisponível"}
+                </strong>
+              </div>
+              <div className={styles.specRow}>
+                <span>Código do produto</span>
+                <strong>{produto.id}</strong>
+              </div>
+            </div>
+          )}
+        </section>
       </div>
     </main>
   );
