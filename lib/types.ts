@@ -27,7 +27,10 @@ export interface Produto {
   categoria: string | null;
   porte: Porte;
   imagem: string | null;
-  destaque: boolean;
+   destaque: boolean;
+  parcelamento_ativo: boolean;
+  parcelamento_maximo: number;
+  desconto_percentual: number;
   criado_em: string;
 }
 
