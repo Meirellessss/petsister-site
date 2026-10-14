@@ -91,7 +91,7 @@ const limiteEstoqueBaixo =
     supabase
       .from("petsister_produtos")
       .select("id,nome,estoque,categoria")
-      .lte("estoque", limiteEstoqueBaixo),
+      .lte("estoque", limiteEstoqueBaixo)
       .order("estoque", { ascending: true })
       .limit(5),
   ]);
