@@ -740,7 +740,26 @@ function adicionarDireto(p: Produto) {
           <div className={styles.prodGrid}>
             
 {visiveis.map((p) => {
-  const parcela = p.preco / 3;
+ const desconto = Math.min(
+  90,
+  Math.max(0, Number(p.desconto_percentual ?? 0))
+);
+
+const precoOriginal = Number(p.preco);
+
+const precoFinal =
+  Math.round(precoOriginal * (1 - desconto / 100) * 100) / 100;
+
+const parcelas = Math.min(
+  12,
+  Math.max(1, Number(p.parcelamento_maximo ?? 3))
+);
+
+const parcelamentoAtivo =
+  p.parcelamento_ativo === true && parcelas > 1;
+
+const valorParcela =
+  Math.round((precoFinal / parcelas) * 100) / 100;
 
   return (
     <div className={styles.prodCard} key={p.id}>
@@ -790,15 +809,30 @@ function adicionarDireto(p: Produto) {
             </div>
           )}
 
-          <div className={styles.prodPriceRow}>
-            <span className={styles.prodPrice}>
-              R$ {formatarPreco(p.preco)}
-            </span>
-          </div>
+          
+<div className={styles.prodPriceRow}>
+  {desconto > 0 && (
+    <span className={styles.prodOldPrice}>
+      R$ {formatarPreco(precoOriginal)}
+    </span>
+  )}
 
-          <div className={styles.prodInstallment}>
-            ou 3x de R$ {formatarPreco(parcela)} sem juros
-          </div>
+  <span className={styles.prodPrice}>
+    R$ {formatarPreco(precoFinal)}
+  </span>
+
+  {desconto > 0 && (
+    <span className={styles.prodDiscountBadge}>
+      -{desconto.toLocaleString("pt-BR")}% 
+    </span>
+  )}
+</div>
+
+{parcelamentoAtivo && (
+  <div className={styles.prodInstallment}>
+    Em até {parcelas}x de R$ {formatarPreco(valorParcela)}
+  </div>
+)}
 
           {usuario ? (
             <button
