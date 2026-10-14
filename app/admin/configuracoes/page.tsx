@@ -49,6 +49,22 @@ export default async function ConfiguracoesPage() {
       ? limiteSalvo
       : 8;
 
+  
+const parcelamentoAtivoInicial =
+  typeof valores.parcelamento_ativo === "boolean"
+    ? valores.parcelamento_ativo
+    : true;
+
+const parcelasSalvas = Number(valores.parcelamento_maximo ?? 3);
+
+const parcelasMaximasIniciais =
+  Number.isInteger(parcelasSalvas) &&
+  parcelasSalvas >= 1 &&
+  parcelasSalvas <= 12
+    ? parcelasSalvas
+    : 3;
+
+
   return (
     <>
       <div className={styles.topbar}>
@@ -94,7 +110,11 @@ export default async function ConfiguracoesPage() {
           </p>
         </div>
 
-        <ConfiguracoesForm limiteInicial={limiteInicial} />
+        <ConfiguracoesForm
+  limiteInicial={limiteInicial}
+  parcelamentoAtivoInicial={parcelamentoAtivoInicial}
+  parcelasMaximasIniciais={parcelasMaximasIniciais}
+/>
 
         <p
           style={{
