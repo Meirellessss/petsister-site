@@ -2,7 +2,10 @@
 "use client";
 
 import { useActionState } from "react";
-import { salvarLimiteEstoqueBaixo } from "../actions";
+import {
+  salvarLimiteEstoqueBaixo,
+  salvarConfiguracaoParcelamento,
+} from "../actions";
 import styles from "../admin.module.css";
 
 const estadoInicial = {
@@ -12,80 +15,191 @@ const estadoInicial = {
 
 export default function ConfiguracoesForm({
   limiteInicial,
+  parcelamentoAtivoInicial,
+  parcelasMaximasIniciais,
 }: {
   limiteInicial: number;
+  parcelamentoAtivoInicial: boolean;
+  parcelasMaximasIniciais: number;
 }) {
-  const [estado, formAction, pendente] = useActionState(
-    salvarLimiteEstoqueBaixo,
-    estadoInicial
-  );
+  const [estadoEstoque, salvarEstoque, pendenteEstoque] =
+    useActionState(salvarLimiteEstoqueBaixo, estadoInicial);
+
+  const [estadoParcelamento, salvarParcelamento, pendenteParcelamento] =
+    useActionState(salvarConfiguracaoParcelamento, estadoInicial);
 
   return (
-    <section className={styles.card}>
-      <div className={styles.cardHead}>
-        <div>
-          <h3>Produtos e estoque</h3>
-          <p
-            style={{
-              marginTop: ".3rem",
-              color: "var(--muted)",
-              fontSize: ".8rem",
-            }}
-          >
-            Configure quando um produto deve ser considerado com estoque baixo.
-          </p>
-        </div>
-      </div>
-
-      <form action={formAction} className={styles.modalBody}>
-        <div className={styles.fg}>
-          <label htmlFor="estoque_limite_baixo">
-            Limite de estoque baixo
-          </label>
-
-          <input
-            id="estoque_limite_baixo"
-            name="estoque_limite_baixo"
-            type="number"
-            className={styles.fc}
-            min="0"
-            max="10000"
-            step="1"
-            defaultValue={limiteInicial}
-            required
-          />
-
-          <small style={{ color: "var(--muted)", lineHeight: 1.6 }}>
-            Exemplo: com o limite 8, os produtos com 8 unidades ou menos
-            serão considerados estoque baixo. Use 0 para alertar apenas
-            quando o estoque chegar a zero.
-          </small>
-        </div>
-
-        {estado.mensagem && (
-          <div
-            className={styles.alert}
-            role="status"
-            style={{
-              background: estado.ok ? "#f0fdf4" : "#fef2f2",
-              color: estado.ok ? "#166534" : "#991b1b",
-              border: `1px solid ${estado.ok ? "#bbf7d0" : "#fecaca"}`,
-            }}
-          >
-            {estado.mensagem}
+    <div style={{ display: "grid", gap: "1rem" }}>
+      <section className={styles.card}>
+        <div className={styles.cardHead}>
+          <div>
+            <h3>Produtos e estoque</h3>
+            <p
+              style={{
+                marginTop: ".3rem",
+                color: "var(--muted)",
+                fontSize: ".8rem",
+              }}
+            >
+              Defina quando um produto deve ser considerado com estoque baixo.
+            </p>
           </div>
-        )}
-
-        <div>
-          <button
-            type="submit"
-            className={`${styles.btn} ${styles.btnPrimary}`}
-            disabled={pendente}
-          >
-            {pendente ? "Salvando..." : "Salvar configurações"}
-          </button>
         </div>
-      </form>
-    </section>
+
+        <form action={salvarEstoque} className={styles.modalBody}>
+          <div className={styles.fg}>
+            <label htmlFor="estoque_limite_baixo">
+              Limite de estoque baixo
+            </label>
+
+            <input
+              id="estoque_limite_baixo"
+              name="estoque_limite_baixo"
+              type="number"
+              className={styles.fc}
+              min="0"
+              max="10000"
+              step="1"
+              defaultValue={limiteInicial}
+              required
+            />
+
+            <small style={{ color: "var(--muted)", lineHeight: 1.6 }}>
+              Produtos com essa quantidade ou menos serão sinalizados
+              no Dashboard e na lista de produtos.
+            </small>
+          </div>
+
+          {estadoEstoque.mensagem && (
+            <div
+              className={styles.alert}
+              role="status"
+              style={{
+                background: estadoEstoque.ok ? "#f0fdf4" : "#fef2f2",
+                color: estadoEstoque.ok ? "#166534" : "#991b1b",
+                border: `1px solid ${
+                  estadoEstoque.ok ? "#bbf7d0" : "#fecaca"
+                }`,
+              }}
+            >
+              {estadoEstoque.mensagem}
+            </div>
+          )}
+
+          <div>
+            <button
+              type="submit"
+              className={`${styles.btn} ${styles.btnPrimary}`}
+              disabled={pendenteEstoque}
+            >
+              {pendenteEstoque ? "Salvando..." : "Salvar limite de estoque"}
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section className={styles.card}>
+        <div className={styles.cardHead}>
+          <div>
+            <h3>Vendas e parcelamento</h3>
+            <p
+              style={{
+                marginTop: ".3rem",
+                color: "var(--muted)",
+                fontSize: ".8rem",
+              }}
+            >
+              Configure como as condições de parcelamento serão apresentadas
+              na loja.
+            </p>
+          </div>
+        </div>
+
+        <form action={salvarParcelamento} className={styles.modalBody}>
+          <div className={styles.fg}>
+            <label
+              htmlFor="parcelamento_ativo"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: ".65rem",
+                cursor: "pointer",
+              }}
+            >
+              <input
+                id="parcelamento_ativo"
+                name="parcelamento_ativo"
+                type="checkbox"
+                defaultChecked={parcelamentoAtivoInicial}
+                style={{
+                  width: "18px",
+                  height: "18px",
+                  accentColor: "var(--p600)",
+                }}
+              />
+              Ativar exibição do parcelamento
+            </label>
+
+            <small style={{ color: "var(--muted)", lineHeight: 1.6 }}>
+              Desmarque para não exibir as informações de parcelamento
+              na página dos produtos.
+            </small>
+          </div>
+
+          <div className={styles.fg}>
+            <label htmlFor="parcelamento_maximo">
+              Número máximo de parcelas
+            </label>
+
+            <select
+              id="parcelamento_maximo"
+              name="parcelamento_maximo"
+              className={styles.fc}
+              defaultValue={parcelasMaximasIniciais}
+              required
+            >
+              {Array.from({ length: 12 }, (_, i) => i + 1).map((n) => (
+                <option key={n} value={n}>
+                  {n}x {n === 1 ? "parcela" : "parcelas"}
+                </option>
+              ))}
+            </select>
+
+            <small style={{ color: "var(--muted)", lineHeight: 1.6 }}>
+              Escolha de 1 a 12 parcelas. Só configure condições que
+              correspondam às modalidades de pagamento realmente oferecidas.
+            </small>
+          </div>
+
+          {estadoParcelamento.mensagem && (
+            <div
+              className={styles.alert}
+              role="status"
+              style={{
+                background: estadoParcelamento.ok ? "#f0fdf4" : "#fef2f2",
+                color: estadoParcelamento.ok ? "#166534" : "#991b1b",
+                border: `1px solid ${
+                  estadoParcelamento.ok ? "#bbf7d0" : "#fecaca"
+                }`,
+              }}
+            >
+              {estadoParcelamento.mensagem}
+            </div>
+          )}
+
+          <div>
+            <button
+              type="submit"
+              className={`${styles.btn} ${styles.btnPrimary}`}
+              disabled={pendenteParcelamento}
+            >
+              {pendenteParcelamento
+                ? "Salvando..."
+                : "Salvar parcelamento"}
+            </button>
+          </div>
+        </form>
+      </section>
+    </div>
   );
 }
