@@ -29,15 +29,21 @@ function nomePorte(porte: Produto["porte"]) {
   }
 }
 
+
 export default function DetalheProduto({
   produto,
   logado,
   produtosRelacionados,
+  parcelamentoAtivo,
+  parcelasMaximas,
 }: {
   produto: Produto;
   logado: boolean;
   produtosRelacionados: Produto[];
+  parcelamentoAtivo: boolean;
+  parcelasMaximas: number;
 }) {
+
   const [quantidade, setQuantidade] = useState(1);
   const [indiceImagem, setIndiceImagem] = useState(0);
 
@@ -160,9 +166,12 @@ const imagemAtual = imagens[indiceSeguro];
                 R$ {formatarPreco(produto.preco)}
               </div>
 
-              <p className={styles.installment}>
-                Em até 3x de R$ {formatarPreco(produto.preco / 3)} sem juros
-              </p>
+             {parcelamentoAtivo && parcelasMaximas > 1 && (
+  <p className={styles.installment}>
+    Em até {parcelasMaximas}x de R${" "}
+    {formatarPreco(produto.preco / parcelasMaximas)}
+  </p>
+)}
             </div>
 
             <div className={styles.stockRow}>
