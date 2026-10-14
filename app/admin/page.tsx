@@ -12,6 +12,31 @@ const badgeStyle: Record<string, { background: string; color: string }> = {
 export default async function AdminDashboard() {
   const supabase = await createClient();
   const agora = new Date().toISOString();
+  
+const { data: registroConfiguracao } = await supabase
+  .from("petsister_configuracoes")
+  .select("configuracoes")
+  .eq("id", "global")
+  .maybeSingle();
+
+const configuracoes =
+  registroConfiguracao?.configuracoes &&
+  typeof registroConfiguracao.configuracoes === "object" &&
+  !Array.isArray(registroConfiguracao.configuracoes)
+    ? registroConfiguracao.configuracoes as Record<string, unknown>
+    : {};
+
+const valorLimite = Number(
+  configuracoes.estoque_limite_baixo ?? 8
+);
+
+const limiteEstoqueBaixo =
+  Number.isInteger(valorLimite) &&
+  valorLimite >= 0 &&
+  valorLimite <= 10000
+    ? valorLimite
+    : 8;
+
 
   const [
     { count: clientes },
@@ -56,7 +81,7 @@ export default async function AdminDashboard() {
     supabase
       .from("petsister_produtos")
       .select("*", { count: "exact", head: true })
-      .lte("estoque", 8),
+     .lte("estoque", limiteEstoqueBaixo)
 
     supabase
       .from("petsister_produtos")
@@ -66,7 +91,7 @@ export default async function AdminDashboard() {
     supabase
       .from("petsister_produtos")
       .select("id,nome,estoque,categoria")
-      .lte("estoque", 8)
+      .lte("estoque", limiteEstoqueBaixo)
       .order("estoque", { ascending: true })
       .limit(5),
   ]);
@@ -245,7 +270,9 @@ export default async function AdminDashboard() {
                   ? `${produtosEsgotados} produto(s) sem estoque.`
                   : "Nenhum produto está com estoque zerado."}
                 {" "}
-                O alerta considera até 8 unidades.
+                {limiteEstoqueBaixo === 0
+  ? "O alerta considera produtos sem estoque."
+  : `O alerta considera ${limiteEstoqueBaixo} unidades ou menos.`}
               </p>
 
               {(produtosBaixo ?? []).length > 0 && (
