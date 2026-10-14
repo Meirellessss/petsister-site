@@ -898,3 +898,39 @@
     height: 60px;
   }
 }
+
+
+.pricePrevious {
+  margin-bottom: 5px;
+  color: var(--muted);
+  font-size: 0.86rem;
+  text-decoration: line-through;
+}
+
+.priceLine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.discountBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 9px;
+  border-radius: 7px;
+  background: #ffdfcf;
+  color: #922f08;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+@media (max-width: 680px) {
+  .priceLine {
+    gap: 8px;
+  }
+
+  .discountBadge {
+    font-size: 0.72rem;
+  }
+}
