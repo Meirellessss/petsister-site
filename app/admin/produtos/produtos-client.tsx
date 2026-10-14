@@ -11,9 +11,11 @@ const PORTES: Porte[] = ["Todos", "Pequeno", "Medio", "Grande"];
 export default function ProdutosClient({
   produtos,
   categorias,
+  limiteEstoqueBaixo,
 }: {
   produtos: Produto[];
   categorias: Categoria[];
+  limiteEstoqueBaixo: number;
 }) {
   const [aberto, setAberto] = useState(false);
   const [editando, setEditando] = useState<Produto | null>(null);
@@ -106,7 +108,7 @@ export default function ProdutosClient({
                     <span
                       className={styles.badge}
                       style={
-                        p.estoque <= 5
+                        p.estoque <= limiteEstoqueBaixo
                           ? { background: "#fef2f2", color: "#991b1b" }
                           : { background: "#f0fdf4", color: "#166534" }
                       }
