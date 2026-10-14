@@ -205,7 +205,83 @@ export default function ProdutosClient({
                   </select>
                 </div>
               </div>
+
               
+<div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+    gap: ".8rem",
+    padding: "1rem",
+    margin: ".5rem 0 1rem",
+    border: "1px solid var(--border)",
+    borderRadius: "12px",
+    background: "var(--bg)",
+  }}
+>
+  <div className={styles.fg}>
+    <label
+      htmlFor="parcelamento_ativo"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: ".6rem",
+        cursor: "pointer",
+      }}
+    >
+      <input
+        id="parcelamento_ativo"
+        type="checkbox"
+        name="parcelamento_ativo"
+        defaultChecked={editando?.parcelamento_ativo ?? false}
+        style={{ accentColor: "var(--p600)" }}
+      />
+      Permitir parcelamento neste produto
+    </label>
+    <small style={{ color: "var(--muted)" }}>
+      Ative apenas para produtos que terão parcelamento.
+    </small>
+  </div>
+
+  <div className={styles.fg}>
+    <label htmlFor="parcelamento_maximo">
+      Quantidade máxima de parcelas
+    </label>
+    <select
+      id="parcelamento_maximo"
+      name="parcelamento_maximo"
+      className={styles.fc}
+      defaultValue={editando?.parcelamento_maximo ?? 3}
+    >
+      {Array.from({ length: 12 }, (_, i) => i + 1).map((n) => (
+        <option key={n} value={n}>
+          {n}x {n === 1 ? "parcela" : "parcelas"}
+        </option>
+      ))}
+    </select>
+  </div>
+
+  <div className={styles.fg}>
+    <label htmlFor="desconto_percentual">
+      Desconto do produto (%)
+    </label>
+    <input
+      id="desconto_percentual"
+      name="desconto_percentual"
+      type="number"
+      className={styles.fc}
+      min="0"
+      max="90"
+      step="0.5"
+      defaultValue={editando?.desconto_percentual ?? 0}
+      required
+    />
+    <small style={{ color: "var(--muted)" }}>
+      Use 0 para não oferecer desconto. Máximo de 90%.
+    </small>
+  </div>
+</div>
+
 <div className={styles.fg}>
   <label>Fotos do produto (uma URL por linha)</label>
   <textarea
