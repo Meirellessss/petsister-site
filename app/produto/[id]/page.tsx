@@ -73,6 +73,8 @@ const parcelasMaximas =
         produto={produto}
         logado={Boolean(usuario)}
         produtosRelacionados={relacionados}
+        parcelamentoAtivo={parcelamentoAtivo}
+        parcelasMaximas={parcelasMaximas}
       />
     </>
   );
