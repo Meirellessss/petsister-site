@@ -1878,3 +1878,28 @@ a.topbarItem:hover {
 :global([data-theme="dark"]) .heroOrbit svg {
   color: #ff985f;
 }
+
+
+.prodOldPrice {
+  color: #cbd5e1;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: line-through;
+  white-space: nowrap;
+}
+
+.prodDiscountBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.22rem 0.4rem;
+  border-radius: 6px;
+  background: #ffdfcf;
+  color: #922f08;
+  font-size: 0.68rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.prodPriceRow .prodPrice {
+  min-width: 0;
+}
