@@ -1,4 +1,4 @@
-
+import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import AreaHeader from "@/components/AreaHeader";
 import {
@@ -18,18 +18,40 @@ export default async function PaginaProduto({
 
   if (!Number.isInteger(produtoId) || produtoId <= 0) {
     notFound();
+    const supabase = await createClient();
   }
 
-  const [produto, usuario, catalogo] = await Promise.all([
-    getProdutoPorId(produtoId),
-    getUsuarioAtual(),
-    getProdutosDisponiveis(),
-  ]);
+const [
+  produto,
+  usuario,
+  catalogo,
+  resultadoParcelamento,
+] = await Promise.all([
+  getProdutoPorId(produtoId),
+  getUsuarioAtual(),
+  getProdutosDisponiveis(),
+  supabase.rpc("petsister_config_publica"),
+]);
 
   if (!produto) {
     notFound();
   }
 
+  const dadosParcelamento = resultadoParcelamento.data?.[0];
+
+const parcelamentoAtivo =
+  dadosParcelamento?.parcelamento_ativo !== false;
+
+const valorParcelas = Number(
+  dadosParcelamento?.parcelamento_maximo ?? 3
+);
+
+const parcelasMaximas =
+  Number.isInteger(valorParcelas) &&
+  valorParcelas >= 1 &&
+  valorParcelas <= 12
+    ? valorParcelas
+    : 3;
   const categoriaAtual = produto.categoria?.trim().toLowerCase();
 
   const relacionados = catalogo
