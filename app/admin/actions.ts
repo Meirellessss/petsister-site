@@ -334,3 +334,8 @@ export async function salvarConfiguracaoParcelamento(
     };
   }
 }
+
+export async function salvarDadosLoja(
+  _estadoAtual: { ok: boolean; mensagem: string },
+  formData: FormData
+): Promise<{ ok:
