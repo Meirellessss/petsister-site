@@ -13,6 +13,7 @@ const ITENS: { href: string; ic: string; label: string; sect?: string }[] = [
   { href: "/admin/pedidos", ic: "carrinho", label: "Pedidos", sect: "Operações" },
   { href: "/admin/agendamentos", ic: "agendar", label: "Agendamentos" },
   { href: "/admin/usuarios", ic: "usuarios", label: "Clientes", sect: "Usuários" },
+  { href: "/admin/configuracoes", ic: "admin", label: "Configurações", sect: "Sistema" },
 ];
 
 export default function Sidebar({ nome }: { nome: string }) {
