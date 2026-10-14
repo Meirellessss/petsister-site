@@ -123,3 +123,90 @@ export async function atualizarStatusAgendamento(
   revalidatePath("/admin/agendamentos");
   return { ok: true };
 }
+
+
+export async function salvarLimiteEstoqueBaixo(
+  estadoAtual: { ok: boolean; mensagem: string },
+  formData: FormData
+): Promise<{ ok: boolean; mensagem: string }> {
+  try {
+    const supabase = await exigirAdmin();
+
+    const valor = String(
+      formData.get("estoque_limite_baixo") ?? ""
+    ).trim();
+
+    const limite = Number(valor);
+
+    if (
+      valor === "" ||
+      !Number.isInteger(limite) ||
+      limite < 0 ||
+      limite > 10000
+    ) {
+      return {
+        ok: false,
+        mensagem: "Informe um limite entre 0 e 10000 unidades.",
+      };
+    }
+
+    const { data: registro, error: erroLeitura } = await supabase
+      .from("petsister_configuracoes")
+      .select("configuracoes")
+      .eq("id", "global")
+      .maybeSingle();
+
+    if (erroLeitura) {
+      return {
+        ok: false,
+        mensagem: "Não foi possível ler as configurações: " + erroLeitura.message,
+      };
+    }
+
+    if (!registro) {
+      return {
+        ok: false,
+        mensagem: "Configuração global não encontrada no Supabase.",
+      };
+    }
+
+    const atuais =
+      registro.configuracoes &&
+      typeof registro.configuracoes === "object" &&
+      !Array.isArray(registro.configuracoes)
+        ? registro.configuracoes as Record<string, unknown>
+        : {};
+
+    const { error: erroAtualizacao } = await supabase
+      .from("petsister_configuracoes")
+      .update({
+        configuracoes: {
+          ...atuais,
+          estoque_limite_baixo: limite,
+        },
+        atualizado_em: new Date().toISOString(),
+      })
+      .eq("id", "global");
+
+    if (erroAtualizacao) {
+      return {
+        ok: false,
+        mensagem: "Não foi possível salvar: " + erroAtualizacao.message,
+      };
+    }
+
+    revalidatePath("/admin/configuracoes");
+    revalidatePath("/admin");
+    revalidatePath("/admin/produtos");
+
+    return {
+      ok: true,
+      mensagem: "Limite de estoque salvo com sucesso!",
+    };
+  } catch {
+    return {
+      ok: false,
+      mensagem: "Não foi possível salvar. Verifique seu acesso de administrador.",
+    };
+  }
+}
