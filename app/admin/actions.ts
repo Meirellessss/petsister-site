@@ -43,6 +43,44 @@ export async function salvarProduto(formData: FormData): Promise<Resultado> {
   .filter(Boolean)
   .join("\n");
   const destaque = formData.get("destaque") === "1";
+  
+const parcelamentoAtivo =
+  formData.get("parcelamento_ativo") === "on";
+
+const parcelasRaw = String(
+  formData.get("parcelamento_maximo") ?? "3"
+).trim();
+
+const parcelamentoMaximo = Number(parcelasRaw || "3");
+
+const descontoRaw = String(
+  formData.get("desconto_percentual") ?? "0"
+).trim();
+
+const descontoPercentual = Number(descontoRaw || "0");
+
+if (
+  !Number.isInteger(parcelamentoMaximo) ||
+  parcelamentoMaximo < 1 ||
+  parcelamentoMaximo > 12
+) {
+  return {
+    ok: false,
+    error: "O número de parcelas deve estar entre 1 e 12.",
+  };
+}
+
+if (
+  !Number.isFinite(descontoPercentual) ||
+  descontoPercentual < 0 ||
+  descontoPercentual > 90
+) {
+  return {
+    ok: false,
+    error: "O desconto deve estar entre 0% e 90%.",
+  };
+}
+
 
   if (!nome) return { ok: false, error: "Nome é obrigatório" };
 
@@ -54,8 +92,11 @@ export async function salvarProduto(formData: FormData): Promise<Resultado> {
     categoria: categoria || null,
     porte,
     imagem: imagem || null,
-    destaque,
-  };
+  destaque,
+  parcelamento_ativo: parcelamentoAtivo,
+  parcelamento_maximo: parcelamentoMaximo,
+  desconto_percentual: descontoPercentual,
+};
 
   const { error } = id
     ? await supabase.from("petsister_produtos").update(payload).eq("id", id)
