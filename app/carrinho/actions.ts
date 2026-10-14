@@ -98,7 +98,7 @@ export async function adicionarAoCarrinho(
      */
     const { data: produto, error: produtoError } = await supabase
       .from("petsister_produtos")
-      .select("id,preco,estoque,nome")
+     .select("id,preco,estoque,nome,desconto_percentual")
       .eq("id", produtoId)
       .single();
 
@@ -109,6 +109,14 @@ export async function adicionarAoCarrinho(
       };
     }
 
+    const desconto = Math.min(
+  90,
+  Math.max(0, Number(produto.desconto_percentual ?? 0))
+);
+
+const precoFinal =
+  Math.round(Number(produto.preco) * (1 - desconto / 100) * 100) / 100;
+    
     if (produto.estoque <= 0) {
       return {
         ok: false,
@@ -155,8 +163,9 @@ export async function adicionarAoCarrinho(
       const { error: updateError } = await supabase
         .from("petsister_itens_pedido")
         .update({
-          quantidade: novaQuantidade,
-        })
+  quantidade: novaQuantidade,
+  preco_unitario: precoFinal,
+})
         .eq("id", itemExistente.id)
         .eq("pedido_id", pedidoId);
 
@@ -172,7 +181,7 @@ export async function adicionarAoCarrinho(
           pedido_id: pedidoId,
           produto_id: produtoId,
           quantidade,
-          preco_unitario: produto.preco,
+          preco_unitario: precoFinal,
         });
 
       if (insertError) {
