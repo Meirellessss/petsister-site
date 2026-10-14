@@ -58,6 +58,31 @@ const indiceSeguro = Math.min(
 );
 
 const imagemAtual = imagens[indiceSeguro];
+  
+const desconto = Math.min(
+  90,
+  Math.max(0, Number(produto.desconto_percentual ?? 0))
+);
+
+const precoOriginal = Number(produto.preco);
+
+const precoFinal =
+  Math.round(precoOriginal * (1 - desconto / 100) * 100) / 100;
+
+const parcelasProduto = Math.min(
+  12,
+  Math.max(1, Number(produto.parcelamento_maximo ?? parcelasMaximas))
+);
+
+const exibirParcelamento =
+  (typeof produto.parcelamento_ativo === "boolean"
+    ? produto.parcelamento_ativo
+    : parcelamentoAtivo) &&
+  parcelasProduto > 1;
+
+const valorParcela =
+  Math.round((precoFinal / parcelasProduto) * 100) / 100;
+
   const [abaAtiva, setAbaAtiva] = useState<"descricao" | "informacoes">(
     "descricao"
   );
@@ -161,18 +186,34 @@ const imagemAtual = imagens[indiceSeguro];
               <span>Avaliações ainda não disponíveis</span>
             </div>
 
-            <div className={styles.priceBlock}>
-              <div className={styles.price}>
-                R$ {formatarPreco(produto.preco)}
-              </div>
+        
+<div className={styles.priceBlock}>
+  {desconto > 0 && (
+    <div className={styles.pricePrevious}>
+      De R$ {formatarPreco(precoOriginal)}
+    </div>
+  )}
 
-             {parcelamentoAtivo && parcelasMaximas > 1 && (
-  <p className={styles.installment}>
-    Em até {parcelasMaximas}x de R${" "}
-    {formatarPreco(produto.preco / parcelasMaximas)}
-  </p>
-)}
-            </div>
+  <div className={styles.priceLine}>
+    <div className={styles.price}>
+      R$ {formatarPreco(precoFinal)}
+    </div>
+
+    {desconto > 0 && (
+      <span className={styles.discountBadge}>
+        -{desconto.toLocaleString("pt-BR")}% OFF
+      </span>
+    )}
+  </div>
+
+  {exibirParcelamento && (
+    <p className={styles.installment}>
+      Em até {parcelasProduto}x de R${" "}
+      {formatarPreco(valorParcela)}
+    </p>
+  )}
+</div>
+
 
             <div className={styles.stockRow}>
               <span
