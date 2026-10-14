@@ -1,3 +1,4 @@
+
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import AreaHeader from "@/components/AreaHeader";
@@ -18,20 +19,21 @@ export default async function PaginaProduto({
 
   if (!Number.isInteger(produtoId) || produtoId <= 0) {
     notFound();
-    const supabase = await createClient();
   }
 
-const [
-  produto,
-  usuario,
-  catalogo,
-  resultadoParcelamento,
-] = await Promise.all([
-  getProdutoPorId(produtoId),
-  getUsuarioAtual(),
-  getProdutosDisponiveis(),
-  supabase.rpc("petsister_config_publica"),
-]);
+  const supabase = await createClient();
+
+  const [
+    produto,
+    usuario,
+    catalogo,
+    resultadoParcelamento,
+  ] = await Promise.all([
+    getProdutoPorId(produtoId),
+    getUsuarioAtual(),
+    getProdutosDisponiveis(),
+    supabase.rpc("petsister_config_publica"),
+  ]);
 
   if (!produto) {
     notFound();
@@ -39,19 +41,20 @@ const [
 
   const dadosParcelamento = resultadoParcelamento.data?.[0];
 
-const parcelamentoAtivo =
-  dadosParcelamento?.parcelamento_ativo !== false;
+  const parcelamentoAtivo =
+    dadosParcelamento?.parcelamento_ativo !== false;
 
-const valorParcelas = Number(
-  dadosParcelamento?.parcelamento_maximo ?? 3
-);
+  const valorParcelas = Number(
+    dadosParcelamento?.parcelamento_maximo ?? 3
+  );
 
-const parcelasMaximas =
-  Number.isInteger(valorParcelas) &&
-  valorParcelas >= 1 &&
-  valorParcelas <= 12
-    ? valorParcelas
-    : 3;
+  const parcelasMaximas =
+    Number.isInteger(valorParcelas) &&
+    valorParcelas >= 1 &&
+    valorParcelas <= 12
+      ? valorParcelas
+      : 3;
+
   const categoriaAtual = produto.categoria?.trim().toLowerCase();
 
   const relacionados = catalogo
@@ -59,6 +62,7 @@ const parcelasMaximas =
     .sort((a, b) => {
       const categoriaA =
         a.categoria?.trim().toLowerCase() === categoriaAtual;
+
       const categoriaB =
         b.categoria?.trim().toLowerCase() === categoriaAtual;
 
@@ -69,6 +73,7 @@ const parcelasMaximas =
   return (
     <>
       <AreaHeader />
+
       <DetalheProduto
         produto={produto}
         logado={Boolean(usuario)}
