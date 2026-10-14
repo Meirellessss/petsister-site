@@ -584,3 +584,278 @@ textarea.fc {
     border-top: 1px solid #eadfd2;
   }
 }
+
+
+/* =========================================
+   PETSISTER ADMIN — BASE VISUAL INTEGRADA
+   ========================================= */
+
+.wrap {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.sidebar {
+  flex: 0 0 238px;
+  width: 238px;
+  min-width: 238px;
+  height: 100vh;
+  align-self: flex-start;
+  position: sticky;
+  top: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.main {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  min-height: 66px;
+  padding: 12px clamp(16px, 2.2vw, 30px);
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.topbar h2 {
+  margin: 0;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.content {
+  width: 100%;
+  min-width: 0;
+  padding: clamp(16px, 2vw, 28px);
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 20px;
+}
+
+.card {
+  min-width: 0;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(12, 24, 64, 0.025);
+}
+
+.cardHead {
+  min-height: 52px;
+  padding: 14px 18px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cardHead h3 {
+  margin: 0;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.94rem;
+  font-weight: 750;
+}
+
+.statsGrid {
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, 180px), 1fr)
+  );
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.stat {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(12, 24, 64, 0.025);
+}
+
+.statNum {
+  color: var(--ink);
+  font-family: inherit;
+  font-size: clamp(1.4rem, 2vw, 1.8rem);
+  overflow-wrap: anywhere;
+}
+
+.tw {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.table {
+  min-width: 540px;
+}
+
+.btn {
+  min-height: 36px;
+}
+
+.fc {
+  box-sizing: border-box;
+}
+
+.sl {
+  min-height: 42px;
+  text-decoration: none;
+}
+
+.sl:focus-visible,
+.btn:focus-visible,
+.fc:focus-visible {
+  outline: 2px solid var(--p400);
+  outline-offset: 2px;
+}
+
+/* Telas médias */
+@media (max-width: 1050px) {
+  .sidebar {
+    flex-basis: 216px;
+    width: 216px;
+    min-width: 216px;
+  }
+
+  .content {
+    padding: 18px;
+  }
+
+  .grid2 {
+    gap: 14px;
+  }
+}
+
+/* Celulares e telas estreitas */
+@media (max-width: 800px) {
+  .wrap {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sidebar {
+    position: relative;
+    top: auto;
+    flex: 0 0 auto;
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .sbLogo {
+    justify-content: flex-start;
+    padding: 8px 16px;
+  }
+
+  .sbLogo img {
+    height: 36px;
+  }
+
+  .sidebar > div:nth-child(2) {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px !important;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    white-space: nowrap;
+    scrollbar-width: thin;
+  }
+
+  .sidebar > div:nth-child(2) > div {
+    flex: 0 0 auto;
+  }
+
+  .sidebar .sbSect {
+    display: none;
+  }
+
+  .sidebar .sl {
+    margin: 0;
+    padding: 9px 12px;
+    font-size: 0.8rem;
+  }
+
+  .sidebar > div:nth-child(2) > div[style*="height: 1px"] {
+    display: none;
+  }
+
+  .sbFoot {
+    display: none;
+  }
+
+  .main {
+    width: 100%;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .topbar {
+    position: relative;
+    min-height: 58px;
+    padding: 12px 16px;
+  }
+
+  .content {
+    padding: 14px;
+  }
+
+  .grid2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .scheduleStats {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .scheduleToolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: 10px;
+  }
+
+  .stat {
+    padding: 14px;
+  }
+
+  .cardHead {
+    padding: 12px;
+  }
+
+  .table thead th,
+  .table tbody td {
+    padding: 10px 12px;
+  }
+}
