@@ -859,3 +859,321 @@ textarea.fc {
     padding: 10px 12px;
   }
 }
+
+
+/* =========================================
+   DASHBOARD — CENTRAL DE ATENÇÃO PETSISTER
+   ========================================= */
+
+.dashboardDate {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-transform: capitalize;
+}
+
+.dashboardStoreLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 8px 13px;
+  border-radius: 8px;
+  background: var(--p600);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 750;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.dashboardStoreLink:hover {
+  background: var(--p700);
+}
+
+.dashboardWelcome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+  padding: 22px 24px;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--p500);
+  border-radius: 14px;
+  background: var(--white);
+}
+
+.dashboardWelcome h1 {
+  margin-top: 5px;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: clamp(1.25rem, 2.5vw, 1.8rem);
+  font-weight: 850;
+  letter-spacing: -0.035em;
+}
+
+.dashboardWelcome p {
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.welcomePaw {
+  display: flex;
+  width: 58px;
+  height: 58px;
+  flex: 0 0 58px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  background: var(--p50);
+  font-size: 1.8rem;
+}
+
+.attentionSection {
+  margin-bottom: 24px;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--white);
+}
+
+.attentionHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 19px;
+}
+
+.attentionEyebrow {
+  color: var(--p600);
+  font-size: 0.68rem;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+}
+
+.attentionHeading h3 {
+  margin-top: 5px;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.attentionHeading p {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
+.attentionGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  align-items: stretch;
+}
+
+.attentionCard {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 17px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.attentionCardTop {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.attentionIcon {
+  display: flex;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  font-size: 1.25rem;
+}
+
+.attentionIconOrange {
+  background: var(--p50);
+}
+
+.attentionIconBlue {
+  background: #eaf1ff;
+}
+
+.attentionCount {
+  color: var(--ink);
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.attentionCard h4 {
+  color: var(--ink);
+  font-size: 0.93rem;
+  font-weight: 800;
+}
+
+.attentionCard > p {
+  min-height: 44px;
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.65;
+}
+
+.attentionLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: auto;
+  padding-top: 16px;
+  color: var(--p600);
+  font-size: 0.81rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.attentionLink:hover {
+  color: var(--p700);
+  text-decoration: underline;
+}
+
+.attentionStockList {
+  width: 100%;
+  margin-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.attentionStockRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.attentionStockName {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 0.76rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attentionQty,
+.attentionQtyCritical {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.attentionQty {
+  color: #16803d;
+}
+
+.attentionQtyCritical {
+  color: #dc2626;
+}
+
+.dashboardTableLink {
+  flex-shrink: 0;
+  color: var(--p600);
+  font-size: 0.8rem;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.dashboardTableLink:hover {
+  text-decoration: underline;
+}
+
+.dashboardEmpty {
+  padding: 24px 16px !important;
+  color: var(--muted);
+  text-align: center;
+}
+
+.dashboardMoney {
+  color: var(--p700);
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.dashboardDateCell {
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+/* Ajuste dos cartões em telas menores */
+@media (max-width: 1100px) {
+  .attentionGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .attentionCard:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 800px) {
+  .dashboardWelcome {
+    padding: 17px;
+  }
+
+  .attentionSection {
+    padding: 16px;
+  }
+
+  .attentionGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .attentionCard:last-child {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboardWelcome {
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .welcomePaw {
+    width: 43px;
+    height: 43px;
+    flex-basis: 43px;
+    font-size: 1.35rem;
+  }
+
+  .attentionSection {
+    padding: 12px;
+  }
+
+  .attentionCard {
+    padding: 14px;
+  }
+
+  .attentionHeading h3 {
+    font-size: 1.05rem;
+  }
+}
