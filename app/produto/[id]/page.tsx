@@ -73,7 +73,6 @@ export default async function PaginaProduto({
   return (
     <>
       <AreaHeader />
-
       <DetalheProduto
         produto={produto}
         logado={Boolean(usuario)}
