@@ -210,3 +210,86 @@ export async function salvarLimiteEstoqueBaixo(
     };
   }
 }
+
+
+export async function salvarConfiguracaoParcelamento(
+  _estadoAtual: { ok: boolean; mensagem: string },
+  formData: FormData
+): Promise<{ ok: boolean; mensagem: string }> {
+  try {
+    const supabase = await exigirAdmin();
+
+    const parcelamentoAtivo =
+      formData.get("parcelamento_ativo") === "on";
+
+    const valorParcelas = String(
+      formData.get("parcelamento_maximo") ?? ""
+    ).trim();
+
+    const parcelas = Number(valorParcelas);
+
+    if (
+      valorParcelas === "" ||
+      !Number.isInteger(parcelas) ||
+      parcelas < 1 ||
+      parcelas > 12
+    ) {
+      return {
+        ok: false,
+        mensagem: "Escolha um número de parcelas entre 1 e 12.",
+      };
+    }
+
+    const { data: registro, error: erroLeitura } = await supabase
+      .from("petsister_configuracoes")
+      .select("configuracoes")
+      .eq("id", "global")
+      .maybeSingle();
+
+    if (erroLeitura || !registro) {
+      return {
+        ok: false,
+        mensagem: "Não foi possível carregar as configurações da loja.",
+      };
+    }
+
+    const atuais =
+      registro.configuracoes &&
+      typeof registro.configuracoes === "object" &&
+      !Array.isArray(registro.configuracoes)
+        ? registro.configuracoes as Record<string, unknown>
+        : {};
+
+    const { error } = await supabase
+      .from("petsister_configuracoes")
+      .update({
+        configuracoes: {
+          ...atuais,
+          parcelamento_ativo: parcelamentoAtivo,
+          parcelamento_maximo: parcelas,
+        },
+        atualizado_em: new Date().toISOString(),
+      })
+      .eq("id", "global");
+
+    if (error) {
+      return {
+        ok: false,
+        mensagem: "Não foi possível salvar o parcelamento: " + error.message,
+      };
+    }
+
+    revalidatePath("/admin/configuracoes");
+    revalidatePath("/");
+
+    return {
+      ok: true,
+      mensagem: "Configurações de parcelamento salvas com sucesso!",
+    };
+  } catch {
+    return {
+      ok: false,
+      mensagem: "Não foi possível salvar. Verifique seu acesso de administrador.",
+    };
+  }
+}
