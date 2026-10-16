@@ -335,7 +335,92 @@ export async function salvarConfiguracaoParcelamento(
   }
 }
 
+
 export async function salvarDadosLoja(
   _estadoAtual: { ok: boolean; mensagem: string },
   formData: FormData
-): Promise<{ ok:
+): Promise<{ ok: boolean; mensagem: string }> {
+  try {
+    const supabase = await exigirAdmin();
+
+    const telefone = String(
+      formData.get("telefone_atendimento") ?? ""
+    ).trim();
+
+    const whatsapp = String(
+      formData.get("whatsapp_atendimento") ?? ""
+    ).trim();
+
+    const mensagemEntrega = String(
+      formData.get("mensagem_entrega") ?? ""
+    ).trim();
+
+    if (telefone.length > 30 || whatsapp.length > 30) {
+      return {
+        ok: false,
+        mensagem: "Telefone e WhatsApp devem ter até 30 caracteres.",
+      };
+    }
+
+    if (mensagemEntrega.length > 300) {
+      return {
+        ok: false,
+        mensagem: "A mensagem de entrega deve ter até 300 caracteres.",
+      };
+    }
+
+    const { data: registro, error: erroLeitura } = await supabase
+      .from("petsister_configuracoes")
+      .select("configuracoes")
+      .eq("id", "global")
+      .maybeSingle();
+
+    if (erroLeitura || !registro) {
+      return {
+        ok: false,
+        mensagem: "Não foi possível carregar as configurações da loja.",
+      };
+    }
+
+    const atuais =
+      registro.configuracoes &&
+      typeof registro.configuracoes === "object" &&
+      !Array.isArray(registro.configuracoes)
+        ? (registro.configuracoes as Record<string, unknown>)
+        : {};
+
+    const { error } = await supabase
+      .from("petsister_configuracoes")
+      .update({
+        configuracoes: {
+          ...atuais,
+          telefone_atendimento: telefone,
+          whatsapp_atendimento: whatsapp,
+          mensagem_entrega: mensagemEntrega,
+        },
+        atualizado_em: new Date().toISOString(),
+      })
+      .eq("id", "global");
+
+    if (error) {
+      return {
+        ok: false,
+        mensagem: "Não foi possível salvar: " + error.message,
+      };
+    }
+
+    revalidatePath("/admin/configuracoes");
+    revalidatePath("/");
+
+    return {
+      ok: true,
+      mensagem: "Dados da loja salvos com sucesso!",
+    };
+  } catch {
+    return {
+      ok: false,
+      mensagem:
+        "Não foi possível salvar. Verifique seu acesso de administrador.",
+    };
+  }
+}
