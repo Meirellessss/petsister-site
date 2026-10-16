@@ -57,6 +57,18 @@ const parcelamentoAtivoInicial =
 
 const parcelasSalvas = Number(valores.parcelamento_maximo ?? 3);
 
+const telefoneInicial = String(
+  valores.telefone_atendimento ?? ""
+);
+
+const whatsappInicial = String(
+  valores.whatsapp_atendimento ?? ""
+);
+
+const mensagemEntregaInicial = String(
+  valores.mensagem_entrega ?? ""
+);  
+
 const parcelasMaximasIniciais =
   Number.isInteger(parcelasSalvas) &&
   parcelasSalvas >= 1 &&
@@ -114,6 +126,9 @@ const parcelasMaximasIniciais =
   limiteInicial={limiteInicial}
   parcelamentoAtivoInicial={parcelamentoAtivoInicial}
   parcelasMaximasIniciais={parcelasMaximasIniciais}
+  telefoneInicial={telefoneInicial}
+  whatsappInicial={whatsappInicial}
+  mensagemEntregaInicial={mensagemEntregaInicial}
 />
 
         <p
