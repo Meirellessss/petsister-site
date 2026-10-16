@@ -5,6 +5,7 @@ import { useActionState } from "react";
 import {
   salvarLimiteEstoqueBaixo,
   salvarConfiguracaoParcelamento,
+  salvarDadosLoja,
 } from "../actions";
 import styles from "../admin.module.css";
 
@@ -17,16 +18,25 @@ export default function ConfiguracoesForm({
   limiteInicial,
   parcelamentoAtivoInicial,
   parcelasMaximasIniciais,
+  telefoneInicial = "",
+  whatsappInicial = "",
+  mensagemEntregaInicial = "",
 }: {
   limiteInicial: number;
   parcelamentoAtivoInicial: boolean;
   parcelasMaximasIniciais: number;
+  telefoneInicial?: string;
+  whatsappInicial?: string;
+  mensagemEntregaInicial?: string;
 }) {
   const [estadoEstoque, salvarEstoque, pendenteEstoque] =
     useActionState(salvarLimiteEstoqueBaixo, estadoInicial);
 
   const [estadoParcelamento, salvarParcelamento, pendenteParcelamento] =
     useActionState(salvarConfiguracaoParcelamento, estadoInicial);
+
+    const [estadoLoja, salvarLoja, pendenteLoja] =
+    useActionState(salvarDadosLoja, estadoInicial);
 
   return (
     <div style={{ display: "grid", gap: "1rem" }}>
@@ -200,6 +210,97 @@ export default function ConfiguracoesForm({
           </div>
         </form>
       </section>
+      
+      <section className={styles.card}>
+        <div className={styles.cardHead}>
+          <div>
+            <h3>Atendimento e entrega</h3>
+            <p
+              style={{
+                marginTop: ".3rem",
+                color: "var(--muted)",
+                fontSize: ".8rem",
+              }}
+            >
+              Altere os contatos e a mensagem de entrega da PetSister.
+            </p>
+          </div>
+        </div>
+
+        <form action={salvarLoja} className={styles.modalBody}>
+          <div className={styles.fg}>
+            <label htmlFor="telefone_atendimento">
+              Telefone de atendimento
+            </label>
+            <input
+              id="telefone_atendimento"
+              name="telefone_atendimento"
+              type="text"
+              className={styles.fc}
+              maxLength={30}
+              defaultValue={telefoneInicial}
+              placeholder="Ex.: (11) 99999-9999"
+            />
+          </div>
+
+          <div className={styles.fg}>
+            <label htmlFor="whatsapp_atendimento">
+              WhatsApp
+            </label>
+            <input
+              id="whatsapp_atendimento"
+              name="whatsapp_atendimento"
+              type="text"
+              className={styles.fc}
+              maxLength={30}
+              defaultValue={whatsappInicial}
+              placeholder="Número com DDD"
+            />
+          </div>
+
+          <div className={styles.fg}>
+            <label htmlFor="mensagem_entrega">
+              Mensagem de entrega
+            </label>
+            <textarea
+              id="mensagem_entrega"
+              name="mensagem_entrega"
+              className={styles.fc}
+              maxLength={300}
+              rows={3}
+              defaultValue={mensagemEntregaInicial}
+              placeholder="Ex.: Consulte o prazo de entrega para sua região."
+            />
+          </div>
+
+          {estadoLoja.mensagem && (
+            <div
+              className={styles.alert}
+              role="status"
+              style={{
+                background: estadoLoja.ok ? "#f0fdf4" : "#fef2f2",
+                color: estadoLoja.ok ? "#166534" : "#991b1b",
+                border: `1px solid ${
+                  estadoLoja.ok ? "#bbf7d0" : "#fecaca"
+                }`,
+              }}
+            >
+              {estadoLoja.mensagem}
+            </div>
+          )}
+
+          <div>
+            <button
+              type="submit"
+              className={`${styles.btn} ${styles.btnPrimary}`}
+              disabled={pendenteLoja}
+            >
+              {pendenteLoja ? "Salvando..." : "Salvar dados da loja"}
+            </button>
+          </div>
+        </form>
+      </section>
+
     </div>
   );
 }
