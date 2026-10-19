@@ -32,13 +32,13 @@ export async function salvarProduto(formData: FormData): Promise<Resultado> {
   const id = idRaw ? Number(idRaw) : null;
   const nome = String(formData.get("nome") ?? "").trim();
   const descricao = String(formData.get("descricao") ?? "").trim();
-  const preco = Number(
-  String(formData.get("preco") ?? "").trim().replace(",", ".")
-);
+  const precoRaw = String(formData.get("preco") ?? "")
+  .trim()
+  .replace(",", ".");
+const preco = precoRaw === "" ? Number.NaN : Number(precoRaw);
 
-const estoque = Number(
-  String(formData.get("estoque") ?? "").trim()
-);
+const estoqueRaw = String(formData.get("estoque") ?? "").trim();
+const estoque = estoqueRaw === "" ? Number.NaN : Number(estoqueRaw);
   const categoria = String(formData.get("categoria") ?? "").trim();
   const porteRaw = String(formData.get("porte") ?? "Todos");
   const porte: Porte = PORTES.includes(porteRaw as Porte) ? (porteRaw as Porte) : "Todos";
