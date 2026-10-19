@@ -1066,12 +1066,35 @@ const valorParcela =
               </>
             )}
           </div>
-          <div className={styles.footCol}>
-            <h4>Atendimento</h4>
-            <a href="#">Central de ajuda</a>
-            <a href="#">Trocas e devoluções</a>
-            <a href="#">Fale conosco</a>
-          </div>
+         
+<div className={styles.footCol}>
+  <h4>Atendimento</h4>
+
+  <a
+    href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Olá! Preciso de ajuda com a PetSister.")}`}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Central de ajuda
+  </a>
+
+  <a
+    href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Olá! Preciso de informações sobre trocas e devoluções na PetSister.")}`}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Trocas e devoluções
+  </a>
+
+  <a
+    href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Olá! Quero falar com o atendimento da PetSister.")}`}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Fale conosco
+  </a>
+</div>
+
         </div>
         <div className={styles.footBottom}>
           © {new Date().getFullYear()} Pet Sister · Cães e gatos · Feito com carinho · {WHATSAPP_LABEL}
