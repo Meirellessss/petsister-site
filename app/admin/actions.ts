@@ -88,6 +88,19 @@ if (
 
 
   if (!nome) return { ok: false, error: "Nome é obrigatório" };
+  if (!Number.isFinite(preco) || preco < 0) {
+  return {
+    ok: false,
+    error: "O preço deve ser um número válido igual ou maior que zero.",
+  };
+}
+
+if (!Number.isInteger(estoque) || estoque < 0) {
+  return {
+    ok: false,
+    error: "O estoque deve ser um número inteiro igual ou maior que zero.",
+  };
+}
 
   const payload = {
     nome,
