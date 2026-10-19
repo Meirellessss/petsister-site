@@ -424,3 +424,117 @@ export async function salvarDadosLoja(
     };
   }
 }
+
+export async function salvarConfiguracaoAgenda(
+  _estadoAtual: { ok: boolean; mensagem: string },
+  formData: FormData
+): Promise<{ ok: boolean; mensagem: string }> {
+  try {
+    const supabase = await exigirAdmin();
+
+    const abertura = String(
+      formData.get("hora_abertura") ?? ""
+    ).trim();
+
+    const fechamento = String(
+      formData.get("hora_fechamento") ?? ""
+    ).trim();
+
+    const intervalo = Number(
+      formData.get("intervalo_agendamentos_minutos")
+    );
+
+    const formatoHora = /^([01]\d|2[0-3]):[0-5]\d$/;
+
+    if (!formatoHora.test(abertura) || !formatoHora.test(fechamento)) {
+      return {
+        ok: false,
+        mensagem: "Informe horários válidos no formato HH:MM.",
+      };
+    }
+
+    const minutos = (hora: string) => {
+      const [h, m] = hora.split(":").map(Number);
+      return h * 60 + m;
+    };
+
+    const duracao = minutos(fechamento) - minutos(abertura);
+
+    if (duracao <= 0) {
+      return {
+        ok: false,
+        mensagem: "O fechamento deve ser posterior à abertura.",
+      };
+    }
+
+    if (![10, 15, 20, 30, 60].includes(intervalo)) {
+      return {
+        ok: false,
+        mensagem: "Escolha um intervalo de 10, 15, 20, 30 ou 60 minutos.",
+      };
+    }
+
+    if (duracao % intervalo !== 0) {
+      return {
+        ok: false,
+        mensagem:
+          "A duração do expediente deve ser divisível pelo intervalo escolhido.",
+      };
+    }
+
+    const { data: registro, error: erroLeitura } = await supabase
+      .from("petsister_configuracoes")
+      .select("configuracoes")
+      .eq("id", "global")
+      .maybeSingle();
+
+    if (erroLeitura || !registro) {
+      return {
+        ok: false,
+        mensagem: "Não foi possível carregar as configurações da loja.",
+      };
+    }
+
+    const atuais =
+      registro.configuracoes &&
+      typeof registro.configuracoes === "object" &&
+      !Array.isArray(registro.configuracoes)
+        ? registro.configuracoes as Record<string, unknown>
+        : {};
+
+    const { error } = await supabase
+      .from("petsister_configuracoes")
+      .update({
+        configuracoes: {
+          ...atuais,
+          hora_abertura: abertura,
+          hora_fechamento: fechamento,
+          intervalo_agendamentos_minutos: intervalo,
+        },
+        atualizado_em: new Date().toISOString(),
+      })
+      .eq("id", "global");
+
+    if (error) {
+      return {
+        ok: false,
+        mensagem: "Não foi possível salvar: " + error.message,
+      };
+    }
+
+    revalidatePath("/admin/configuracoes");
+    revalidatePath("/admin/agendamentos");
+    revalidatePath("/agendamentos");
+
+    return {
+      ok: true,
+      mensagem: "Horários de atendimento salvos com sucesso!",
+    };
+  } catch {
+    return {
+      ok: false,
+      mensagem:
+        "Não foi possível salvar. Verifique seu acesso de administrador.",
+    };
+  }
+}
