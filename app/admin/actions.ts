@@ -32,8 +32,13 @@ export async function salvarProduto(formData: FormData): Promise<Resultado> {
   const id = idRaw ? Number(idRaw) : null;
   const nome = String(formData.get("nome") ?? "").trim();
   const descricao = String(formData.get("descricao") ?? "").trim();
-  const preco = parseFloat(String(formData.get("preco") ?? "0").replace(",", "."));
-  const estoque = parseInt(String(formData.get("estoque") ?? "0"), 10);
+  const preco = Number(
+  String(formData.get("preco") ?? "").trim().replace(",", ".")
+);
+
+const estoque = Number(
+  String(formData.get("estoque") ?? "").trim()
+);
   const categoria = String(formData.get("categoria") ?? "").trim();
   const porteRaw = String(formData.get("porte") ?? "Todos");
   const porte: Porte = PORTES.includes(porteRaw as Porte) ? (porteRaw as Porte) : "Todos";
