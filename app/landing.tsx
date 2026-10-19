@@ -131,6 +131,24 @@ function alternarTema() {
   });
 }
 
+  
+const digitosWhatsApp = (
+  dadosLoja.whatsappAtendimento || WHATSAPP
+).replace(/\D/g, "");
+
+const whatsappNumber =
+  digitosWhatsApp.length === 10 ||
+  digitosWhatsApp.length === 11
+    ? `55${digitosWhatsApp}`
+    : digitosWhatsApp || WHATSAPP;
+
+const telefoneExibicao =
+  dadosLoja.telefoneAtendimento.trim() || WHATSAPP_LABEL;
+
+const mensagemEntregaExibida =
+  dadosLoja.mensagemEntrega.trim() ||
+  "Consulte o prazo de entrega para sua região.";
+
   const visiveis = useMemo(() => {
     if (busca.trim()) {
       const q = busca.toLowerCase().trim();
@@ -197,7 +215,7 @@ function adicionarDireto(p: Produto) {
   <span className={styles.topbarSeparator}>•</span>
 
   <a
-    href={`https://wa.me/${WHATSAPP}`}
+   href={`https://wa.me/${whatsappNumber}`}
     target="_blank"
     rel="noopener noreferrer"
     className={styles.topbarItem}
@@ -634,7 +652,7 @@ function adicionarDireto(p: Produto) {
               </a>
               <a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener">
                 <button className={`${styles.btnHero} ${styles.btnHeroGhost}`} style={{ display: "inline-flex", alignItems: "center", gap: ".5rem" }}>
-                  <Icon name="caminhao" size={16} /> {WHATSAPP_LABEL}
+                  <Icon name="caminhao" size={16} /> {telefoneExibicao}
                 </button>
               </a>
             </div>
@@ -683,7 +701,9 @@ function adicionarDireto(p: Produto) {
             </div>
             <div>
               <div className={styles.advT}>Entrega rápida</div>
-              <div className={styles.advS}>Receba em até 24h</div>
+              <div className={styles.advS}>
+  {mensagemEntregaExibida}
+</div>
             </div>
           </div>
           <div className={styles.advItem}>
