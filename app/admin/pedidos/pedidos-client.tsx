@@ -23,7 +23,7 @@ const statusLabel: Record<StatusPedido, string> = {
   cancelado: "Cancelado",
 };
 
-type Detalhe = Awaited<ReturnType<typeof detalhePedido>>;
+type Detalhe = Awaited<ReturnType<typeof detalhePedido>> | { erro: string };
 
 function formatarMoeda(valor: number) {
   return Number(valor).toLocaleString("pt-BR", {
