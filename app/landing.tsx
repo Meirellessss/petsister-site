@@ -62,17 +62,25 @@ function formatarPreco(v: number) {
   return v.toFixed(2).replace(".", ",");
 }
 
+
 export default function Landing({
   categorias,
   produtos,
   cartCount,
   usuario,
+  dadosLoja,
 }: {
   categorias: Categoria[];
   produtos: Produto[];
   cartCount: number;
   usuario: { nome: string; perfil: Perfil } | null;
+  dadosLoja: {
+    telefoneAtendimento: string;
+    whatsappAtendimento: string;
+    mensagemEntrega: string;
+  };
 }) {
+
  
   const [busca, setBusca] = useState("");
   const [catAtiva, setCatAtiva] = useState("");
