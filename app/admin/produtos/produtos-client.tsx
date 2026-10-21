@@ -51,6 +51,21 @@ export default function ProdutosClient({
     );
   });
 
+  const totalEsgotados = produtos.filter(
+    (produto) => produto.estoque === 0
+  ).length;
+
+  const totalEstoqueBaixo = produtos.filter(
+    (produto) =>
+      produto.estoque > 0 &&
+      produto.estoque <= limiteEstoqueBaixo
+  ).length;
+
+  const totalDisponiveis = produtos.filter(
+    (produto) => produto.estoque > limiteEstoqueBaixo
+  ).length;
+
+  
   function novo() {
     setEditando(null);
     setErro("");
