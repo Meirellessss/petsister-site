@@ -37,12 +37,15 @@ export default function ProdutosClient({
       filtroCategoria === "Todas" ||
       produto.categoria === filtroCategoria;
 
+    
     const correspondeEstoque =
       filtroEstoque === "todos" ||
       (filtroEstoque === "baixo" &&
         produto.estoque > 0 &&
         produto.estoque <= limiteEstoqueBaixo) ||
-      (filtroEstoque === "esgotado" && produto.estoque === 0);
+      (filtroEstoque === "esgotado" && produto.estoque === 0) ||
+      (filtroEstoque === "normal" &&
+        produto.estoque > limiteEstoqueBaixo);
 
     return (
       correspondeBusca &&
@@ -147,6 +150,7 @@ export default function ProdutosClient({
             <option value="todos">Todos os estoques</option>
             <option value="baixo">Estoque baixo</option>
             <option value="esgotado">Esgotados</option>
+            <option value="normal">Estoque normal</option>
           </select>
         </div>
 
