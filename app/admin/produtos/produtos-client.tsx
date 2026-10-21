@@ -27,8 +27,9 @@ export default function ProdutosClient({
   const [filtroEstoque, setFiltroEstoque] = useState("todos");
 
   const produtosFiltrados = produtos.filter((produto) => {
-    const termo = busca.trim().toLocaleLowerCase("pt-BR");
-
+    const termo = busca.trim().toLocaleLowerCase("pt-BR");   
+    const produtosOrdenados = [...produtosFiltrados].sort(
+    (a, b) => a.estoque - b.estoque);
     const correspondeBusca =
       produto.nome.toLocaleLowerCase("pt-BR").includes(termo) ||
       (produto.descricao ?? "").toLocaleLowerCase("pt-BR").includes(termo);
@@ -241,7 +242,7 @@ export default function ProdutosClient({
                   </td>
                 </tr>
               )}
-              {produtosFiltrados.map((p) => (
+              {produtosOrdenados.map((p) => (
                 <tr key={p.id}>
                   <td>{p.id}</td>
                   <td>
