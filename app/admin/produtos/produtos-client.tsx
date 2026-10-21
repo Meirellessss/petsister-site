@@ -28,8 +28,6 @@ export default function ProdutosClient({
 
   const produtosFiltrados = produtos.filter((produto) => {
     const termo = busca.trim().toLocaleLowerCase("pt-BR");   
-    const produtosOrdenados = [...produtosFiltrados].sort(
-    (a, b) => a.estoque - b.estoque);
     const correspondeBusca =
       produto.nome.toLocaleLowerCase("pt-BR").includes(termo) ||
       (produto.descricao ?? "").toLocaleLowerCase("pt-BR").includes(termo);
@@ -55,6 +53,10 @@ export default function ProdutosClient({
     );
   });
 
+  const produtosOrdenados = [...produtosFiltrados].sort(
+    (a, b) => a.estoque - b.estoque
+  );
+  
   const totalEsgotados = produtos.filter(
     (produto) => produto.estoque === 0
   ).length;
