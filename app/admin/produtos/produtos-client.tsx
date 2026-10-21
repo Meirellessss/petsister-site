@@ -150,9 +150,68 @@ export default function ProdutosClient({
           </select>
         </div>
 
+       
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+            gap: ".8rem",
+            marginBottom: "1rem",
+          }}
+        >
+          <div
+            style={{
+              padding: "1rem",
+              border: "1px solid var(--border)",
+              borderRadius: "12px",
+              background: "var(--bg)",
+            }}
+          >
+            <div style={{ color: "var(--muted)", fontSize: ".85rem" }}>
+              Produtos esgotados
+            </div>
+            <strong style={{ color: "#991b1b", fontSize: "1.5rem" }}>
+              {totalEsgotados}
+            </strong>
+          </div>
+
+          <div
+            style={{
+              padding: "1rem",
+              border: "1px solid var(--border)",
+              borderRadius: "12px",
+              background: "var(--bg)",
+            }}
+          >
+            <div style={{ color: "var(--muted)", fontSize: ".85rem" }}>
+              Estoque baixo
+            </div>
+            <strong style={{ color: "#9a3412", fontSize: "1.5rem" }}>
+              {totalEstoqueBaixo}
+            </strong>
+          </div>
+
+          <div
+            style={{
+              padding: "1rem",
+              border: "1px solid var(--border)",
+              borderRadius: "12px",
+              background: "var(--bg)",
+            }}
+          >
+            <div style={{ color: "var(--muted)", fontSize: ".85rem" }}>
+              Estoque normal
+            </div>
+            <strong style={{ color: "#166534", fontSize: "1.5rem" }}>
+              {totalDisponiveis}
+            </strong>
+          </div>
+        </div>
+
         <p style={{ color: "var(--muted)", marginBottom: ".8rem" }}>
           Exibindo {produtosFiltrados.length} de {produtos.length} produtos
         </p>
+
 
         <div className={styles.tw}>
           <table className={styles.table}>
