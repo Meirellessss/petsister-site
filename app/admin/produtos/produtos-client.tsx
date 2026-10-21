@@ -22,6 +22,34 @@ export default function ProdutosClient({
   const [pending, startTransition] = useTransition();
   const [erro, setErro] = useState("");
   const router = useRouter();
+    const [busca, setBusca] = useState("");
+  const [filtroCategoria, setFiltroCategoria] = useState("Todas");
+  const [filtroEstoque, setFiltroEstoque] = useState("todos");
+
+  const produtosFiltrados = produtos.filter((produto) => {
+    const termo = busca.trim().toLocaleLowerCase("pt-BR");
+
+    const correspondeBusca =
+      produto.nome.toLocaleLowerCase("pt-BR").includes(termo) ||
+      (produto.descricao ?? "").toLocaleLowerCase("pt-BR").includes(termo);
+
+    const correspondeCategoria =
+      filtroCategoria === "Todas" ||
+      produto.categoria === filtroCategoria;
+
+    const correspondeEstoque =
+      filtroEstoque === "todos" ||
+      (filtroEstoque === "baixo" &&
+        produto.estoque > 0 &&
+        produto.estoque <= limiteEstoqueBaixo) ||
+      (filtroEstoque === "esgotado" && produto.estoque === 0);
+
+    return (
+      correspondeBusca &&
+      correspondeCategoria &&
+      correspondeEstoque
+    );
+  });
 
   function novo() {
     setEditando(null);
@@ -64,6 +92,53 @@ export default function ProdutosClient({
             + Novo produto
           </button>
         </div>
+                <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+            gap: ".8rem",
+            marginBottom: "1rem",
+          }}
+        >
+          <input
+            type="search"
+            className={styles.fc}
+            placeholder="Buscar por nome ou descrição..."
+            aria-label="Buscar produtos por nome ou descrição"
+            value={busca}
+            onChange={(e) => setBusca(e.target.value)}
+          />
+
+          <select
+            className={styles.fc}
+            aria-label="Filtrar por categoria"
+            value={filtroCategoria}
+            onChange={(e) => setFiltroCategoria(e.target.value)}
+          >
+            <option value="Todas">Todas as categorias</option>
+            {categorias.map((categoria) => (
+              <option key={categoria.id} value={categoria.nome}>
+                {categoria.nome}
+              </option>
+            ))}
+          </select>
+
+          <select
+            className={styles.fc}
+            aria-label="Filtrar por estoque"
+            value={filtroEstoque}
+            onChange={(e) => setFiltroEstoque(e.target.value)}
+          >
+            <option value="todos">Todos os estoques</option>
+            <option value="baixo">Estoque baixo</option>
+            <option value="esgotado">Esgotados</option>
+          </select>
+        </div>
+
+        <p style={{ color: "var(--muted)", marginBottom: ".8rem" }}>
+          Exibindo {produtosFiltrados.length} de {produtos.length} produtos
+        </p>
+
         <div className={styles.tw}>
           <table className={styles.table}>
             <thead>
@@ -79,14 +154,16 @@ export default function ProdutosClient({
               </tr>
             </thead>
             <tbody>
-              {produtos.length === 0 && (
+              {produtosFiltrados.length === 0 && (
                 <tr>
                   <td colSpan={8} style={{ textAlign: "center", padding: "2rem", color: "var(--muted)" }}>
-                    Nenhum produto cadastrado
+                   {produtos.length === 0
+                      ? "Nenhum produto cadastrado"
+                      : "Nenhum produto encontrado com esses filtros"}
                   </td>
                 </tr>
               )}
-              {produtos.map((p) => (
+              {produtosFiltrados.map((p) => (
                 <tr key={p.id}>
                   <td>{p.id}</td>
                   <td>
