@@ -25,6 +25,7 @@ export default function ProdutosClient({
     const [busca, setBusca] = useState("");
   const [filtroCategoria, setFiltroCategoria] = useState("Todas");
   const [filtroEstoque, setFiltroEstoque] = useState("todos");
+  const [ordenacao, setOrdenacao] = useState("estoque-menor");
 
   const produtosFiltrados = produtos.filter((produto) => {
     const termo = busca.trim().toLocaleLowerCase("pt-BR");   
@@ -53,9 +54,24 @@ export default function ProdutosClient({
     );
   });
 
-  const produtosOrdenados = [...produtosFiltrados].sort(
-    (a, b) => a.estoque - b.estoque
-  );
+  
+  const produtosOrdenados = [...produtosFiltrados].sort((a, b) => {
+    switch (ordenacao) {
+      case "estoque-maior":
+        return b.estoque - a.estoque;
+
+      case "nome-az":
+        return a.nome.localeCompare(b.nome, "pt-BR");
+
+      case "nome-za":
+        return b.nome.localeCompare(a.nome, "pt-BR");
+
+      case "estoque-menor":
+      default:
+        return a.estoque - b.estoque;
+    }
+  });
+
   
   const totalEsgotados = produtos.filter(
     (produto) => produto.estoque === 0
@@ -155,6 +171,19 @@ export default function ProdutosClient({
             <option value="esgotado">Esgotados</option>
             <option value="normal">Estoque normal</option>
           </select>
+             
+  <select
+    className={styles.fc}
+    aria-label="Ordenar produtos"
+    value={ordenacao}
+    onChange={(e) => setOrdenacao(e.target.value)}
+  >
+    <option value="estoque-menor">Menor estoque primeiro</option>
+    <option value="estoque-maior">Maior estoque primeiro</option>
+    <option value="nome-az">Nome: A–Z</option>
+    <option value="nome-za">Nome: Z–A</option>
+  </select>
+     
         </div>
 
        
