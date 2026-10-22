@@ -2963,3 +2963,36 @@ a.topbarItem:hover {
     font-size: 0.78rem;
   }
 }
+
+/* Categorias em faixa horizontal */
+.catGrid {
+  display: grid;
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(135px, 155px);
+  gap: 1rem;
+  overflow-x: auto;
+  padding: 0.4rem 0.25rem 1rem;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--p300) transparent;
+}
+
+.catCard {
+  width: 100%;
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+@media (max-width: 560px) {
+  .catGrid {
+    grid-auto-columns: 138px;
+    gap: 0.75rem;
+    padding-bottom: 0.85rem;
+  }
+
+  .catCard {
+    min-height: 165px;
+  }
+}
