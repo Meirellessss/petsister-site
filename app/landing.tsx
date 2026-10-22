@@ -868,16 +868,13 @@ function adicionarDireto(p: Produto) {
         >
           <div className={styles.sectionInner}>
             <div className={styles.secHead}>
-              <div className={styles.secLabel}>Ofertas especiais</div>
               <h2
                 id="ofertas-titulo"
                 className={styles.secTitle}
               >
                 Ofertas para o seu pet
               </h2>
-              <p className={styles.secSub}>
-                Aproveite os descontos disponíveis na PetSister.
-              </p>
+              
             </div>
 
             <div className={styles.prodGrid}>
@@ -910,9 +907,6 @@ function adicionarDireto(p: Produto) {
                         className={styles.prodThumb}
                         aria-label={`Ver oferta de ${p.nome}`}
                       >
-                        <span className={styles.prodTag}>
-                          Oferta
-                        </span>
 
                         {p.imagem ? (
                           <img
@@ -995,16 +989,14 @@ function adicionarDireto(p: Produto) {
           >
             <div className={styles.sectionInner}>
               <div className={styles.secHead}>
-                <div className={styles.secLabel}>Para seu pet</div>
+                
                 <h2
                   id={`vitrine-${secao.id}`}
                   className={styles.secTitle}
                 >
                   {secao.titulo}
                 </h2>
-                <p className={styles.secSub}>
-                  {secao.subtitulo}
-                </p>
+               
               </div>
 
               <div className={styles.prodGrid}>
@@ -1100,7 +1092,9 @@ function adicionarDireto(p: Produto) {
         <div className={styles.sectionInner}>
           <div className={styles.secHead}>
             <div className={styles.secLabel}>Loja</div>
-            <h2 className={styles.secTitle}>Mais procurados</h2>
+            <div className={styles.secHead}>
+  <h2 className={styles.secTitle}>Nossos produtos</h2>
+</div>
             <p className={styles.secSub}>Produtos selecionados a dedo pelos tutores da Pet Sister.</p>
           </div>
           <div className={styles.filtros}>
