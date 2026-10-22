@@ -29,14 +29,14 @@
 
 
 .topbarInner {
-  width: min(1380px, calc(100% - 24px));
+  width: min(1380px, calc(100% - 40px));
   min-height: 36px;
   margin: 0 auto;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   flex-wrap: wrap;
-  gap: 0.5rem 1rem;
+  gap: 0.5rem clamp(1.5rem, 5vw, 4rem);
   padding: 0.3rem 0;
   line-height: 1.2;
 }
@@ -681,10 +681,11 @@ a.topbarItem:hover {
   .topbarInner {
     justify-content: space-around;
   
-  .topbarInner {
-    gap: 0.2rem;
-    padding: 0.25rem 0.3rem;
-  }
+.topbarInner {
+  justify-content: center;
+  gap: 0.35rem 0.65rem;
+  padding: 0.3rem 0.2rem;
+}
 
   .topbarItem {
     gap: 0.25rem;
