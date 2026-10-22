@@ -2724,3 +2724,94 @@ a.topbarItem:hover {
     right: -2%;
   }
 }
+
+/* Vitrines de cães e gatos */
+.section[aria-labelledby^="vitrine-"] {
+  position: relative;
+  padding-top: clamp(2rem, 4vw, 3.5rem);
+  padding-bottom: clamp(2rem, 4vw, 3.5rem);
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(244, 91, 27, 0.09),
+      transparent 32%
+    ),
+    linear-gradient(180deg, #fffaf5 0%, #ffffff 100%);
+  border-top: 1px solid #f2e2d6;
+  border-bottom: 1px solid #f2e2d6;
+}
+
+.section[aria-labelledby^="vitrine-"] .sectionInner {
+  padding: clamp(1rem, 2.5vw, 1.8rem);
+  border: 1px solid rgba(234, 88, 12, 0.12);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 12px 32px rgba(18, 38, 75, 0.045);
+}
+
+.section[aria-labelledby^="vitrine-"] .secHead {
+  position: relative;
+  margin-bottom: 1.6rem;
+  padding: 0 0 1.1rem 1rem;
+  border-bottom: 1px solid var(--border);
+  border-left: 4px solid var(--p500);
+}
+
+.section[aria-labelledby^="vitrine-"] .secLabel {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin-bottom: 0.55rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--p100);
+  border-radius: 999px;
+  background: var(--p50);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.section[aria-labelledby^="vitrine-"] .secTitle {
+  font-size: clamp(1.65rem, 3vw, 2.35rem);
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+}
+
+.section[aria-labelledby^="vitrine-"] .secSub {
+  margin-top: 0.55rem;
+  line-height: 1.65;
+}
+
+.section[aria-labelledby^="vitrine-"] .prodCard {
+  border-color: #eee1d7;
+  border-radius: 17px;
+  background: #ffffff;
+  box-shadow: 0 4px 15px rgba(18, 38, 75, 0.055);
+}
+
+.section[aria-labelledby^="vitrine-"] .prodCard:hover {
+  border-color: var(--p300);
+  box-shadow: 0 12px 26px rgba(18, 38, 75, 0.1);
+}
+
+@media (max-width: 560px) {
+  .section[aria-labelledby^="vitrine-"] {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .section[aria-labelledby^="vitrine-"] .sectionInner {
+    padding: 0.85rem;
+    border-radius: 18px;
+  }
+
+  .section[aria-labelledby^="vitrine-"] .secHead {
+    margin-bottom: 1rem;
+    padding-bottom: 0.85rem;
+  }
+
+  .section[aria-labelledby^="vitrine-"] .secTitle {
+    font-size: 1.55rem;
+  }
+}
