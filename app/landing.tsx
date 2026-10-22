@@ -752,6 +752,68 @@ function adicionarDireto(p: Produto) {
         </div>
       </div>
 
+      
+      <section
+        className={styles.section}
+        aria-labelledby="categorias-titulo"
+        style={{ paddingTop: "2rem", paddingBottom: "2rem" }}
+      >
+        <div className={styles.sectionInner}>
+          <div className={styles.secHead}>
+            <div className={styles.secLabel}>Explore a loja</div>
+            <h2
+              id="categorias-titulo"
+              className={styles.secTitle}
+            >
+              Compre por categoria
+            </h2>
+            <p className={styles.secSub}>
+              Encontre rapidamente o que seu pet precisa.
+            </p>
+          </div>
+
+          <div className={styles.catGrid}>
+            {categorias.map((c) => {
+              const total = produtos.filter(
+                (p) =>
+                  (p.categoria ?? "").trim().toLocaleLowerCase("pt-BR") ===
+                  c.nome.trim().toLocaleLowerCase("pt-BR")
+              ).length;
+
+              return (
+                <button
+                  key={c.id}
+                  type="button"
+                  className={styles.catCard}
+                  style={{ width: "100%", font: "inherit" }}
+                  onClick={() => {
+                    filtrarCat(c.nome);
+                    document
+                      .getElementById("produtos")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                >
+                  <span className={styles.catCardIc}>
+                    <Icon
+                      name={CATEGORIA_ICON[c.nome] ?? "pata"}
+                      size={30}
+                    />
+                  </span>
+
+                  <span className={styles.catCardName}>
+                    {c.nome}
+                  </span>
+
+                  <span className={styles.catCardCount}>
+                    {total} {total === 1 ? "produto" : "produtos"}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       <section className={styles.section} id="produtos" style={{ paddingTop: "1rem" }}>
         <div className={styles.sectionInner}>
           <div className={styles.secHead}>
