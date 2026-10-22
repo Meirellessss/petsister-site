@@ -795,10 +795,7 @@ function adicionarDireto(p: Produto) {
       </div>
 
       
-      <nav
-        className={styles.sectionNav}
-        aria-label="Atalhos da loja"
-      >
+      
         <a
           href="#categorias-titulo"
           className={styles.sectionNavLink}
