@@ -683,18 +683,37 @@ function adicionarDireto(p: Produto) {
            <p className={styles.heroSub}>
    O cuidado que ele merece, pertinho de você. 🐾
 </p>
-            <div className={styles.heroActions}>
-              <a href="#produtos">
-                <button className={`${styles.btnHero} ${styles.btnHeroMain}`} style={{ display: "inline-flex", alignItems: "center", gap: ".55rem" }}>
-                  Ver produtos <Icon name="sacola" size={18} />
-                </button>
-              </a>
-              <a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener">
-                <button className={`${styles.btnHero} ${styles.btnHeroGhost}`} style={{ display: "inline-flex", alignItems: "center", gap: ".5rem" }}>
-                  <Icon name="caminhao" size={16} /> {telefoneExibicao}
-                </button>
-              </a>
-            </div>
+           
+<div className={styles.heroActions}>
+  <a
+    href="#produtos"
+    className={`${styles.btnHero} ${styles.btnHeroMain}`}
+    style={{
+      display: "inline-flex",
+      alignItems: "center",
+      gap: ".55rem",
+    }}
+  >
+    Ver produtos
+    <Icon name="sacola" size={18} />
+  </a>
+
+  <a
+    href={`https://wa.me/${WHATSAPP}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    className={`${styles.btnHero} ${styles.btnHeroGhost}`}
+    style={{
+      display: "inline-flex",
+      alignItems: "center",
+      gap: ".5rem",
+    }}
+  >
+    <Icon name="caminhao" size={16} />
+    {telefoneExibicao}
+  </a>
+</div>
+
             <div className={styles.heroTrust}>
               <div className={styles.heroTrustItem}>
                 <span className={styles.tc}>
