@@ -183,6 +183,29 @@ const mensagemEntregaExibida =
     setBusca("");
   }
 
+  
+  const produtosParaCaes = produtos
+    .filter((p) => {
+      if (p.estoque <= 0) return false;
+
+      const texto = `${p.nome} ${p.categoria ?? ""}`;
+
+      return /(cachorr|cão|cães|cao|caes|canin|\bdog\b)/i.test(
+        texto
+      );
+    })
+    .slice(0, 4);
+
+  const produtosParaGatos = produtos
+    .filter((p) => {
+      if (p.estoque <= 0) return false;
+
+      const texto = `${p.nome} ${p.categoria ?? ""}`;
+
+      return /(gato|gata|felino|felina)/i.test(texto);
+    })
+    .slice(0, 4);
+
  
 function adicionarDireto(p: Produto) {
   setErroCarrinho(null);
@@ -928,6 +951,132 @@ function adicionarDireto(p: Produto) {
           </div>
         </section>
       )}
+
+      
+      {[
+        {
+          id: "caes",
+          titulo: "Tudo para cachorros",
+          subtitulo: "Produtos para cuidar, alimentar e divertir seu cão.",
+          itens: produtosParaCaes,
+        },
+        {
+          id: "gatos",
+          titulo: "Tudo para gatos",
+          subtitulo: "Encontre produtos para o bem-estar do seu gato.",
+          itens: produtosParaGatos,
+        },
+      ]
+        .filter((secao) => secao.itens.length > 0)
+        .map((secao) => (
+          <section
+            key={secao.id}
+            className={styles.section}
+            aria-labelledby={`vitrine-${secao.id}`}
+            style={{ paddingTop: "2rem", paddingBottom: "2rem" }}
+          >
+            <div className={styles.sectionInner}>
+              <div className={styles.secHead}>
+                <div className={styles.secLabel}>Para seu pet</div>
+                <h2
+                  id={`vitrine-${secao.id}`}
+                  className={styles.secTitle}
+                >
+                  {secao.titulo}
+                </h2>
+                <p className={styles.secSub}>
+                  {secao.subtitulo}
+                </p>
+              </div>
+
+              <div className={styles.prodGrid}>
+                {secao.itens.map((p) => {
+                  const desconto = Math.min(
+                    90,
+                    Math.max(0, Number(p.desconto_percentual ?? 0))
+                  );
+
+                  const precoOriginal = Number(p.preco);
+                  const precoFinal =
+                    Math.round(
+                      precoOriginal * (1 - desconto / 100) * 100
+                    ) / 100;
+
+                  return (
+                    <article
+                      className={styles.prodCard}
+                      key={`${secao.id}-${p.id}`}
+                    >
+                      <Link
+                        href={`/produto/${p.id}`}
+                        className={styles.prodThumb}
+                        aria-label={`Ver ${p.nome}`}
+                      >
+                        {p.destaque && (
+                          <span className={styles.prodTag}>
+                            Destaque
+                          </span>
+                        )}
+
+                        {p.imagem ? (
+                          <img
+                            src={p.imagem.split(/\r?\n/)[0]}
+                            alt={p.nome}
+                          />
+                        ) : (
+                          <span className={styles.phIc}>
+                            <Icon
+                              name={CATEGORIA_ICON[p.categoria ?? ""] ?? "pata"}
+                              size={64}
+                            />
+                          </span>
+                        )}
+                      </Link>
+
+                      <div className={styles.prodBody}>
+                        <div className={styles.prodCat}>
+                          {p.categoria}
+                        </div>
+
+                        <Link
+                          href={`/produto/${p.id}`}
+                          className={styles.prodName}
+                        >
+                          {p.nome}
+                        </Link>
+
+                        <div className={styles.prodPriceRow}>
+                          {desconto > 0 && (
+                            <span className={styles.prodOldPrice}>
+                              R$ {formatarPreco(precoOriginal)}
+                            </span>
+                          )}
+
+                          <span className={styles.prodPrice}>
+                            R$ {formatarPreco(precoFinal)}
+                          </span>
+
+                          {desconto > 0 && (
+                            <span className={styles.prodDiscountBadge}>
+                              -{desconto}%
+                            </span>
+                          )}
+                        </div>
+
+                        <Link
+                          href={`/produto/${p.id}`}
+                          className={styles.btnComprar}
+                        >
+                          Ver produto
+                        </Link>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+        ))}
 
       <section className={styles.section} id="produtos" style={{ paddingTop: "1rem" }}>
         <div className={styles.sectionInner}>
