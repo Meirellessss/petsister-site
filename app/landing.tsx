@@ -184,15 +184,18 @@ const mensagemEntregaExibida =
   }
 
   
+  
   const produtosParaCaes = produtos
     .filter((p) => {
       if (p.estoque <= 0) return false;
 
       const texto = `${p.nome} ${p.categoria ?? ""}`;
+      const paraCaes =
+        /(cachorr|cão|cães|cao|caes|canin|\bdog\b)/i.test(texto);
+      const paraGatos =
+        /(gato|gata|felino|felina)/i.test(texto);
 
-      return /(cachorr|cão|cães|cao|caes|canin|\bdog\b)/i.test(
-        texto
-      );
+      return paraCaes && !paraGatos;
     })
     .slice(0, 4);
 
@@ -201,8 +204,12 @@ const mensagemEntregaExibida =
       if (p.estoque <= 0) return false;
 
       const texto = `${p.nome} ${p.categoria ?? ""}`;
+      const paraCaes =
+        /(cachorr|cão|cães|cao|caes|canin|\bdog\b)/i.test(texto);
+      const paraGatos =
+        /(gato|gata|felino|felina)/i.test(texto);
 
-      return /(gato|gata|felino|felina)/i.test(texto);
+      return paraGatos && !paraCaes;
     })
     .slice(0, 4);
 
@@ -856,11 +863,11 @@ function adicionarDireto(p: Produto) {
       </section>
 
       
-      {produtos.some(
-        (p) =>
-          Number(p.desconto_percentual ?? 0) > 0 &&
-          p.estoque > 0
-      ) && (
+    {produtos.filter(
+  (p) =>
+    Number(p.desconto_percentual ?? 0) > 0 &&
+    p.estoque > 0
+).length >= 3 && (
         <section
           className={styles.section}
           aria-labelledby="ofertas-titulo"
