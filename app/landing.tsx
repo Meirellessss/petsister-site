@@ -149,17 +149,33 @@ const mensagemEntregaExibida =
   dadosLoja.mensagemEntrega.trim() ||
   "Consulte o prazo de entrega para sua região.";
 
+  
   const visiveis = useMemo(() => {
-    if (busca.trim()) {
-      const q = busca.toLowerCase().trim();
-      return produtos.filter((p) => p.nome?.toLowerCase().includes(q));
-    }
-    if (catAtiva === "") return produtos;
-    // Compara ignorando maiúsculas, minúsculas e espaços extras
-    return produtos.filter(
-      (p) => p.categoria?.toLowerCase().trim() === catAtiva.toLowerCase().trim()
-    );
+    const termo = busca.trim().toLocaleLowerCase("pt-BR");
+    const categoriaSelecionada = catAtiva
+      .trim()
+      .toLocaleLowerCase("pt-BR");
+
+    return produtos.filter((p) => {
+      const nome = (p.nome ?? "").toLocaleLowerCase("pt-BR");
+      const descricao = (p.descricao ?? "").toLocaleLowerCase("pt-BR");
+      const categoria = (p.categoria ?? "")
+        .trim()
+        .toLocaleLowerCase("pt-BR");
+
+      const correspondeBusca =
+        !termo ||
+        nome.includes(termo) ||
+        descricao.includes(termo);
+
+      const correspondeCategoria =
+        !categoriaSelecionada ||
+        categoria === categoriaSelecionada;
+
+      return correspondeBusca && correspondeCategoria;
+    });
   }, [produtos, busca, catAtiva]);
+
 
   
   function filtrarCat(cat: string) {
