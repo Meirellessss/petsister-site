@@ -26,30 +26,39 @@
   pointer-events: none;
 }
 
+
 .topbarInner {
   width: min(1380px, 100%);
+  min-height: 36px;
   margin: 0 auto;
-
   display: flex;
   align-items: center;
-  justify-content: space-between;
-
-  gap: 1rem;
-
-  padding: 0.25rem 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem clamp(0.75rem, 3vw, 2.5rem);
+  padding: 0.3rem 1rem;
   line-height: 1.2;
 }
+
+
 
 
 .topbarItem {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.4rem;
-  color: rgba(255, 255, 255, 0.94);
-  font-size: 0.79rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 0.76rem;
   text-decoration: none;
   white-space: nowrap;
+  transition: background 0.2s ease;
 }
+
 
 .topbarItem strong {
   color: #fff;
@@ -62,9 +71,7 @@ a.topbarItem:hover {
 }
 
 .topbarSeparator {
-  color: rgba(255, 255, 255, 0.55);
-  font-size: 0.8rem;
-  line-height: 1;
+  display: none;
 }
 
 
@@ -134,7 +141,7 @@ a.topbarItem:hover {
 .nav {
   position: fixed;
 
-  top: 21px;
+  top: 36px;
   left: 0;
   right: 0;
 
@@ -671,6 +678,18 @@ a.topbarItem:hover {
 @media (max-width: 560px) {
   .topbarInner {
     justify-content: center;
+  
+  .topbarInner {
+    gap: 0.2rem;
+    padding: 0.25rem 0.3rem;
+  }
+
+  .topbarItem {
+    gap: 0.25rem;
+    padding: 0.25rem 0.4rem;
+    font-size: 0.64rem;
+  }
+
   }
 
   .topbarMessage {
