@@ -2996,3 +2996,93 @@ a.topbarItem:hover {
     min-height: 165px;
   }
 }
+
+/* PetSister — integrar as vitrines numa única loja */
+
+/* Remover o aspecto de caixas independentes */
+.section[aria-labelledby="categorias-titulo"] .secHead {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0 0 1.25rem;
+  margin-bottom: 1.5rem;
+  overflow: visible;
+}
+
+.section[aria-labelledby="ofertas-titulo"] {
+  border: 0;
+  background: transparent;
+}
+
+.section[aria-labelledby="ofertas-titulo"] .sectionInner {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.section[aria-labelledby="ofertas-titulo"] .secHead {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1rem;
+}
+
+.section[aria-labelledby^="vitrine-"] {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  border: 0;
+  background: transparent;
+}
+
+.section[aria-labelledby^="vitrine-"] .sectionInner {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.section[aria-labelledby^="vitrine-"] .secHead {
+  margin-bottom: 1.35rem;
+}
+
+/* Separação leve entre as áreas, sem caixas gigantes */
+.section[aria-labelledby="categorias-titulo"] {
+  padding-bottom: 2rem;
+}
+
+.section[aria-labelledby="ofertas-titulo"] {
+  padding-top: 1.5rem;
+  padding-bottom: 2rem;
+}
+
+.section[aria-labelledby="ofertas-titulo"] .secTitle,
+.section[aria-labelledby^="vitrine-"] .secTitle {
+  color: var(--ink);
+}
+
+/* Os cartões individuais continuam destacados */
+.section[aria-labelledby="ofertas-titulo"] .prodCard,
+.section[aria-labelledby^="vitrine-"] .prodCard {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(18, 38, 75, 0.06);
+}
+
+@media (max-width: 560px) {
+  .section[aria-labelledby="categorias-titulo"] .secHead {
+    padding: 0 0 1rem;
+  }
+
+  .section[aria-labelledby="ofertas-titulo"] .sectionInner,
+  .section[aria-labelledby^="vitrine-"] .sectionInner {
+    padding: 0;
+  }
+
+  .section[aria-labelledby^="vitrine-"] {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+}
