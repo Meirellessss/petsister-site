@@ -814,6 +814,121 @@ function adicionarDireto(p: Produto) {
         </div>
       </section>
 
+      
+      {produtos.some(
+        (p) =>
+          Number(p.desconto_percentual ?? 0) > 0 &&
+          p.estoque > 0
+      ) && (
+        <section
+          className={styles.section}
+          aria-labelledby="ofertas-titulo"
+          style={{ paddingTop: "2rem", paddingBottom: "2rem" }}
+        >
+          <div className={styles.sectionInner}>
+            <div className={styles.secHead}>
+              <div className={styles.secLabel}>Ofertas especiais</div>
+              <h2
+                id="ofertas-titulo"
+                className={styles.secTitle}
+              >
+                Ofertas para o seu pet
+              </h2>
+              <p className={styles.secSub}>
+                Aproveite os descontos disponíveis na PetSister.
+              </p>
+            </div>
+
+            <div className={styles.prodGrid}>
+              {produtos
+                .filter(
+                  (p) =>
+                    Number(p.desconto_percentual ?? 0) > 0 &&
+                    p.estoque > 0
+                )
+                .slice(0, 4)
+                .map((p) => {
+                  const desconto = Math.min(
+                    90,
+                    Math.max(0, Number(p.desconto_percentual ?? 0))
+                  );
+
+                  const precoOriginal = Number(p.preco);
+                  const precoFinal =
+                    Math.round(
+                      precoOriginal * (1 - desconto / 100) * 100
+                    ) / 100;
+
+                  return (
+                    <article
+                      className={styles.prodCard}
+                      key={`oferta-${p.id}`}
+                    >
+                      <Link
+                        href={`/produto/${p.id}`}
+                        className={styles.prodThumb}
+                        aria-label={`Ver oferta de ${p.nome}`}
+                      >
+                        <span className={styles.prodTag}>
+                          Oferta
+                        </span>
+
+                        {p.imagem ? (
+                          <img
+                            src={p.imagem.split(/\r?\n/)[0]}
+                            alt={p.nome}
+                          />
+                        ) : (
+                          <span className={styles.phIc}>
+                            <Icon
+                              name={CATEGORIA_ICON[p.categoria ?? ""] ?? "pata"}
+                              size={64}
+                            />
+                          </span>
+                        )}
+                      </Link>
+
+                      <div className={styles.prodBody}>
+                        <div className={styles.prodCat}>
+                          {p.categoria}
+                        </div>
+
+                        <Link
+                          href={`/produto/${p.id}`}
+                          className={styles.prodName}
+                        >
+                          {p.nome}
+                        </Link>
+
+                        <div className={styles.prodPriceRow}>
+                          <span className={styles.prodOldPrice}>
+                            R$ {formatarPreco(precoOriginal)}
+                          </span>
+
+                          <span className={styles.prodPrice}>
+                            R$ {formatarPreco(precoFinal)}
+                          </span>
+
+                          <span className={styles.prodDiscountBadge}>
+                            -{desconto.toLocaleString("pt-BR")}%
+                          </span>
+                        </div>
+
+                        <Link
+                          href={`/produto/${p.id}`}
+                          className={styles.btnComprar}
+                        >
+                          Ver oferta
+                        </Link>
+                      </div>
+                    </article>
+                  );
+                })}
+            </div>
+          </div>
+        </section>
+      )}
+
       <section className={styles.section} id="produtos" style={{ paddingTop: "1rem" }}>
         <div className={styles.sectionInner}>
           <div className={styles.secHead}>
