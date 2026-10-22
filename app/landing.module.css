@@ -2815,3 +2815,151 @@ a.topbarItem:hover {
     font-size: 1.55rem;
   }
 }
+
+/* Acabamento consistente dos preços e botões PetSister */
+.prodCard {
+  height: 100%;
+}
+
+.prodBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.prodName {
+  min-height: 2.7rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.prodPriceRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 0.55rem;
+  margin-top: auto;
+  padding-top: 0.9rem;
+  margin-bottom: 0.2rem;
+  min-width: 0;
+}
+
+.prodOldPrice {
+  color: #cbd5e1;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-decoration: line-through;
+}
+
+.prodPrice {
+  color: #ff8a55;
+  font-size: clamp(1.15rem, 1.7vw, 1.45rem);
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  padding-top: 0;
+  margin-top: 0;
+  overflow-wrap: anywhere;
+}
+
+.prodDiscountBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  background: #ffdfcf;
+  color: #922f08;
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+.prodInstallment {
+  min-height: 2rem;
+  display: flex;
+  align-items: center;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #f1f5f9;
+  line-height: 1.4;
+}
+
+.btnComprar {
+  width: 100%;
+  min-height: 46px;
+  margin-top: auto;
+  padding: 0.75rem 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: #f45b1b;
+  color: #ffffff;
+  font-size: 0.87rem;
+  font-weight: 800;
+  line-height: 1.3;
+  text-align: center;
+  text-decoration: none;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.btnComprar:hover {
+  background: #d94812;
+  color: #ffffff;
+  box-shadow: 0 7px 18px rgba(244, 91, 27, 0.22);
+  transform: translateY(-1px);
+}
+
+.btnComprar:focus-visible {
+  outline: 3px solid #ffbd59;
+  outline-offset: 3px;
+}
+
+.btnComprar:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+@media (max-width: 560px) {
+  .prodPriceRow {
+    gap: 0.35rem;
+    padding-top: 0.65rem;
+  }
+
+  .prodPrice {
+    font-size: 1.12rem;
+  }
+
+  .prodOldPrice {
+    font-size: 0.72rem;
+  }
+
+  .prodDiscountBadge {
+    font-size: 0.65rem;
+  }
+
+  .prodInstallment {
+    font-size: 0.74rem;
+  }
+
+  .btnComprar {
+    min-height: 43px;
+    padding: 0.65rem 0.4rem;
+    font-size: 0.78rem;
+  }
+}
