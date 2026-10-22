@@ -846,12 +846,15 @@ const valorParcela =
           {p.porte === "Medio" ? "Médio" : p.porte}
         </span>
 
-        <div className={styles.prodFoot}>
-          {p.estoque <= 8 && (
-            <div className={styles.prodStockLow}>
-              <Icon name="raio" size={13} /> Últimas {p.estoque} unidades
-            </div>
-          )}
+        {p.estoque <= 0 ? (
+  <div className={styles.prodStockLow}>
+    Produto esgotado
+  </div>
+) : p.estoque <= 8 ? (
+  <div className={styles.prodStockLow}>
+    <Icon name="raio" size={13} /> Últimas {p.estoque} unidades
+  </div>
+) : null}
 
           
 <div className={styles.prodPriceRow}>
@@ -878,23 +881,33 @@ const valorParcela =
   </div>
 )}
 
-          {usuario ? (
-            <button
-              type="button"
-              className={styles.btnComprar}
-              onClick={() => adicionarDireto(p)}
-              disabled={pending && produtoAdicionando === p.id}
-            >
-              <Icon name="carrinho" size={16} />
-              {produtoAdicionando === p.id
-                ? "Adicionando..."
-                : "Adicionar"}
-            </button>
-          ) : (
-            <Link href="/login" className={styles.btnComprar}>
-              Entrar para comprar
-            </Link>
-          )}
+          {p.estoque <= 0 ? (
+  <button
+    type="button"
+    className={styles.btnComprar}
+    disabled
+    aria-disabled="true"
+    style={{ opacity: 0.55, cursor: "not-allowed" }}
+  >
+    Produto esgotado
+  </button>
+) : usuario ? (
+  <button
+    type="button"
+    className={styles.btnComprar}
+    onClick={() => adicionarDireto(p)}
+    disabled={pending && produtoAdicionando === p.id}
+  >
+    <Icon name="carrinho" size={16} />
+    {produtoAdicionando === p.id
+      ? "Adicionando..."
+      : "Adicionar"}
+  </button>
+) : (
+  <Link href="/login" className={styles.btnComprar}>
+    Entrar para comprar
+  </Link>
+)}
         </div>
       </div>
     </div>
