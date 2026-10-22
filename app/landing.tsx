@@ -794,54 +794,6 @@ function adicionarDireto(p: Produto) {
         </div>
       </div>
 
-      
-      
-        <a
-          href="#categorias-titulo"
-          className={styles.sectionNavLink}
-        >
-          Categorias
-        </a>
-
-        {produtos.some(
-          (p) =>
-            Number(p.desconto_percentual ?? 0) > 0 &&
-            p.estoque > 0
-        ) && (
-          <a
-            href="#ofertas-titulo"
-            className={styles.sectionNavLink}
-          >
-            Ofertas
-          </a>
-        )}
-
-        {produtosParaCaes.length > 0 && (
-          <a
-            href="#vitrine-caes"
-            className={styles.sectionNavLink}
-          >
-            Para cães
-          </a>
-        )}
-
-        {produtosParaGatos.length > 0 && (
-          <a
-            href="#vitrine-gatos"
-            className={styles.sectionNavLink}
-          >
-            Para gatos
-          </a>
-        )}
-
-        <a
-          href="#produtos"
-          className={styles.sectionNavLink}
-        >
-          Todos os produtos
-        </a>
-      </nav>
-
       <section
         className={styles.section}
         aria-labelledby="categorias-titulo"
