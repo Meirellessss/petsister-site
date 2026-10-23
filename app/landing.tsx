@@ -1071,9 +1071,11 @@ function adicionarDireto(p: Produto) {
                         
                        className={styles.prodDescription}
 
+                        {p.porte ? (
                         <span className={styles.prodPorte}>
                           Porte: {p.porte === "Medio" ? "Médio" : p.porte}
                         </span>
+                      ) : null}
 
                         
                         <div className={styles.prodPriceRow}>
