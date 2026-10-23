@@ -761,9 +761,7 @@ function adicionarDireto(p: Produto) {
       <div className={styles.adv}>
         <div className={styles.advInner}>
           <div className={styles.advItem}>
-            <div className={styles.advIc}>
-             <div className={styles.advIc}>🚚</div>
-            </div>
+               <div className={styles.advIc}>🚚</div>
             <div>
               <div className={styles.advT}>Entrega rápida</div>
               <div className={styles.advS}>
@@ -772,27 +770,21 @@ function adicionarDireto(p: Produto) {
             </div>
           </div>
           <div className={styles.advItem}>
-            <div className={styles.advIc}>
-             <div className={styles.advIc}>💊</div>
-            </div>
+              <div className={styles.advIc}>💊</div>
             <div>
               <div className={styles.advT}>Até 3x sem juros</div>
               <div className={styles.advS}>No cartão de crédito</div>
             </div>
           </div>
           <div className={styles.advItem}>
-            <div className={styles.advIc}>
-             <div className={styles.advIc}>🥣</div>
-            </div>
+            <div className={styles.advIc}>🥣</div>
             <div>
               <div className={styles.advT}>Troca facilitada</div>
               <div className={styles.advS}>Em até 7 dias úteis</div>
             </div>
           </div>
           <div className={styles.advItem}>
-            <div className={styles.advIc}>
-              <div className={styles.advIc}>❤️</div>
-            </div>
+             <div className={styles.advIc}>❤️</div>
             <div>
               <div className={styles.advT}>Cães e gatos</div>
               <div className={styles.advS}>Curadoria especializada</div>
@@ -1098,11 +1090,11 @@ function adicionarDireto(p: Produto) {
       <section className={styles.section} id="produtos" style={{ paddingTop: "1rem" }}>
         <div className={styles.sectionInner}>
           <div className={styles.secHead}>
-            <div className={styles.secLabel}>Loja</div>
-            <div className={styles.secHead}>
-  <h2 className={styles.secTitle}>Nossos produtos</h2>
-</div>
-            <p className={styles.secSub}>Produtos selecionados a dedo pelos tutores da Pet Sister.</p>
+            <div className={styles.secLabel}>Catálogo completo</div>
+            <h2 className={styles.secTitle}>Nossos produtos</h2>
+            <p className={styles.secSub}>
+              Explore as categorias e encontre os produtos certos para o seu pet.
+            </p>
           </div>
           <div className={styles.filtros}>
             <button
