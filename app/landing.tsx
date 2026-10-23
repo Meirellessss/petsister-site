@@ -813,43 +813,44 @@ function adicionarDireto(p: Produto) {
           </div>
 
           <div className={styles.catGrid}>
-            {categorias.map((c) => {
-              const total = produtos.filter(
-                (p) =>
-                  (p.categoria ?? "").trim().toLocaleLowerCase("pt-BR") ===
-                  c.nome.trim().toLocaleLowerCase("pt-BR")
-              ).length;
+           
+{categorias.map((c) => {
+  const total = produtos.filter(
+    (p) =>
+      (p.categoria ?? "").trim().toLocaleLowerCase("pt-BR") ===
+      c.nome.trim().toLocaleLowerCase("pt-BR")
+  ).length;
 
-              return (
-                <button
-                  key={c.id}
-                  type="button"
-                  className={styles.catCard}
-                  style={{ width: "100%", font: "inherit" }}
-                  onClick={() => {
-                    filtrarCat(c.nome);
-                    document
-                      .getElementById("produtos")
-                      ?.scrollIntoView({ behavior: "smooth" });
-                  }}
-                >
-                  <span className={styles.catCardIc}>
-                    <Icon
-                      name={CATEGORIA_ICON[c.nome] ?? "pata"}
-                      size={30}
-                    />
-                  </span>
+  return (
+    <Link
+      key={c.id}
+      href={`/produtos?categoria=${encodeURIComponent(c.nome)}`}
+      className={styles.catCard}
+      style={{
+        width: "100%",
+        font: "inherit",
+        textDecoration: "none",
+        color: "inherit",
+      }}
+    >
+      <span className={styles.catCardIc}>
+        <Icon
+          name={CATEGORIA_ICON[c.nome] ?? "pata"}
+          size={30}
+        />
+      </span>
 
-                  <span className={styles.catCardName}>
-                    {c.nome}
-                  </span>
+      <span className={styles.catCardName}>
+        {c.nome}
+      </span>
 
-                  <span className={styles.catCardCount}>
-                    {total} {total === 1 ? "produto" : "produtos"}
-                  </span>
-                </button>
-              );
-            })}
+      <span className={styles.catCardCount}>
+        {total} {total === 1 ? "produto" : "produtos"}
+      </span>
+    </Link>
+  );
+})}
+
           </div>
         </div>
       </section>
