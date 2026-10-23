@@ -3501,3 +3501,161 @@ a.topbarItem:hover {
   border: 1px solid #f4c19f;
   color: #9b3912;
 }
+
+/* Padrão único para todas as vitrines PetSister */
+.section .prodGrid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: 420px;
+  align-items: stretch;
+  gap: 1rem;
+}
+
+.section .prodGrid .prodCard {
+  box-sizing: border-box;
+  width: 100%;
+  height: 420px;
+  min-height: 420px;
+  max-height: 420px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.section .prodGrid .prodThumb {
+  flex: 0 0 135px;
+  height: 135px;
+  min-height: 135px;
+  padding: 0.5rem;
+  overflow: hidden;
+}
+
+.section .prodGrid .prodThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.section .prodGrid .prodBody {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0.7rem;
+  gap: 0.35rem;
+}
+
+.section .prodGrid .prodCat {
+  flex: 0 0 12px;
+  min-height: 12px;
+  max-height: 12px;
+  overflow: hidden;
+  line-height: 12px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.section .prodGrid .prodName {
+  display: -webkit-box;
+  flex: 0 0 2.4rem;
+  min-height: 2.4rem;
+  max-height: 2.4rem;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: 1.2rem;
+}
+
+.section .prodGrid .prodDescription {
+  display: -webkit-box;
+  flex: 0 0 2rem;
+  min-height: 2rem;
+  max-height: 2rem;
+  margin: 0;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-size: 0.73rem;
+  line-height: 1rem;
+}
+
+.section .prodGrid .prodPorte {
+  flex: 0 0 22px;
+  min-height: 22px;
+  max-height: 22px;
+  align-self: flex-start;
+  overflow: hidden;
+  padding: 0.2rem 0.45rem;
+  font-size: 0.68rem;
+  white-space: nowrap;
+}
+
+.section .prodGrid .prodPriceRow {
+  flex-shrink: 0;
+  min-height: 2rem;
+  margin-top: auto;
+  padding-top: 0.25rem;
+  margin-bottom: 0;
+  gap: 0.3rem;
+}
+
+.section .prodGrid .prodInstallment {
+  flex-shrink: 0;
+  min-height: 26px;
+  max-height: 26px;
+  overflow: hidden;
+  padding: 0.3rem 0.4rem;
+  font-size: 0.69rem;
+}
+
+.section .prodGrid .btnComprar {
+  flex-shrink: 0;
+  min-height: 38px;
+  max-height: 38px;
+  margin-top: auto;
+  padding: 0.45rem;
+}
+
+@media (max-width: 900px) {
+  .section .prodGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-rows: 420px;
+  }
+}
+
+@media (max-width: 600px) {
+  .section .prodGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 405px;
+    gap: 0.7rem;
+  }
+
+  .section .prodGrid .prodCard {
+    height: 405px;
+    min-height: 405px;
+    max-height: 405px;
+  }
+
+  .section .prodGrid .prodThumb {
+    flex-basis: 125px;
+    height: 125px;
+    min-height: 125px;
+  }
+
+  .section .prodGrid .prodBody {
+    padding: 0.55rem;
+    gap: 0.3rem;
+  }
+
+  .section .prodGrid .prodName {
+    font-size: 0.82rem;
+  }
+
+  .section .prodGrid .prodDescription {
+    font-size: 0.7rem;
+  }
+
+  .section .prodGrid .prodPrice {
+    font-size: 1rem;
+  }
+}
