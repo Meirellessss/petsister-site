@@ -3478,3 +3478,26 @@ a.topbarItem:hover {
   padding: 0.45rem 0.6rem;
   font-weight: 600;
 }
+
+
+/* Informações dos produtos */
+.section .prodGrid .prodDescription {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-height: 2.35rem;
+  max-height: 2.35rem;
+  margin: 0 0 0.35rem;
+  color: #765b49;
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.section .prodGrid .prodPorte {
+  background: #ffdfc8;
+  border: 1px solid #f4c19f;
+  color: #9b3912;
+}
