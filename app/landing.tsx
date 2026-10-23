@@ -949,6 +949,17 @@ function adicionarDireto(p: Produto) {
                         </div>
 
                         <Link
+
+                          
+                        <p className={styles.prodDescription}>
+                          {p.descricao?.trim() || ""}
+                        </p>
+
+                        <span className={styles.prodPorte}>
+                          Porte: {p.porte === "Medio" ? "Médio" : p.porte}
+                        </span>
+
+                          
                           href={`/produto/${p.id}`}
                           className={styles.btnComprar}
                         >
@@ -1053,7 +1064,16 @@ function adicionarDireto(p: Produto) {
                         >
                           {p.nome}
                         </Link>
+                        
+                        <p className={styles.prodDescription}>
+                          {p.descricao?.trim() || ""}
+                        </p>
 
+                        <span className={styles.prodPorte}>
+                          Porte: {p.porte === "Medio" ? "Médio" : p.porte}
+                        </span>
+
+                        
                         <div className={styles.prodPriceRow}>
                           {desconto > 0 && (
                             <span className={styles.prodOldPrice}>
@@ -1177,6 +1197,10 @@ const valorParcela =
         >
           {p.nome}
         </Link>
+        
+        <p className={styles.prodDescription}>
+          {p.descricao?.trim() || ""}
+        </p>
 
         <span className={styles.prodPorte}>
           <Icon name="cao" size={12} /> Porte{" "}
