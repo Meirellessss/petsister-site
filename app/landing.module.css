@@ -3401,67 +3401,76 @@ a.topbarItem:hover {
   }
 }
 
-/* Paleta equilibrada dos cartões PetSister */
+
+/* Paleta equilibrada PetSister */
 .section .prodGrid .prodCard {
-  background: #fff5e9;
-  border: 1px solid #efd5bd;
-  border-radius: 16px;
-  box-shadow: 0 5px 16px rgba(18, 32, 68, 0.08);
+  background: #ece7df;
+  border: 1px solid #d5cdc1;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(18, 32, 68, 0.07);
 }
 
 .section .prodGrid .prodThumb {
-  background: linear-gradient(145deg, #fff8ef, #fbe8d6);
-  border-bottom: 1px solid #efd5bd;
+  background: #e5ded4;
+  border-bottom: 1px solid #d5cdc1;
 }
 
 .section .prodGrid .prodBody {
-  background: linear-gradient(145deg, #fff0df 0%, #f8e1ca 100%);
+  background: #e2dbd0;
   border-top: 3px solid #f45b1b;
-  color: #122044;
+  color: #17213e;
 }
 
 .section .prodGrid .prodCat {
-  color: #765b49;
+  color: #555b66;
 }
 
 .section .prodGrid .prodName {
-  color: #122044;
+  color: #17213e;
 }
 
 .section .prodGrid .prodPrice {
-  color: #122044;
+  color: #17213e;
+  font-weight: 900;
 }
 
 .section .prodGrid .prodOldPrice {
-  color: #806b5c;
+  color: #62636a;
 }
 
 .section .prodGrid .prodDiscountBadge {
-  background: #ffdfc8;
-  color: #9b3912;
-  border: 1px solid #f4c19f;
+  background: #f5b98e;
+  color: #6e2e12;
+  border: 1px solid #dfa078;
 }
 
 .section .prodGrid .prodInstallment {
-  background: rgba(255, 255, 255, 0.55);
-  border: 1px solid #e9cdb6;
-  color: #394563;
+  background: #d6dce5;
+  border: 1px solid #c1cad8;
+  color: #263653;
 }
 
 .section .prodGrid .prodStockLow {
-  background: #ffe8d6;
-  border-color: #f3c49c;
-  color: #963c16;
+  background: #f5dfc9;
+  border: 1px solid #dfb994;
+  color: #713915;
 }
 
 .section .prodGrid .btnComprar {
   background: #f45b1b;
   color: #ffffff;
   border: 0;
+  border-radius: 10px;
+  font-weight: 800;
 }
 
 .section .prodGrid .btnComprar:hover {
   background: #d94812;
   color: #ffffff;
-  box-shadow: 0 6px 15px rgba(217, 72, 18, 0.2);
 }
+
+.section .prodGrid .btnComprar:focus-visible {
+  outline: 3px solid #17213e;
+  outline-offset: 2px;
+}
+
