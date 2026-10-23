@@ -7,7 +7,7 @@ import Icon from "@/components/Icon";
 import styles from "./AreaHeader.module.css";
 
 const links = [
-  { href: "/#produtos", rota: "/", texto: "Loja", icone: "loja" },
+  { href: "/produtos", rota: "/produtos", texto: "Loja", icone: "loja" },
   {
     href: "/agendamentos",
     rota: "/agendamentos",
@@ -45,9 +45,9 @@ export default function AreaHeader() {
         <nav className={styles.nav} aria-label="Menu principal">
           {links.map((link) => {
             const ativo =
-              link.rota === "/"
-                ? pathname === "/"
-                : pathname.startsWith(link.rota);
+  link.texto === "Loja"
+    ? pathname === "/" || pathname.startsWith("/produtos")
+    : pathname.startsWith(link.rota);
 
             return (
               <Link
