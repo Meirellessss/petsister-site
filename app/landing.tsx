@@ -1208,10 +1208,12 @@ const valorParcela =
   </p>
 ) : null}
 
+        {p.porte ? (
         <span className={styles.prodPorte}>
           <Icon name="cao" size={12} /> Porte{" "}
           {p.porte === "Medio" ? "Médio" : p.porte}
         </span>
+      ) : null}
 
         {p.estoque <= 0 ? (
   <div className={styles.prodStockLow}>
