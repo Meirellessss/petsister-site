@@ -1200,9 +1200,11 @@ const valorParcela =
           {p.nome}
         </Link>
         
-        <p className={styles.prodDescription}>
-          {p.descricao?.trim() || ""}
-        </p>
+        {p.descricao?.trim() ? (
+  <p className={styles.prodDescription}>
+    {p.descricao.trim()}
+  </p>
+) : null}
 
         <span className={styles.prodPorte}>
           <Icon name="cao" size={12} /> Porte{" "}
