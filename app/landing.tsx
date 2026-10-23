@@ -948,23 +948,24 @@ function adicionarDireto(p: Produto) {
                           </span>
                         </div>
 
-                        <Link
-
-                          
+                       
                         <p className={styles.prodDescription}>
                           {p.descricao?.trim() || ""}
                         </p>
 
-                        <span className={styles.prodPorte}>
-                          Porte: {p.porte === "Medio" ? "Médio" : p.porte}
-                        </span>
+                        {p.porte ? (
+                          <span className={styles.prodPorte}>
+                            Porte: {p.porte === "Medio" ? "Médio" : p.porte}
+                          </span>
+                        ) : null}
 
-                          
+                        <Link
                           href={`/produto/${p.id}`}
                           className={styles.btnComprar}
                         >
                           Ver oferta
                         </Link>
+
                       </div>
                     </article>
                   );
