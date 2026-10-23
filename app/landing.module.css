@@ -3297,3 +3297,106 @@ a.topbarItem:hover {
     font-size: 0.75rem;
   }
 }
+
+/* Cartões PetSister: mais leves e fáceis de ler */
+.section .prodGrid .prodCard {
+  background: #ffffff;
+  border: 1px solid #e6e8ef;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(8, 22, 61, 0.055);
+}
+
+.section .prodGrid .prodThumb {
+  flex: 0 0 180px;
+  height: 180px;
+  background: #ffffff;
+  border-bottom: 1px solid #f0f1f5;
+}
+
+.section .prodGrid .prodThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.section .prodGrid .prodBody {
+  background: #ffffff;
+  border-top: 3px solid #f45b1b;
+  color: #122044;
+  padding: 0.95rem;
+  gap: 0.5rem;
+}
+
+.section .prodGrid .prodCat {
+  color: #6b7280;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.section .prodGrid .prodName {
+  color: #122044;
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.section .prodGrid .prodOldPrice {
+  color: #6b7280;
+}
+
+.section .prodGrid .prodPrice {
+  color: #122044;
+  font-weight: 900;
+  font-size: 1.2rem;
+}
+
+.section .prodGrid .prodDiscountBadge {
+  background: #ffeadc;
+  color: #a53b11;
+}
+
+.section .prodGrid .prodInstallment {
+  background: #f5f7fb;
+  border: 1px solid #e6e8ef;
+  color: #4b5563;
+  border-radius: 8px;
+}
+
+.section .prodGrid .prodStockLow {
+  background: #fff3e8;
+  border: 1px solid #fed7aa;
+  color: #9a3412;
+}
+
+.section .prodGrid .btnComprar {
+  background: #f45b1b;
+  color: #ffffff;
+  border: 0;
+  border-radius: 10px;
+  font-weight: 800;
+}
+
+.section .prodGrid .btnComprar:hover {
+  background: #d94812;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 650px) {
+  .section .prodGrid .prodThumb {
+    flex-basis: 145px;
+    height: 145px;
+  }
+
+  .section .prodGrid .prodBody {
+    padding: 0.7rem;
+  }
+
+  .section .prodGrid .prodName {
+    font-size: 0.86rem;
+  }
+
+  .section .prodGrid .prodPrice {
+    font-size: 1.05rem;
+  }
+}
