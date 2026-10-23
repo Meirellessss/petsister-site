@@ -1069,7 +1069,13 @@ function adicionarDireto(p: Produto) {
                           {p.nome}
                         </Link>
                         
-                       className={styles.prodDescription}
+                       
+                        {p.descricao?.trim() ? (
+                          <p className={styles.prodDescription}>
+                            {p.descricao.trim()}
+                          </p>
+                        ) : null}
+
 
                         {p.porte ? (
                         <span className={styles.prodPorte}>
