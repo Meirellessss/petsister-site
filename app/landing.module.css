@@ -3400,3 +3400,68 @@ a.topbarItem:hover {
     font-size: 1.05rem;
   }
 }
+
+/* Paleta equilibrada dos cartões PetSister */
+.section .prodGrid .prodCard {
+  background: #fff5e9;
+  border: 1px solid #efd5bd;
+  border-radius: 16px;
+  box-shadow: 0 5px 16px rgba(18, 32, 68, 0.08);
+}
+
+.section .prodGrid .prodThumb {
+  background: linear-gradient(145deg, #fff8ef, #fbe8d6);
+  border-bottom: 1px solid #efd5bd;
+}
+
+.section .prodGrid .prodBody {
+  background: linear-gradient(145deg, #fff0df 0%, #f8e1ca 100%);
+  border-top: 3px solid #f45b1b;
+  color: #122044;
+}
+
+.section .prodGrid .prodCat {
+  color: #765b49;
+}
+
+.section .prodGrid .prodName {
+  color: #122044;
+}
+
+.section .prodGrid .prodPrice {
+  color: #122044;
+}
+
+.section .prodGrid .prodOldPrice {
+  color: #806b5c;
+}
+
+.section .prodGrid .prodDiscountBadge {
+  background: #ffdfc8;
+  color: #9b3912;
+  border: 1px solid #f4c19f;
+}
+
+.section .prodGrid .prodInstallment {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid #e9cdb6;
+  color: #394563;
+}
+
+.section .prodGrid .prodStockLow {
+  background: #ffe8d6;
+  border-color: #f3c49c;
+  color: #963c16;
+}
+
+.section .prodGrid .btnComprar {
+  background: #f45b1b;
+  color: #ffffff;
+  border: 0;
+}
+
+.section .prodGrid .btnComprar:hover {
+  background: #d94812;
+  color: #ffffff;
+  box-shadow: 0 6px 15px rgba(217, 72, 18, 0.2);
+}
