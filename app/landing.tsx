@@ -693,7 +693,7 @@ function adicionarDireto(p: Produto) {
            
 <div className={styles.heroActions}>
   <a
-    href="#produtos"
+    href="/produtos"
     className={`${styles.btnHero} ${styles.btnHeroMain}`}
     style={{
       display: "inline-flex",
@@ -1417,7 +1417,7 @@ const valorParcela =
         </h2>
         <p>Crie sua conta grátis e ganhe frete grátis na primeira compra.</p>
         <div className={styles.ctaBtns}>
-          <a href={usuario ? "#produtos" : "/cadastro"}>
+          <a href={usuario ? "/produtos" : "/cadastro"}>
             <button className={styles.btnCtaMain}>Começar agora →</button>
           </a>
           <a href="#servicos">
@@ -1447,8 +1447,8 @@ const valorParcela =
           </div>
           <div className={styles.footCol}>
             <h4>Loja</h4>
-            <a href="#produtos">Produtos</a>
-           <a href="#produtos">Categorias</a>
+            <a href="/produtos">Produtos</a>
+           <a href="/produtos">Categorias</a>
             <a href="#servicos">Serviços</a>
             {usuario && <a href="/pedidos">Meus pedidos</a>}
           </div>
