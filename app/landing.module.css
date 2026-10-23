@@ -3402,75 +3402,69 @@ a.topbarItem:hover {
 }
 
 
-/* Paleta equilibrada PetSister */
+
+/* Paleta equilibrada dos cartões PetSister */
 .section .prodGrid .prodCard {
-  background: #ece7df;
-  border: 1px solid #d5cdc1;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(18, 32, 68, 0.07);
+  background: #fff5e9;
+  border: 1px solid #efd5bd;
+  border-radius: 16px;
+  box-shadow: 0 5px 16px rgba(18, 32, 68, 0.08);
 }
 
 .section .prodGrid .prodThumb {
-  background: #e5ded4;
-  border-bottom: 1px solid #d5cdc1;
+  background: linear-gradient(145deg, #fff8ef, #fbe8d6);
+  border-bottom: 1px solid #efd5bd;
 }
 
 .section .prodGrid .prodBody {
-  background: #e2dbd0;
+  background: linear-gradient(145deg, #fff0df 0%, #f8e1ca 100%);
   border-top: 3px solid #f45b1b;
-  color: #17213e;
+  color: #122044;
 }
 
 .section .prodGrid .prodCat {
-  color: #555b66;
+  color: #765b49;
 }
 
 .section .prodGrid .prodName {
-  color: #17213e;
+  color: #122044;
 }
 
 .section .prodGrid .prodPrice {
-  color: #17213e;
-  font-weight: 900;
+  color: #122044;
 }
 
 .section .prodGrid .prodOldPrice {
-  color: #62636a;
+  color: #806b5c;
 }
 
 .section .prodGrid .prodDiscountBadge {
-  background: #f5b98e;
-  color: #6e2e12;
-  border: 1px solid #dfa078;
+  background: #ffdfc8;
+  color: #9b3912;
+  border: 1px solid #f4c19f;
 }
 
 .section .prodGrid .prodInstallment {
-  background: #d6dce5;
-  border: 1px solid #c1cad8;
-  color: #263653;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid #e9cdb6;
+  color: #394563;
 }
 
 .section .prodGrid .prodStockLow {
-  background: #f5dfc9;
-  border: 1px solid #dfb994;
-  color: #713915;
+  background: #ffe8d6;
+  border-color: #f3c49c;
+  color: #963c16;
 }
 
 .section .prodGrid .btnComprar {
   background: #f45b1b;
   color: #ffffff;
   border: 0;
-  border-radius: 10px;
-  font-weight: 800;
 }
 
 .section .prodGrid .btnComprar:hover {
   background: #d94812;
   color: #ffffff;
-}
-
-.section .prodGrid .btnComprar:focus-visible {
-  outline: 3px solid #17213e;
-  outline-offset: 2px;
+  box-shadow: 0 6px 15px rgba(217, 72, 18, 0.2);
 }
 
