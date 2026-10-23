@@ -934,6 +934,19 @@ function adicionarDireto(p: Produto) {
                           {p.nome}
                         </Link>
 
+                       
+                        {p.descricao?.trim() ? (
+                          <p className={styles.prodDescription}>
+                            {p.descricao.trim()}
+                          </p>
+                        ) : null}
+
+                        {p.porte ? (
+                          <span className={styles.prodPorte}>
+                            Porte: {p.porte === "Medio" ? "Médio" : p.porte}
+                          </span>
+                        ) : null}
+
                         <div className={styles.prodPriceRow}>
                           <span className={styles.prodOldPrice}>
                             R$ {formatarPreco(precoOriginal)}
@@ -948,25 +961,13 @@ function adicionarDireto(p: Produto) {
                           </span>
                         </div>
 
-                       
-                       {p.descricao?.trim() ? (
-  <p className={styles.prodDescription}>
-    {p.descricao.trim()}
-  </p>
-) : null}
-
-                        {p.porte ? (
-                          <span className={styles.prodPorte}>
-                            Porte: {p.porte === "Medio" ? "Médio" : p.porte}
-                          </span>
-                        ) : null}
-
                         <Link
                           href={`/produto/${p.id}`}
                           className={styles.btnComprar}
                         >
                           Ver oferta
                         </Link>
+
 
                       </div>
                     </article>
