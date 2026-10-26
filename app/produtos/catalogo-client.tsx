@@ -16,6 +16,7 @@ type CatalogoProps = {
   produtos: Produto[];
   usuario: { nome: string; perfil: Perfil } | null;
   categoriaInicial?: string;
+  buscaInicial?: string;
 };
 
 const ICONES: Record<string, string> = {
@@ -50,14 +51,15 @@ function precoFinal(produto: Produto) {
 }
 
 export default function CatalogoClient({
-  categorias,
+   categorias,
   produtos,
   usuario,
   categoriaInicial = "",
+  buscaInicial = "",
 }: CatalogoProps) {
   const router = useRouter();
   const [categoria, setCategoria] = useState(categoriaInicial);
-  const [busca, setBusca] = useState("");
+  const [busca, setBusca] = useState(buscaInicial);
   const [ordenacao, setOrdenacao] = useState("destaque");
   const [erro, setErro] = useState("");
   const [produtoAdicionando, setProdutoAdicionando] = useState<
