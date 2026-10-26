@@ -9,6 +9,7 @@ import CatalogoClient from "./catalogo-client";
 type PaginaProdutosProps = {
   searchParams: Promise<{
     categoria?: string | string[];
+    busca?: string | string[];
   }>;
 };
 
@@ -21,6 +22,10 @@ export default async function PaginaProdutos({
     typeof parametros.categoria === "string"
       ? parametros.categoria
       : "";
+  const buscaInicial =
+  typeof parametros.busca === "string"
+    ? parametros.busca
+    : "";
 
   const [categorias, produtos, usuario] = await Promise.all([
     getCategorias(),
@@ -47,6 +52,7 @@ export default async function PaginaProdutos({
           : null
       }
       categoriaInicial={categoriaInicial}
+      buscaInicial={buscaInicial}
     />
   );
 }
