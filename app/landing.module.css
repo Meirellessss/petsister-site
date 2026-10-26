@@ -3659,3 +3659,93 @@ a.topbarItem:hover {
     font-size: 1rem;
   }
 }
+
+
+/* Ajustes do modo escuro — categorias PetSister */
+:global([data-theme="dark"]) .section[aria-labelledby="categorias-titulo"] .catCard {
+  background: linear-gradient(145deg, #fff5e9 0%, #f0dfcc 100%);
+  border-color: #d5b99b;
+  color: #17213e;
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
+}
+
+:global([data-theme="dark"]) .section[aria-labelledby="categorias-titulo"] .catCard::before {
+  background: #eac49f;
+  opacity: 0.45;
+}
+
+:global([data-theme="dark"]) .section[aria-labelledby="categorias-titulo"] .catCardIc {
+  background: linear-gradient(145deg, #fff0dd, #e6c5a3);
+  border-color: #d8b18b;
+  color: #17213e;
+  box-shadow: 0 4px 12px rgba(104, 65, 35, 0.12);
+}
+
+:global([data-theme="dark"]) .section[aria-labelledby="categorias-titulo"] .catCardName {
+  color: #17213e;
+}
+
+:global([data-theme="dark"]) .section[aria-labelledby="categorias-titulo"] .catCardCount {
+  color: #655344;
+}
+
+:global([data-theme="dark"]) .section[aria-labelledby="categorias-titulo"] .catCard:hover {
+  border-color: #f45b1b;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+}
+
+
+/* Ajustes do modo escuro — serviços */
+:global([data-theme="dark"]) .secServ {
+  background: linear-gradient(145deg, #17294e 0%, #0b1429 100%);
+  color: #f8fafc;
+}
+
+:global([data-theme="dark"]) .secServ .servGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+:global([data-theme="dark"]) .secServ .servCard {
+  background: #1a2b4d;
+  border-color: #3b4e70;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+:global([data-theme="dark"]) .secServ .servCard:hover {
+  background: #22385f;
+  border-color: #e59a66;
+}
+
+:global([data-theme="dark"]) .secServ .servIc {
+  color: #ffbd59;
+}
+
+:global([data-theme="dark"]) .secServ .servName {
+  color: #ffffff;
+}
+
+:global([data-theme="dark"]) .secServ .servDesc {
+  color: #d6dfef;
+}
+
+:global([data-theme="dark"]) .secServ .servPrice {
+  color: #ffcb70;
+}
+
+:global([data-theme="dark"]) .secServ .secSub {
+  color: #d6dfef !important;
+}
+
+@media (max-width: 900px) {
+  :global([data-theme="dark"]) .secServ .servGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 450px) {
+  :global([data-theme="dark"]) .secServ .servGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
