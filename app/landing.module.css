@@ -4054,3 +4054,33 @@ a.topbarItem:hover {
     transition: none;
   }
 }
+
+
+/* Interação dos banners ao passar o mouse */
+
+.bannerImage {
+  transition: transform 600ms ease;
+}
+
+.bannerSlide:hover .bannerImage {
+  transform: scale(1.04);
+}
+
+.bannerCta {
+  cursor: pointer;
+}
+
+.bannerCta:active {
+  transform: scale(0.98);
+}
+
+/* Evita animações excessivas em dispositivos sem movimento */
+@media (prefers-reduced-motion: reduce) {
+  .bannerImage {
+    transition: none;
+  }
+
+  .bannerSlide:hover .bannerImage {
+    transform: none;
+  }
+}
