@@ -556,3 +556,137 @@ export async function salvarConfiguracaoAgenda(
     };
   }
 }
+
+
+export async function salvarBanner(
+  formData: FormData
+): Promise<Resultado> {
+  try {
+    const supabase = await exigirAdmin();
+
+    const idRaw = String(formData.get("id") ?? "").trim();
+    const id = idRaw ? Number(idRaw) : null;
+    const titulo = String(formData.get("titulo") ?? "").trim();
+    const descricao = String(formData.get("descricao") ?? "").trim();
+    const etiqueta = String(formData.get("etiqueta") ?? "").trim();
+    const imagemUrl = String(formData.get("imagem_url") ?? "").trim();
+    const textoBotao =
+      String(formData.get("texto_botao") ?? "").trim() || "Ver produtos";
+    const linkDestino =
+      String(formData.get("link_destino") ?? "").trim() || "/produtos";
+    const ordemRaw = String(formData.get("ordem") ?? "0").trim();
+    const ordem = Number(ordemRaw);
+    const ativo = String(formData.get("ativo") ?? "true") === "true";
+
+    if (!titulo) {
+      return { ok: false, error: "Informe o título do banner." };
+    }
+
+    if (!imagemUrl) {
+      return { ok: false, error: "Selecione uma imagem ou informe uma URL." };
+    }
+
+    if (
+      !(
+        (linkDestino.startsWith("/") && !linkDestino.startsWith("//")) ||
+        (() => {
+          try {
+            return new URL(linkDestino).protocol === "https:";
+          } catch {
+            return false;
+          }
+        })()
+      )
+    ) {
+      return {
+        ok: false,
+        error: "O destino deve ser uma rota interna ou um endereço HTTPS.",
+      };
+    }
+
+    if (
+      !Number.isInteger(ordem) ||
+      ordem < 0 ||
+      ordem > 10000
+    ) {
+      return {
+        ok: false,
+        error: "A ordem deve ser um número inteiro entre 0 e 10000.",
+      };
+    }
+
+    if (id !== null && (!Number.isInteger(id) || id <= 0)) {
+      return { ok: false, error: "Identificador de banner inválido." };
+    }
+
+    const payload = {
+      titulo,
+      descricao,
+      etiqueta,
+      imagem_url: imagemUrl,
+      texto_botao: textoBotao,
+      link_destino: linkDestino,
+      ordem,
+      ativo,
+      atualizado_em: new Date().toISOString(),
+    };
+
+    const { error } = id !== null
+      ? await supabase
+          .from("petsister_banners")
+          .update(payload)
+          .eq("id", id)
+      : await supabase
+          .from("petsister_banners")
+          .insert(payload);
+
+    if (error) {
+      return {
+        ok: false,
+        error: "Não foi possível salvar o banner: " + error.message,
+      };
+    }
+
+    revalidatePath("/admin/banners");
+    revalidatePath("/");
+
+    return { ok: true };
+  } catch {
+    return {
+      ok: false,
+      error: "Não foi possível salvar. Verifique seu acesso de administrador.",
+    };
+  }
+}
+
+export async function excluirBanner(id: number): Promise<Resultado> {
+  try {
+    const supabase = await exigirAdmin();
+
+    if (!Number.isInteger(id) || id <= 0) {
+      return { ok: false, error: "Identificador de banner inválido." };
+    }
+
+    const { error } = await supabase
+      .from("petsister_banners")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      return {
+        ok: false,
+        error: "Não foi possível excluir o banner: " + error.message,
+      };
+    }
+
+    revalidatePath("/admin/banners");
+    revalidatePath("/");
+
+    return { ok: true };
+  } catch {
+    return {
+      ok: false,
+      error: "Não foi possível excluir. Verifique seu acesso de administrador.",
+    };
+  }
+}
