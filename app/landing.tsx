@@ -64,6 +64,7 @@ function formatarPreco(v: number) {
 
 
 export default function Landing({
+  banners,
   categorias,
   produtos,
   cartCount,
