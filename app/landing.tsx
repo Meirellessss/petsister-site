@@ -496,15 +496,11 @@ function adicionarDireto(p: Produto) {
     <button
       type="button"
       className={styles.catbarLink}
-      onClick={() => {
-        filtrarCat("Ração Cachorro");
-
-        document
-          .getElementById("produtos")
-          ?.scrollIntoView({
-            behavior: "smooth",
-          });
-      }}
+     onClick={() => {
+  router.push(
+    `/produtos?categoria=${encodeURIComponent("Ração Cachorro")}`
+  );
+}}
     >
       <span className={styles.ce}>
         <Icon name="racao" size={19} />
