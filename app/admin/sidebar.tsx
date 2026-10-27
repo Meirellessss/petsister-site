@@ -9,6 +9,7 @@ import styles from "./admin.module.css";
 const ITENS: { href: string; ic: string; label: string; sect?: string }[] = [
   { href: "/admin", ic: "dashboard", label: "Dashboard", sect: "Principal" },
   { href: "/admin/produtos", ic: "racao", label: "Produtos", sect: "Catálogo" },
+  { href: "/admin/banners", ic: "estrela", label: "Banners e anúncios" },
   { href: "/admin/categorias", ic: "pata", label: "Categorias" },
   { href: "/admin/pedidos", ic: "carrinho", label: "Pedidos", sect: "Operações" },
   { href: "/admin/agendamentos", ic: "agendar", label: "Agendamentos" },
