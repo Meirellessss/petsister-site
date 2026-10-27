@@ -514,14 +514,10 @@ function adicionarDireto(p: Produto) {
       type="button"
       className={styles.catbarLink}
       onClick={() => {
-        filtrarCat("Ração Gato");
-
-        document
-          .getElementById("produtos")
-          ?.scrollIntoView({
-            behavior: "smooth",
-          });
-      }}
+  router.push(
+    `/produtos?categoria=${encodeURIComponent("Ração Gato")}`
+  );
+}}
     >
       <span className={styles.ce}>
         <Icon name="gato" size={19} />
@@ -535,14 +531,10 @@ function adicionarDireto(p: Produto) {
       type="button"
       className={styles.catbarLink}
       onClick={() => {
-        filtrarCat("Brinquedos");
-
-        document
-          .getElementById("produtos")
-          ?.scrollIntoView({
-            behavior: "smooth",
-          });
-      }}
+  router.push(
+    `/produtos?categoria=${encodeURIComponent("Brinquedos")}`
+  );
+}}
     >
       <span className={styles.ce}>
         <Icon name="brinquedos" size={19} />
@@ -555,15 +547,11 @@ function adicionarDireto(p: Produto) {
     <button
       type="button"
       className={styles.catbarLink}
-      onClick={() => {
-        filtrarCat("Conforto");
-
-        document
-          .getElementById("produtos")
-          ?.scrollIntoView({
-            behavior: "smooth",
-          });
-      }}
+     onClick={() => {
+  router.push(
+    `/produtos?categoria=${encodeURIComponent("Conforto")}`
+  );
+}}
     >
       <span className={styles.ce}>
         <Icon name="conforto" size={19} />
@@ -577,14 +565,10 @@ function adicionarDireto(p: Produto) {
       type="button"
       className={styles.catbarLink}
       onClick={() => {
-        filtrarCat("Farmácia");
-
-        document
-          .getElementById("produtos")
-          ?.scrollIntoView({
-            behavior: "smooth",
-          });
-      }}
+  router.push(
+    `/produtos?categoria=${encodeURIComponent("Farmácia")}`
+  );
+}}
     >
       <span className={styles.ce}>
         <Icon name="farmacia" size={19} />
@@ -598,14 +582,10 @@ function adicionarDireto(p: Produto) {
       type="button"
       className={styles.catbarLink}
       onClick={() => {
-        filtrarCat("Higiene");
-
-        document
-          .getElementById("produtos")
-          ?.scrollIntoView({
-            behavior: "smooth",
-          });
-      }}
+  router.push(
+    `/produtos?categoria=${encodeURIComponent("Higiene")}`
+  );
+}}
     >
       <span className={styles.ce}>
         <Icon name="higiene" size={19} />
@@ -619,14 +599,10 @@ function adicionarDireto(p: Produto) {
       type="button"
       className={styles.catbarLink}
       onClick={() => {
-        filtrarCat("Passeio");
-
-        document
-          .getElementById("produtos")
-          ?.scrollIntoView({
-            behavior: "smooth",
-          });
-      }}
+  router.push(
+    `/produtos?categoria=${encodeURIComponent("Passeio")}`
+  );
+}}
     >
       <span className={styles.ce}>
         <Icon name="passeio" size={19} />
@@ -640,14 +616,10 @@ function adicionarDireto(p: Produto) {
       type="button"
       className={styles.catbarLink}
       onClick={() => {
-        filtrarCat("Petiscos");
-
-        document
-          .getElementById("produtos")
-          ?.scrollIntoView({
-            behavior: "smooth",
-          });
-      }}
+  router.push(
+    `/produtos?categoria=${encodeURIComponent("Petiscos")}`
+  );
+}}
     >
       <span className={styles.ce}>
         <Icon name="petiscos" size={19} />
