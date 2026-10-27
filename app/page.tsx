@@ -17,17 +17,26 @@ export default async function Home() {
     produtos,
     cartCount,
     resultadoLoja,
+    resultadoBanners,
   ] = await Promise.all([
     getCategorias(),
     getProdutosDisponiveis(),
     usuario ? getCartCount(usuario.id) : Promise.resolve(0),
     supabase.rpc("petsister_dados_loja_publicos"),
+    supabase
+      .from("petsister_banners")
+      .select("*")
+      .eq("ativo", true)
+      .order("ordem", { ascending: true }),
   ]);
 
   const registro =
     !resultadoLoja.error && resultadoLoja.data?.length
       ? resultadoLoja.data[0]
       : null;
+  const bannersAtivos = resultadoBanners.error
+    ? []
+    : resultadoBanners.data ?? [];
 
   const dadosLoja = {
     telefoneAtendimento: String(
@@ -45,6 +54,7 @@ export default async function Home() {
     <Landing
       categorias={categorias}
       produtos={produtos}
+      banners={bannersAtivos}
       cartCount={cartCount}
       usuario={
         usuario
