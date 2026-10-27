@@ -73,6 +73,17 @@ export default function Landing({
 }: {
   categorias: Categoria[];
   produtos: Produto[];
+  banners: {
+    id: number;
+    titulo: string;
+    descricao: string;
+    etiqueta: string;
+    imagem_url: string;
+    texto_botao: string;
+    link_destino: string;
+    ordem: number;
+    ativo: boolean;
+  }[];
   cartCount: number;
   usuario: { nome: string; perfil: Perfil } | null;
   dadosLoja: {
@@ -91,6 +102,7 @@ export default function Landing({
   const [pending, startTransition] = useTransition();
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
+  const [bannerAtual, setBannerAtual] = useState(0);
 
 useEffect(() => {
   const handleScroll = () => {
@@ -107,6 +119,20 @@ useEffect(() => {
     window.removeEventListener("scroll", handleScroll);
   };
 }, []);
+
+  useEffect(() => {
+  if (banners.length <= 1) {
+    setBannerAtual(0);
+    return;
+  }
+
+  const intervalo = window.setInterval(() => {
+    setBannerAtual((atual) => (atual + 1) % banners.length);
+  }, 5000);
+
+  return () => window.clearInterval(intervalo);
+}, [banners.length]);
+  
   useEffect(() => {
   const temaSalvo = localStorage.getItem("petsister-theme");
   const escuro = temaSalvo === "dark";
@@ -644,6 +670,108 @@ function adicionarDireto(p: Produto) {
   </div>
 </div>
 </nav>
+      
+      {banners.length > 0 && (
+        <section
+          className={styles.bannerCarousel}
+          aria-label="Anúncios da PetSister"
+        >
+          <div className={styles.bannerViewport}>
+            {banners.map((banner, indice) => (
+              <article
+                key={banner.id}
+                className={`${styles.bannerSlide} ${
+                  indice === bannerAtual
+                    ? styles.bannerSlideActive
+                    : ""
+                }`}
+                aria-hidden={indice !== bannerAtual}
+              >
+                <img
+                  className={styles.bannerImage}
+                  src={banner.imagem_url}
+                  alt={banner.titulo}
+                />
+
+                <div className={styles.bannerOverlay} />
+
+                <div className={styles.bannerContent}>
+                  {banner.etiqueta && (
+                    <span className={styles.bannerTag}>
+                      {banner.etiqueta}
+                    </span>
+                  )}
+
+                  <p className={styles.bannerSlogan}>
+                    O cuidado que ele merece, pertinho de você.
+                  </p>
+
+                  <h1>{banner.titulo}</h1>
+
+                  {banner.descricao && (
+                    <p className={styles.bannerDescription}>
+                      {banner.descricao}
+                    </p>
+                  )}
+
+                  <a
+                    href={banner.link_destino || "/produtos"}
+                    className={styles.bannerCta}
+                  >
+                    {banner.texto_botao || "Ver produtos"} →
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          {banners.length > 1 && (
+            <>
+              <button
+                type="button"
+                className={`${styles.bannerArrow} ${styles.bannerPrev}`}
+                aria-label="Anúncio anterior"
+                onClick={() =>
+                  setBannerAtual(
+                    (atual) => (atual - 1 + banners.length) % banners.length
+                  )
+                }
+              >
+                ‹
+              </button>
+
+              <button
+                type="button"
+                className={`${styles.bannerArrow} ${styles.bannerNext}`}
+                aria-label="Próximo anúncio"
+                onClick={() =>
+                  setBannerAtual((atual) => (atual + 1) % banners.length)
+                }
+              >
+                ›
+              </button>
+
+              <div className={styles.bannerDots}>
+                {banners.map((banner, indice) => (
+                  <button
+                    type="button"
+                    key={banner.id}
+                    aria-label={`Ver anúncio ${indice + 1}`}
+                    aria-current={indice === bannerAtual}
+                    className={`${styles.bannerDot} ${
+                      indice === bannerAtual
+                        ? styles.bannerDotActive
+                        : ""
+                    }`}
+                    onClick={() => setBannerAtual(indice)}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </section>
+      )}
+
       <section className={styles.hero}>
         <div className={styles.heroGlow}></div>
         <div className={`${styles.heroGlow} ${styles.heroGlowG2}`}></div>
