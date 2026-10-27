@@ -294,20 +294,25 @@ function adicionarDireto(p: Produto) {
           <Icon name="busca" size={21} />
         </span>
 
+      
         <input
           type="text"
           placeholder="O que seu pet precisa?"
           value={busca}
-          onChange={(e) => {
-            setBusca(e.target.value);
+          onChange={(e) => setBusca(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              const termo = busca.trim();
 
-            document
-              .getElementById("produtos")
-              ?.scrollIntoView({
-                behavior: "smooth",
-              });
+              router.push(
+                termo
+                  ? `/produtos?busca=${encodeURIComponent(termo)}`
+                  : "/produtos"
+              );
+            }
           }}
         />
+
 
         <span className={styles.searchHint}>
           Buscar produtos
