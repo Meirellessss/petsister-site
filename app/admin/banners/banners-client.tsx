@@ -380,7 +380,7 @@ export default function BannersClient({
               <input
                 className={styles.fc}
                 type="number"
-                min={0}
+                min={1}
                 max={10000}
                 step={1}
                 value={formulario.ordem}
