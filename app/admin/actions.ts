@@ -574,7 +574,7 @@ export async function salvarBanner(
       String(formData.get("texto_botao") ?? "").trim() || "Ver produtos";
     const linkDestino =
       String(formData.get("link_destino") ?? "").trim() || "/produtos";
-    const ordemRaw = String(formData.get("ordem") ?? "0").trim();
+    const ordemRaw = String(formData.get("ordem") ?? "1").trim();
     const ordem = Number(ordemRaw);
     const ativo = String(formData.get("ativo") ?? "true") === "true";
 
