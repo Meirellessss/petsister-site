@@ -606,12 +606,12 @@ export async function salvarBanner(
 
     if (
       !Number.isInteger(ordem) ||
-      ordem < 0 ||
+      ordem < 1 ||
       ordem > 10000
     ) {
       return {
         ok: false,
-        error: "A ordem deve ser um número inteiro entre 0 e 10000.",
+        error: "A ordem deve ser um número inteiro entre 1 e 10000.",
       };
     }
 
