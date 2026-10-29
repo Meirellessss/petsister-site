@@ -38,7 +38,7 @@ const FORM_VAZIO: FormularioBanner = {
   imagem_url: "",
   texto_botao: "Ver produtos",
   link_destino: "/produtos",
-  ordem: 0,
+  ordem: 1,
   ativo: true,
 };
 
