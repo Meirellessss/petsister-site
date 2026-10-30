@@ -35,9 +35,9 @@ export default async function Home() {
     !resultadoLoja.error && resultadoLoja.data?.length
       ? resultadoLoja.data[0]
       : null;
-  const bannersAtivos = resultadoBanners.error
-    ? []
-    : resultadoBanners.data ?? [];
+  const bannersCadastrados = resultadoBanners.error
+  ? []
+  : resultadoBanners.data ?? [];
 
   const dadosLoja = {
     telefoneAtendimento: String(
@@ -55,7 +55,7 @@ export default async function Home() {
     <Landing
       categorias={categorias}
       produtos={produtos}
-      banners={bannersAtivos}
+      banners={bannersCadastrados}
       cartCount={cartCount}
       usuario={
         usuario
