@@ -24,12 +24,10 @@ export default async function Home() {
     usuario ? getCartCount(usuario.id) : Promise.resolve(0),
     supabase.rpc("petsister_dados_loja_publicos"),
     supabase
-     supabase
-  .from("petsister_banners")
-  .select("*")
-  .order("ordem", { ascending: true })
-  .order("id", { ascending: true }),
-  ]);
+      .from("petsister_banners")
+      .select("*")
+      .order("ordem", { ascending: true })
+      .order("id", { ascending: true }),
 
   const registro =
     !resultadoLoja.error && resultadoLoja.data?.length
