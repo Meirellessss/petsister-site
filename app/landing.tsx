@@ -120,18 +120,6 @@ useEffect(() => {
   };
 }, []);
 
-  useEffect(() => {
-  if (banners.length <= 1) {
-    setBannerAtual(0);
-    return;
-  }
-
-  const intervalo = window.setInterval(() => {
-    setBannerAtual((atual) => (atual + 1) % banners.length);
-  }, 5000);
-
-  return () => window.clearInterval(intervalo);
-}, [banners.length]);
   
   useEffect(() => {
   const temaSalvo = localStorage.getItem("petsister-theme");
