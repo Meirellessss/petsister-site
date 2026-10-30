@@ -37,6 +37,10 @@ export default async function Home() {
   ? []
   : resultadoBanners.data ?? [];
 
+  const bannersAtivos = bannersCadastrados.filter(
+  (banner) => banner.ativo
+);
+
   const dadosLoja = {
     telefoneAtendimento: String(
       registro?.telefone_atendimento ?? ""
@@ -53,7 +57,7 @@ export default async function Home() {
     <Landing
       categorias={categorias}
       produtos={produtos}
-      banners={bannersCadastrados}
+      banners={bannersAtivos}
       cartCount={cartCount}
       usuario={
         usuario
