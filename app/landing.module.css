@@ -4056,14 +4056,58 @@ a.topbarItem:hover {
 }
 
 
-/* Interação dos banners ao passar o mouse */
 
-.bannerImage {
-  transition: transform 600ms ease;
+/* Animação interativa dos banners PetSister */
+
+.bannerArtworkLink {
+  overflow: hidden;
 }
 
-.bannerSlide:hover .bannerImage {
-  transform: scale(1.04);
+.bannerArtworkLink::after {
+  content: "";
+  position: absolute;
+  top: -35%;
+  left: -45%;
+  width: 35%;
+  height: 170%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.22),
+    transparent
+  );
+  transform: translateX(-180%) skewX(-18deg);
+  transition: transform 950ms ease;
+  pointer-events: none;
+}
+
+.bannerImage {
+  transition:
+    transform 900ms cubic-bezier(.2, .8, .2, 1),
+    filter 900ms ease;
+  transform: scale(1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bannerCarousel .bannerViewport {
+    transition:
+      transform 500ms cubic-bezier(.2, .8, .2, 1),
+      box-shadow 500ms ease;
+  }
+
+  .bannerCarousel:hover .bannerViewport {
+    transform: translateY(-5px);
+    box-shadow: 0 24px 55px rgba(12, 24, 64, 0.25);
+  }
+
+  .bannerArtworkLink:hover .bannerImage {
+    transform: scale(1.055);
+    filter: brightness(1.05) saturate(1.08);
+  }
+
+  .bannerArtworkLink:hover::after {
+    transform: translateX(520%) skewX(-18deg);
+  }
 }
 
 .bannerCta {
@@ -4071,19 +4115,30 @@ a.topbarItem:hover {
 }
 
 .bannerCta:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
 }
 
-/* Evita animações excessivas em dispositivos sem movimento */
 @media (prefers-reduced-motion: reduce) {
+  .bannerCarousel .bannerViewport,
+  .bannerArtworkLink::after,
   .bannerImage {
     transition: none;
   }
 
-  .bannerSlide:hover .bannerImage {
+  .bannerCarousel:hover .bannerViewport {
+    transform: none;
+  }
+
+  .bannerArtworkLink:hover .bannerImage {
+    transform: none;
+    filter: none;
+  }
+
+  .bannerArtworkLink:hover::after {
     transform: none;
   }
 }
+
 
 
 /* ==========================================
