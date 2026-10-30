@@ -558,6 +558,7 @@ export async function salvarConfiguracaoAgenda(
 }
 
 
+
 export async function salvarBanner(
   formData: FormData
 ): Promise<Resultado> {
@@ -566,14 +567,24 @@ export async function salvarBanner(
 
     const idRaw = String(formData.get("id") ?? "").trim();
     const id = idRaw ? Number(idRaw) : null;
+
+    const tipoRaw = String(formData.get("tipo") ?? "anuncio");
+    const tipo =
+      tipoRaw === "principal" ? "principal" : "anuncio";
+
     const titulo = String(formData.get("titulo") ?? "").trim();
     const descricao = String(formData.get("descricao") ?? "").trim();
     const etiqueta = String(formData.get("etiqueta") ?? "").trim();
     const imagemUrl = String(formData.get("imagem_url") ?? "").trim();
+
     const textoBotao =
-      String(formData.get("texto_botao") ?? "").trim() || "Ver produtos";
+      String(formData.get("texto_botao") ?? "").trim() ||
+      "Ver produtos";
+
     const linkDestino =
-      String(formData.get("link_destino") ?? "").trim() || "/produtos";
+      String(formData.get("link_destino") ?? "").trim() ||
+      "/produtos";
+
     const ordemRaw = String(formData.get("ordem") ?? "1").trim();
     const ordem = Number(ordemRaw);
     const ativo = String(formData.get("ativo") ?? "true") === "true";
@@ -583,12 +594,16 @@ export async function salvarBanner(
     }
 
     if (!imagemUrl) {
-      return { ok: false, error: "Selecione uma imagem ou informe uma URL." };
+      return {
+        ok: false,
+        error: "Selecione uma imagem ou informe uma URL.",
+      };
     }
 
     if (
       !(
-        (linkDestino.startsWith("/") && !linkDestino.startsWith("//")) ||
+        (linkDestino.startsWith("/") &&
+          !linkDestino.startsWith("//")) ||
         (() => {
           try {
             return new URL(linkDestino).protocol === "https:";
@@ -616,10 +631,14 @@ export async function salvarBanner(
     }
 
     if (id !== null && (!Number.isInteger(id) || id <= 0)) {
-      return { ok: false, error: "Identificador de banner inválido." };
+      return {
+        ok: false,
+        error: "Identificador de banner inválido.",
+      };
     }
 
     const payload = {
+      tipo,
       titulo,
       descricao,
       etiqueta,
@@ -631,14 +650,15 @@ export async function salvarBanner(
       atualizado_em: new Date().toISOString(),
     };
 
-    const { error } = id !== null
-      ? await supabase
-          .from("petsister_banners")
-          .update(payload)
-          .eq("id", id)
-      : await supabase
-          .from("petsister_banners")
-          .insert(payload);
+    const { error } =
+      id !== null
+        ? await supabase
+            .from("petsister_banners")
+            .update(payload)
+            .eq("id", id)
+        : await supabase
+            .from("petsister_banners")
+            .insert(payload);
 
     if (error) {
       return {
@@ -659,23 +679,51 @@ export async function salvarBanner(
   }
 }
 
+
+
 export async function excluirBanner(id: number): Promise<Resultado> {
   try {
     const supabase = await exigirAdmin();
 
     if (!Number.isInteger(id) || id <= 0) {
-      return { ok: false, error: "Identificador de banner inválido." };
-    }
-
-    const { error } = await supabase
-      .from("petsister_banners")
-      .delete()
-      .eq("id", id);
-
-    if (error) {
       return {
         ok: false,
-        error: "Não foi possível excluir o banner: " + error.message,
+        error: "Identificador de banner inválido.",
+      };
+    }
+
+    const { data: banner, error: erroBusca } = await supabase
+      .from("petsister_banners")
+      .select("tipo")
+      .eq("id", id)
+      .maybeSingle();
+
+    if (erroBusca || !banner) {
+      return {
+        ok: false,
+        error: "Não foi possível localizar esse banner.",
+      };
+    }
+
+    const resultado =
+      banner.tipo === "principal"
+        ? await supabase
+            .from("petsister_banners")
+            .update({
+              ativo: false,
+              atualizado_em: new Date().toISOString(),
+            })
+            .eq("id", id)
+        : await supabase
+            .from("petsister_banners")
+            .delete()
+            .eq("id", id);
+
+    if (resultado.error) {
+      return {
+        ok: false,
+        error: "Não foi possível remover o banner: " +
+          resultado.error.message,
       };
     }
 
@@ -686,7 +734,8 @@ export async function excluirBanner(id: number): Promise<Resultado> {
   } catch {
     return {
       ok: false,
-      error: "Não foi possível excluir. Verifique seu acesso de administrador.",
+      error: "Não foi possível remover. Verifique seu acesso de administrador.",
     };
   }
 }
+
