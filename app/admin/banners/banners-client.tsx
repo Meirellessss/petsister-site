@@ -8,6 +8,7 @@ import styles from "../admin.module.css";
 
 type Banner = {
   id: number;
+  tipo: "principal" | "anuncio";
   titulo: string;
   descricao: string;
   etiqueta: string;
@@ -21,6 +22,7 @@ type Banner = {
 
 type FormularioBanner = {
   id?: number;
+  tipo: "principal" | "anuncio";
   titulo: string;
   descricao: string;
   etiqueta: string;
@@ -32,6 +34,7 @@ type FormularioBanner = {
 };
 
 const FORM_VAZIO: FormularioBanner = {
+  tipo: "anuncio",
   titulo: "",
   descricao: "",
   etiqueta: "",
@@ -57,6 +60,7 @@ export default function BannersClient({
   const [enviandoImagem, setEnviandoImagem] = useState(false);
   const [erro, setErro] = useState("");
   const [sucesso, setSucesso] = useState("");
+  const bannerPrincipal = banners.find((banner) => banner.tipo === "principal");
 
   function atualizar<K extends keyof FormularioBanner>(
     campo: K,
@@ -76,16 +80,41 @@ export default function BannersClient({
     inputImagem.current?.focus();
   }
 
+  function cadastrarOuEditarBannerPrincipal() {
+    if (bannerPrincipal) {
+      editarBanner(bannerPrincipal);
+      return;
+    }
+
+    setFormulario({
+      ...FORM_VAZIO,
+      tipo: "principal",
+      titulo: "Tudo para o seu pet em um só lugar.",
+      descricao: "O cuidado que ele merece, pertinho de você. 🐾",
+      etiqueta: "RAÇÕES • CÃES E GATOS • FARMÁCIA VETERINÁRIA • ACESSÓRIOS",
+      imagem_url: "/logo.jpg",
+      texto_botao: "Ver produtos",
+      link_destino: "/produtos",
+      ordem: 1,
+      ativo: true,
+    });
+    setEditando(false);
+    setErro("");
+    setSucesso("");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
   function editarBanner(banner: Banner) {
     setFormulario({
       id: banner.id,
+      tipo: banner.tipo === "principal" ? "principal" : "anuncio",
       titulo: banner.titulo,
       descricao: banner.descricao ?? "",
       etiqueta: banner.etiqueta ?? "",
       imagem_url: banner.imagem_url,
       texto_botao: banner.texto_botao || "Ver produtos",
       link_destino: banner.link_destino || "/produtos",
-      ordem: banner.ordem ?? 0,
+      ordem: Math.max(1, banner.ordem ?? 1),
       ativo: banner.ativo,
     });
     setEditando(true);
@@ -172,6 +201,7 @@ export default function BannersClient({
 
     const dados = new FormData();
     dados.set("id", formulario.id?.toString() ?? "");
+    dados.set("tipo", formulario.tipo);
     dados.set("titulo", formulario.titulo);
     dados.set("descricao", formulario.descricao);
     dados.set("etiqueta", formulario.etiqueta);
@@ -204,7 +234,9 @@ export default function BannersClient({
 
   async function remover(banner: Banner) {
     const confirmar = window.confirm(
-      `Deseja realmente excluir o banner "${banner.titulo}"?`
+      banner.tipo === "principal"
+        ? `Deseja desativar o banner principal "${banner.titulo}"? Ele poderá ser reativado depois.`
+        : `Deseja realmente excluir o banner "${banner.titulo}"?`
     );
 
     if (!confirmar) return;
@@ -220,7 +252,11 @@ export default function BannersClient({
         return;
       }
 
-      setSucesso("Banner excluído com sucesso.");
+      setSucesso(
+        banner.tipo === "principal"
+          ? "Banner principal desativado. Você pode reativá-lo ao editar o banner."
+          : "Banner excluído com sucesso."
+      );
       if (formulario.id === banner.id) {
         setFormulario(FORM_VAZIO);
         setEditando(false);
@@ -235,7 +271,23 @@ export default function BannersClient({
     <>
       <div className={styles.card}>
         <div className={styles.cardHead}>
-          <h3>{editando ? "Editar banner" : "Novo banner"}</h3>
+          <h3>
+            {editando
+              ? formulario.tipo === "principal"
+                ? "Editar banner principal"
+                : "Editar banner"
+              : formulario.tipo === "principal"
+                ? "Cadastrar banner principal"
+                : "Novo banner"}
+          </h3>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: ".5rem" }}>
+            <button
+              type="button"
+              className={`${styles.btn} ${styles.btnOutline}`}
+              onClick={cadastrarOuEditarBannerPrincipal}
+            >
+              {bannerPrincipal ? "Editar banner principal" : "Cadastrar banner principal original"}
+            </button>
           {editando && (
             <button
               type="button"
@@ -245,6 +297,7 @@ export default function BannersClient({
               Cancelar edição
             </button>
           )}
+          </div>
         </div>
 
         <form
@@ -255,6 +308,9 @@ export default function BannersClient({
             gap: "1rem",
           }}
         >
+          <p style={{ margin: 0, color: "var(--muted)", fontSize: ".85rem" }}>
+            Tipo: <strong>{formulario.tipo === "principal" ? "Banner principal original da PetSister" : "Anúncio do carrossel"}</strong>
+          </p>
           <div className={styles.grid2}>
             <label>
               <span className={styles.label}>Título *</span>
@@ -472,6 +528,9 @@ export default function BannersClient({
 
                 <div style={{ minWidth: 0 }}>
                   <strong>{banner.titulo}</strong>
+                  <p style={{ marginTop: ".25rem", color: banner.tipo === "principal" ? "#0f1e4a" : "#c45b25", fontWeight: 700, fontSize: ".8rem" }}>
+                    {banner.tipo === "principal" ? "Banner principal" : "Anúncio"}
+                  </p>
                   {banner.etiqueta && (
                     <p style={{ marginTop: ".25rem", color: "#c45b25" }}>
                       {banner.etiqueta}
