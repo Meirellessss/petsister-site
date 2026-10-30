@@ -28,6 +28,7 @@ export default async function Home() {
       .select("*")
       .order("ordem", { ascending: true })
       .order("id", { ascending: true }),
+    ]);
 
   const registro =
     !resultadoLoja.error && resultadoLoja.data?.length
