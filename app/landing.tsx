@@ -75,7 +75,6 @@ export default function Landing({
   produtos: Produto[];
   banners: {
     id: number;
-    tipo: "principal" | "anuncio";
     titulo: string;
     descricao: string;
     etiqueta: string;
@@ -93,3 +92,1265 @@ export default function Landing({
     mensagemEntrega: string;
   };
 }) {
+
+ 
+  const [busca, setBusca] = useState("");
+  const [catAtiva, setCatAtiva] = useState("");
+  const [darkMode, setDarkMode] = useState(false);
+  const [produtoAdicionando, setProdutoAdicionando] = useState<number | null>(null);
+  const [erroCarrinho, setErroCarrinho] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
+  const router = useRouter();
+  const [scrolled, setScrolled] = useState(false);
+  const [bannerAtual, setBannerAtual] = useState(0);
+
+useEffect(() => {
+  const handleScroll = () => {
+    setScrolled(window.scrollY > 40);
+  };
+
+  handleScroll();
+
+  window.addEventListener("scroll", handleScroll, {
+    passive: true,
+  });
+
+  return () => {
+    window.removeEventListener("scroll", handleScroll);
+  };
+}, []);
+
+  useEffect(() => {
+  if (banners.length <= 1) {
+    setBannerAtual(0);
+    return;
+  }
+
+  const intervalo = window.setInterval(() => {
+    setBannerAtual((atual) => (atual + 1) % banners.length);
+  }, 5000);
+
+  return () => window.clearInterval(intervalo);
+}, [banners.length]);
+  
+  useEffect(() => {
+  const temaSalvo = localStorage.getItem("petsister-theme");
+  const escuro = temaSalvo === "dark";
+
+  setDarkMode(escuro);
+  document.documentElement.dataset.theme = escuro ? "dark" : "light";
+}, []);
+
+function alternarTema() {
+  setDarkMode((atual) => {
+    const novoModo = !atual;
+
+    document.documentElement.dataset.theme = novoModo
+      ? "dark"
+      : "light";
+
+    localStorage.setItem(
+      "petsister-theme",
+      novoModo ? "dark" : "light"
+    );
+
+    return novoModo;
+  });
+}
+
+  
+const digitosWhatsApp = (
+  dadosLoja.whatsappAtendimento || WHATSAPP
+).replace(/\D/g, "");
+
+const whatsappNumber =
+  digitosWhatsApp.length === 10 ||
+  digitosWhatsApp.length === 11
+    ? `55${digitosWhatsApp}`
+    : digitosWhatsApp || WHATSAPP;
+
+const telefoneExibicao =
+  dadosLoja.telefoneAtendimento.trim() || WHATSAPP_LABEL;
+
+const mensagemEntregaExibida =
+  dadosLoja.mensagemEntrega.trim() ||
+  "Consulte o prazo de entrega para sua região.";
+
+  
+  const visiveis = useMemo(() => {
+    const termo = busca.trim().toLocaleLowerCase("pt-BR");
+    const categoriaSelecionada = catAtiva
+      .trim()
+      .toLocaleLowerCase("pt-BR");
+
+    return produtos.filter((p) => {
+      const nome = (p.nome ?? "").toLocaleLowerCase("pt-BR");
+      const descricao = (p.descricao ?? "").toLocaleLowerCase("pt-BR");
+      const categoria = (p.categoria ?? "")
+        .trim()
+        .toLocaleLowerCase("pt-BR");
+
+      const correspondeBusca =
+        !termo ||
+        nome.includes(termo) ||
+        descricao.includes(termo);
+
+      const correspondeCategoria =
+        !categoriaSelecionada ||
+        categoria === categoriaSelecionada;
+
+      return correspondeBusca && correspondeCategoria;
+    });
+  }, [produtos, busca, catAtiva]);
+
+
+  
+  function filtrarCat(cat: string) {
+    setCatAtiva(cat);
+    setBusca("");
+  }
+
+  
+  
+  const produtosParaCaes = produtos
+    .filter((p) => {
+      if (p.estoque <= 0) return false;
+
+      const texto = `${p.nome} ${p.categoria ?? ""}`;
+      const paraCaes =
+        /(cachorr|cão|cães|cao|caes|canin|\bdog\b)/i.test(texto);
+      const paraGatos =
+        /(gato|gata|felino|felina)/i.test(texto);
+
+      return paraCaes && !paraGatos;
+    })
+    .slice(0, 4);
+
+  const produtosParaGatos = produtos
+    .filter((p) => {
+      if (p.estoque <= 0) return false;
+
+      const texto = `${p.nome} ${p.categoria ?? ""}`;
+      const paraCaes =
+        /(cachorr|cão|cães|cao|caes|canin|\bdog\b)/i.test(texto);
+      const paraGatos =
+        /(gato|gata|felino|felina)/i.test(texto);
+
+      return paraGatos && !paraCaes;
+    })
+    .slice(0, 4);
+
+ 
+function adicionarDireto(p: Produto) {
+  setErroCarrinho(null);
+  setProdutoAdicionando(p.id);
+
+  startTransition(async () => {
+    try {
+      const res = await adicionarAoCarrinho(p.id, 1);
+
+      if (!res.ok) {
+        setErroCarrinho(res.error);
+        return;
+      }
+
+      router.refresh();
+    } catch {
+      setErroCarrinho("Não foi possível adicionar o produto. Tente novamente.");
+    } finally {
+      setProdutoAdicionando(null);
+    }
+  });
+}
+
+
+  return (
+    <div>
+      <div
+  className={`${styles.topbar} ${
+    scrolled ? styles.topbarHidden : ""
+  }`}
+>
+ <div className={styles.topbarInner}>
+
+  <span className={styles.topbarItem}>
+    <Icon name="caminhao" size={15} />
+    <strong>Disk Entrega</strong>
+  </span>
+
+  <span className={styles.topbarSeparator}>•</span>
+
+  <span className={styles.topbarItem}>
+    <Icon name="cadeado" size={15} />
+    Compra segura
+  </span>
+
+  <span className={styles.topbarSeparator}>•</span>
+
+  <a
+   href={`https://wa.me/${whatsappNumber}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    className={styles.topbarItem}
+  >
+    Atendimento pelo WhatsApp
+  </a>
+
+</div>
+</div>
+<nav
+  className={`${styles.nav} ${
+    scrolled ? styles.navScrolled : ""
+  }`}
+>
+  <div className={styles.navMain}>
+    <div className={styles.navInner}>
+
+      {/* LOGO ORIGINAL */}
+      <Link
+        href="/"
+        className={styles.logo}
+        aria-label="Pet Sister - página inicial"
+      >
+        <img src="/logo.jpg" alt="Pet Sister" />
+      </Link>
+
+      {/* BUSCA */}
+      <div className={styles.navSearch}>
+        <span className={styles.searchIcon}>
+          <Icon name="busca" size={21} />
+        </span>
+
+      
+        <input
+          type="text"
+          placeholder="O que seu pet precisa?"
+          value={busca}
+          onChange={(e) => setBusca(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              const termo = busca.trim();
+
+              router.push(
+                termo
+                  ? `/produtos?busca=${encodeURIComponent(termo)}`
+                  : "/produtos"
+              );
+            }
+          }}
+        />
+
+
+        <span className={styles.searchHint}>
+          Buscar produtos
+        </span>
+      </div>
+
+      {/* AÇÕES DO LADO DIREITO */}
+      <div className={styles.navRight}>
+
+        {/* MODO ESCURO */}
+        <button
+          type="button"
+          className={styles.themeBtn}
+          onClick={alternarTema}
+          aria-label={
+            darkMode
+              ? "Ativar modo claro"
+              : "Ativar modo escuro"
+          }
+          title={
+            darkMode
+              ? "Modo claro"
+              : "Modo escuro"
+          }
+        >
+          {darkMode ? "☀" : "☾"}
+        </button>
+
+        {usuario ? (
+          <>
+            {/* PEDIDOS */}
+            <Link
+              href="/pedidos"
+              className={styles.navAction}
+            >
+              <span className={styles.navActionIcon}>
+                <Icon name="pedidos" size={21} />
+              </span>
+
+              <span className={styles.navActionText}>
+                <small>Meus</small>
+                Pedidos
+              </span>
+            </Link>
+
+            {/* AGENDAMENTO */}
+            <Link
+              href="/agendamentos"
+              className={styles.navAction}
+            >
+              <span className={styles.navActionIcon}>
+                <Icon name="agendar" size={21} />
+              </span>
+
+              <span className={styles.navActionText}>
+                <small>Serviço</small>
+                Agendar
+              </span>
+            </Link>
+
+            {/* CARRINHO */}
+            <Link
+              href="/carrinho"
+              className={`${styles.navAction} ${styles.cartAction}`}
+            >
+              <span className={styles.navActionIcon}>
+                <Icon name="carrinho" size={21} />
+              </span>
+
+              <span className={styles.navActionText}>
+                <small>Meu</small>
+                Carrinho
+              </span>
+
+              {cartCount > 0 && (
+                <span className={styles.cartDot}>
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+
+            {/* ADMIN */}
+            {usuario.perfil === "admin" && (
+              <Link
+                href="/admin"
+                className={styles.accountButton}
+              >
+                <Icon name="admin" size={16} />
+                Admin
+              </Link>
+            )}
+
+{/* MEU PERFIL */}
+<Link
+  href="/perfil"
+  className={styles.navAction}
+  title="Meu Perfil"
+>
+  <span className={styles.navActionIcon}>
+    <Icon name="usuario" size={21} />
+  </span>
+
+  <span className={styles.navActionText}>
+    <small>Meu</small>
+    Perfil
+  </span>
+</Link>
+            
+            {/* SAIR */}
+            <form action={sair}>
+  <button
+    type="submit"
+    className={styles.logoutButton}
+    title="Sair"
+  >
+    <Icon name="sair" size={18} />
+    <span>Sair</span>
+  </button>
+</form>
+          </>
+        ) : (
+          <>
+            {/* LOGIN */}
+            <Link
+              href="/login"
+              className={styles.accountArea}
+            >
+              <span className={styles.accountIcon}>
+                <Icon name="usuario" size={21} />
+              </span>
+
+              <span>
+                <small>Minha conta</small>
+                Entrar
+              </span>
+            </Link>
+
+            {/* CADASTRO */}
+            <Link
+              href="/cadastro"
+              className={styles.createAccount}
+            >
+              Criar conta
+            </Link>
+
+            {/* CARRINHO */}
+            <Link
+              href="/carrinho"
+              className={`${styles.navAction} ${styles.cartAction}`}
+            >
+              <span className={styles.navActionIcon}>
+                <Icon name="carrinho" size={21} />
+              </span>
+
+              <span className={styles.navActionText}>
+                <small>Meu</small>
+                Carrinho
+              </span>
+
+              {cartCount > 0 && (
+                <span className={styles.cartDot}>
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+          </>
+        )}
+      </div>
+    </div>
+  </div>
+
+  {/* MENU DE CATEGORIAS */}
+<div
+  className={`${styles.catbar} ${
+    scrolled ? styles.catbarHidden : ""
+  }`}
+>
+  <div className={styles.catbarInner}>
+
+    {/* RAÇÃO CACHORRO */}
+    <button
+      type="button"
+      className={styles.catbarLink}
+     onClick={() => {
+  router.push(
+    `/produtos?categoria=${encodeURIComponent("Ração Cachorro")}`
+  );
+}}
+    >
+      <span className={styles.ce}>
+        <Icon name="racao" size={19} />
+      </span>
+
+      Ração Cachorro
+    </button>
+
+    {/* RAÇÃO GATO */}
+    <button
+      type="button"
+      className={styles.catbarLink}
+      onClick={() => {
+  router.push(
+    `/produtos?categoria=${encodeURIComponent("Ração Gato")}`
+  );
+}}
+    >
+      <span className={styles.ce}>
+        <Icon name="gato" size={19} />
+      </span>
+
+      Ração Gato
+    </button>
+
+    {/* BRINQUEDOS */}
+    <button
+      type="button"
+      className={styles.catbarLink}
+      onClick={() => {
+  router.push(
+    `/produtos?categoria=${encodeURIComponent("Brinquedos")}`
+  );
+}}
+    >
+      <span className={styles.ce}>
+        <Icon name="brinquedos" size={19} />
+      </span>
+
+      Brinquedos
+    </button>
+
+    {/* CONFORTO */}
+    <button
+      type="button"
+      className={styles.catbarLink}
+     onClick={() => {
+  router.push(
+    `/produtos?categoria=${encodeURIComponent("Conforto")}`
+  );
+}}
+    >
+      <span className={styles.ce}>
+        <Icon name="conforto" size={19} />
+      </span>
+
+      Conforto
+    </button>
+
+    {/* FARMÁCIA */}
+    <button
+      type="button"
+      className={styles.catbarLink}
+      onClick={() => {
+  router.push(
+    `/produtos?categoria=${encodeURIComponent("Farmácia")}`
+  );
+}}
+    >
+      <span className={styles.ce}>
+        <Icon name="farmacia" size={19} />
+      </span>
+
+      Farmácia
+    </button>
+
+    {/* HIGIENE */}
+    <button
+      type="button"
+      className={styles.catbarLink}
+      onClick={() => {
+  router.push(
+    `/produtos?categoria=${encodeURIComponent("Higiene")}`
+  );
+}}
+    >
+      <span className={styles.ce}>
+        <Icon name="higiene" size={19} />
+      </span>
+
+      Higiene
+    </button>
+
+    {/* PASSEIO */}
+    <button
+      type="button"
+      className={styles.catbarLink}
+      onClick={() => {
+  router.push(
+    `/produtos?categoria=${encodeURIComponent("Passeio")}`
+  );
+}}
+    >
+      <span className={styles.ce}>
+        <Icon name="passeio" size={19} />
+      </span>
+
+      Passeio
+    </button>
+
+    {/* PETISCOS */}
+    <button
+      type="button"
+      className={styles.catbarLink}
+      onClick={() => {
+  router.push(
+    `/produtos?categoria=${encodeURIComponent("Petiscos")}`
+  );
+}}
+    >
+      <span className={styles.ce}>
+        <Icon name="petiscos" size={19} />
+      </span>
+
+      Petiscos
+    </button>
+
+    {/* BANHO E TOSA — ÚLTIMO */}
+    <a
+      href="#servicos"
+      className={`${styles.catbarLink} ${styles.serviceLink}`}
+    >
+      <span className={styles.ce}>
+        <Icon name="banho" size={19} />
+      </span>
+
+      Banho e Tosa
+    </a>
+
+  </div>
+</div>
+</nav>
+      
+      {banners.length > 0 && (
+        <section
+          className={styles.bannerCarousel}
+          aria-label="Anúncios da PetSister"
+        >
+          <div className={styles.bannerViewport}>
+            {banners.map((banner, indice) => (
+              <article
+                key={banner.id}
+                className={`${styles.bannerSlide} ${
+                  indice === bannerAtual
+                    ? styles.bannerSlideActive
+                    : ""
+                }`}
+                aria-hidden={indice !== bannerAtual}
+              >
+                <img
+                  className={styles.bannerImage}
+                  src={banner.imagem_url}
+                  alt={banner.titulo}
+                />
+
+                <div className={styles.bannerOverlay} />
+
+                <div className={styles.bannerContent}>
+                  {banner.etiqueta && (
+                    <span className={styles.bannerTag}>
+                      {banner.etiqueta}
+                    </span>
+                  )}
+
+                  <p className={styles.bannerSlogan}>
+                    O cuidado que ele merece, pertinho de você.
+                  </p>
+
+                  <h1>{banner.titulo}</h1>
+
+                  {banner.descricao && (
+                    <p className={styles.bannerDescription}>
+                      {banner.descricao}
+                    </p>
+                  )}
+
+                  <a
+                    href={banner.link_destino || "/produtos"}
+                    className={styles.bannerCta}
+                  >
+                    {banner.texto_botao || "Ver produtos"} →
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          {banners.length > 1 && (
+            <>
+              <button
+                type="button"
+                className={`${styles.bannerArrow} ${styles.bannerPrev}`}
+                aria-label="Anúncio anterior"
+                onClick={() =>
+                  setBannerAtual(
+                    (atual) => (atual - 1 + banners.length) % banners.length
+                  )
+                }
+              >
+                ‹
+              </button>
+
+              <button
+                type="button"
+                className={`${styles.bannerArrow} ${styles.bannerNext}`}
+                aria-label="Próximo anúncio"
+                onClick={() =>
+                  setBannerAtual((atual) => (atual + 1) % banners.length)
+                }
+              >
+                ›
+              </button>
+
+              <div className={styles.bannerDots}>
+                {banners.map((banner, indice) => (
+                  <button
+                    type="button"
+                    key={banner.id}
+                    aria-label={`Ver anúncio ${indice + 1}`}
+                    aria-current={indice === bannerAtual}
+                    className={`${styles.bannerDot} ${
+                      indice === bannerAtual
+                        ? styles.bannerDotActive
+                        : ""
+                    }`}
+                    onClick={() => setBannerAtual(indice)}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </section>
+      )}
+
+      <section className={styles.hero}>
+        <div className={styles.heroGlow}></div>
+        <div className={`${styles.heroGlow} ${styles.heroGlowG2}`}></div>
+        <span className={`${styles.heroPaw} ${styles.p1}`}>
+          <Icon name="pata" size={120} />
+        </span>
+        <span className={`${styles.heroPaw} ${styles.p2}`}>
+          <Icon name="pata" size={64} />
+        </span>
+        <div className={styles.heroInner}>
+          <div>
+           <span className={styles.heroTag}>
+  RAÇÕES • CÃES E GATOS • FARMÁCIA VETERINÁRIA • ACESSÓRIOS
+</span>
+           <h1>
+  Tudo para o seu pet em um só lugar.
+</h1>
+           <p className={styles.heroSub}>
+   O cuidado que ele merece, pertinho de você. 🐾
+</p>
+           
+<div className={styles.heroActions}>
+  <a
+    href="/produtos"
+    className={`${styles.btnHero} ${styles.btnHeroMain}`}
+    style={{
+      display: "inline-flex",
+      alignItems: "center",
+      gap: ".55rem",
+    }}
+  >
+    Ver produtos
+    <Icon name="sacola" size={18} />
+  </a>
+
+  <a
+    href={`https://wa.me/${WHATSAPP}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    className={`${styles.btnHero} ${styles.btnHeroGhost}`}
+    style={{
+      display: "inline-flex",
+      alignItems: "center",
+      gap: ".5rem",
+    }}
+  >
+    <Icon name="caminhao" size={16} />
+    {telefoneExibicao}
+  </a>
+</div>
+
+            <div className={styles.heroTrust}>
+              <div className={styles.heroTrustItem}>
+                <span className={styles.tc}>
+                  <Icon name="caminhao" size={16} />
+                </span>
+                Disk entrega
+              </div>
+              <div className={styles.heroTrustItem}>
+                <span className={styles.tc}>
+                  <Icon name="cadeado" size={16} />
+                </span>
+                Compra segura
+              </div>
+              <div className={styles.heroTrustItem}>
+                <span className={styles.tc}>
+                  <Icon name="estrela-fill" size={16} />
+                </span>
+                +500 tutores felizes
+              </div>
+            </div>
+          </div>
+          <div className={styles.heroVisual}>
+            <div className={styles.heroLogoStage}>
+              <div className={styles.heroLogoCard}>
+                <img src="/logo.jpg" alt="Pet Sister - mascotes" />
+              </div>
+              <span className={`${styles.heroOrbit} ${styles.fb1}`}>
+                <Icon name="caminhao" size={16} /> Disk Entrega
+              </span>
+              <span className={`${styles.heroOrbit} ${styles.fb2}`}>
+                <Icon name="estrela-fill" size={16} /> 4.9 / 5
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className={styles.adv}>
+        <div className={styles.advInner}>
+          <div className={styles.advItem}>
+               <div className={styles.advIc}>🚚</div>
+            <div>
+              <div className={styles.advT}>Entrega rápida</div>
+              <div className={styles.advS}>
+  {mensagemEntregaExibida}
+</div>
+            </div>
+          </div>
+          <div className={styles.advItem}>
+              <div className={styles.advIc}>💊</div>
+            <div>
+              <div className={styles.advT}>Até 3x sem juros</div>
+              <div className={styles.advS}>No cartão de crédito</div>
+            </div>
+          </div>
+          <div className={styles.advItem}>
+            <div className={styles.advIc}>🥣</div>
+            <div>
+              <div className={styles.advT}>Troca facilitada</div>
+              <div className={styles.advS}>Em até 7 dias úteis</div>
+            </div>
+          </div>
+          <div className={styles.advItem}>
+             <div className={styles.advIc}>❤️</div>
+            <div>
+              <div className={styles.advT}>Cães e gatos</div>
+              <div className={styles.advS}>Curadoria especializada</div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+    {produtos.filter(
+  (p) =>
+    Number(p.desconto_percentual ?? 0) > 0 &&
+    p.estoque > 0
+).length >= 3 && (
+        <section
+          className={styles.section}
+          aria-labelledby="ofertas-titulo"
+          style={{ paddingTop: "2rem", paddingBottom: "2rem" }}
+        >
+          <div className={styles.sectionInner}>
+            <div className={styles.secHead}>
+              <h2
+                id="ofertas-titulo"
+                className={styles.secTitle}
+              >
+                Ofertas para o seu pet
+              </h2>
+              
+            </div>
+
+            <div className={styles.prodGrid}>
+              {produtos
+                .filter(
+                  (p) =>
+                    Number(p.desconto_percentual ?? 0) > 0 &&
+                    p.estoque > 0
+                )
+                .slice(0, 4)
+                .map((p) => {
+                  const desconto = Math.min(
+                    90,
+                    Math.max(0, Number(p.desconto_percentual ?? 0))
+                  );
+
+                  const precoOriginal = Number(p.preco);
+                  const precoFinal =
+                    Math.round(
+                      precoOriginal * (1 - desconto / 100) * 100
+                    ) / 100;
+
+                  return (
+                    <article
+                      className={styles.prodCard}
+                      key={`oferta-${p.id}`}
+                    >
+                      <Link
+                        href={`/produto/${p.id}`}
+                        className={styles.prodThumb}
+                        aria-label={`Ver oferta de ${p.nome}`}
+                      >
+
+                        {p.imagem ? (
+                          <img
+                            src={p.imagem.split(/\r?\n/)[0]}
+                            alt={p.nome}
+                          />
+                        ) : (
+                          <span className={styles.phIc}>
+                            <Icon
+                              name={CATEGORIA_ICON[p.categoria ?? ""] ?? "pata"}
+                              size={64}
+                            />
+                          </span>
+                        )}
+                      </Link>
+
+                      <div className={styles.prodBody}>
+                        <div className={styles.prodCat}>
+                          {p.categoria}
+                        </div>
+
+                        <Link
+                          href={`/produto/${p.id}`}
+                          className={styles.prodName}
+                        >
+                          {p.nome}
+                        </Link>
+
+                       
+                      {p.descricao?.trim() ? (
+  <p className={styles.prodDescription}>
+    {p.descricao.trim()}
+  </p>
+) : null}
+
+                        {p.porte ? (
+                          <span className={styles.prodPorte}>
+                            Porte: {p.porte === "Medio" ? "Médio" : p.porte}
+                          </span>
+                        ) : null}
+
+                        <div className={styles.prodPriceRow}>
+                          <span className={styles.prodOldPrice}>
+                            R$ {formatarPreco(precoOriginal)}
+                          </span>
+
+                          <span className={styles.prodPrice}>
+                            R$ {formatarPreco(precoFinal)}
+                          </span>
+
+                          <span className={styles.prodDiscountBadge}>
+                            -{desconto.toLocaleString("pt-BR")}%
+                          </span>
+                        </div>
+
+                        <Link
+                          href={`/produto/${p.id}`}
+                          className={styles.btnComprar}
+                        >
+                          Ver oferta
+                        </Link>
+
+
+                      </div>
+                    </article>
+                  );
+                })}
+            </div>
+          </div>
+        </section>
+      )}
+
+      
+      {[
+        {
+          id: "caes",
+          titulo: "Tudo para cachorros",
+          subtitulo: "Produtos para cuidar, alimentar e divertir seu cão.",
+          itens: produtosParaCaes,
+        },
+        {
+          id: "gatos",
+          titulo: "Tudo para gatos",
+          subtitulo: "Encontre produtos para o bem-estar do seu gato.",
+          itens: produtosParaGatos,
+        },
+      ]
+        .filter((secao) => secao.itens.length > 0)
+        .map((secao) => (
+          <section
+            key={secao.id}
+            className={styles.section}
+            aria-labelledby={`vitrine-${secao.id}`}
+            style={{ paddingTop: "2rem", paddingBottom: "2rem" }}
+          >
+            <div className={styles.sectionInner}>
+              <div className={styles.secHead}>
+                
+                <h2
+                  id={`vitrine-${secao.id}`}
+                  className={styles.secTitle}
+                >
+                  {secao.titulo}
+                </h2>
+               
+              </div>
+
+              <div className={styles.prodGrid}>
+                {secao.itens.map((p) => {
+                  const desconto = Math.min(
+                    90,
+                    Math.max(0, Number(p.desconto_percentual ?? 0))
+                  );
+
+                  const precoOriginal = Number(p.preco);
+                  const precoFinal =
+                    Math.round(
+                      precoOriginal * (1 - desconto / 100) * 100
+                    ) / 100;
+
+                  return (
+                    <article
+                      className={styles.prodCard}
+                      key={`${secao.id}-${p.id}`}
+                    >
+                      <Link
+                        href={`/produto/${p.id}`}
+                        className={styles.prodThumb}
+                        aria-label={`Ver ${p.nome}`}
+                      >
+                        {p.destaque && (
+                          <span className={styles.prodTag}>
+                            Destaque
+                          </span>
+                        )}
+
+                        {p.imagem ? (
+                          <img
+                            src={p.imagem.split(/\r?\n/)[0]}
+                            alt={p.nome}
+                          />
+                        ) : (
+                          <span className={styles.phIc}>
+                            <Icon
+                              name={CATEGORIA_ICON[p.categoria ?? ""] ?? "pata"}
+                              size={64}
+                            />
+                          </span>
+                        )}
+                      </Link>
+
+                      <div className={styles.prodBody}>
+                        <div className={styles.prodCat}>
+                          {p.categoria}
+                        </div>
+
+                        <Link
+                          href={`/produto/${p.id}`}
+                          className={styles.prodName}
+                        >
+                          {p.nome}
+                        </Link>
+                        
+                       
+                        {p.descricao?.trim() ? (
+                          <p className={styles.prodDescription}>
+                            {p.descricao.trim()}
+                          </p>
+                        ) : null}
+
+
+                        {p.porte ? (
+                        <span className={styles.prodPorte}>
+                          Porte: {p.porte === "Medio" ? "Médio" : p.porte}
+                        </span>
+                      ) : null}
+
+                        
+                        <div className={styles.prodPriceRow}>
+                          {desconto > 0 && (
+                            <span className={styles.prodOldPrice}>
+                              R$ {formatarPreco(precoOriginal)}
+                            </span>
+                          )}
+
+                          <span className={styles.prodPrice}>
+                            R$ {formatarPreco(precoFinal)}
+                          </span>
+
+                          {desconto > 0 && (
+                            <span className={styles.prodDiscountBadge}>
+                              -{desconto}%
+                            </span>
+                          )}
+                        </div>
+
+                        <Link
+                          href={`/produto/${p.id}`}
+                          className={styles.btnComprar}
+                        >
+                          Ver produto
+                        </Link>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+        ))}
+
+      <section className={`${styles.section} ${styles.secServ}`} id="servicos">
+        <div className={styles.sectionInner}>
+          <div className={styles.secHead}>
+            <div className={styles.secLabel} style={{ color: "#fbbf24" }}>
+              Serviços
+            </div>
+            <h2 className={styles.secTitle} style={{ color: "#fff" }}>
+              Cuidados que seu pet <em style={{ color: "#fbbf24" }}>ama</em>
+            </h2>
+            <p className={styles.secSub} style={{ color: "rgba(255,255,255,.6)" }}>
+              Agende pelo site em segundos. Confirmamos por WhatsApp.
+            </p>
+          </div>
+          <div className={styles.servGrid}>
+            {SERVICOS.map(([ic, nome, desc, preco], idx) => (
+              <div className={styles.servCard} key={`${nome}-${idx}`}>
+                <div className={styles.servIc}>
+                  <Icon name={ic} size={44} />
+                </div>
+                <div className={styles.servName}>{nome}</div>
+                <div className={styles.servDesc}>{desc}</div>
+                <div className={styles.servPrice}>{preco}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ textAlign: "center", marginTop: "2.5rem" }}>
+            <a href={usuario ? "/agendamentos" : "/login"}>
+              <button className={`${styles.btnHero} ${styles.btnHeroMain}`}>Agendar agora →</button>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <div className={styles.sectionInner}>
+          <div className={styles.secHead}>
+            <div className={styles.secLabel}>Como funciona</div>
+            <h2 className={styles.secTitle}>
+              Simples como um <em>passeio</em>
+            </h2>
+          </div>
+          <div className={styles.steps}>
+            <div className={styles.step}>
+              <div className={styles.stepNum}>1</div>
+              <h4>Crie sua conta</h4>
+              <p>Cadastro gratuito em menos de um minuto, sem burocracia.</p>
+            </div>
+            <div className={styles.step}>
+              <div className={styles.stepNum}>2</div>
+              <h4>Escolha o que precisa</h4>
+              <p>Navegue pelo catálogo de cães e gatos e adicione tudo ao carrinho.</p>
+            </div>
+            <div className={styles.step}>
+              <div className={styles.stepNum}>3</div>
+              <h4>Finalize o pedido</h4>
+              <p>Checkout rápido. Para serviços, escolha o melhor dia e horário.</p>
+            </div>
+            <div className={styles.step}>
+              <div className={styles.stepNum}>4</div>
+              <h4>Pronto, é só receber!</h4>
+              <p>Acompanhe tudo pela sua conta. Seu pet vai agradecer.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className={`${styles.section} ${styles.secDepo}`}>
+        <div className={styles.sectionInner}>
+          <div className={styles.secHead}>
+            <div className={styles.secLabel}>Depoimentos</div>
+            <h2 className={styles.secTitle}>
+              Tutores que <em>confiam</em>
+            </h2>
+          </div>
+          <div className={styles.depoGrid}>
+            {DEPOIMENTOS.map(([texto, nome, pet]) => (
+              <div className={styles.depoCard} key={nome}>
+                <div className={styles.depoStars}>
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Icon key={i} name="estrela-fill" size={16} />
+                  ))}
+                </div>
+                <div className={styles.depoText}>{texto}</div>
+                <div className={styles.depoAutor}>
+                  <div className={styles.depoAv}>{nome.charAt(0).toUpperCase()}</div>
+                  <div>
+                    <div className={styles.depoNome}>{nome}</div>
+                    <div className={styles.depoPet}>{pet}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.secCta}>
+        <span className={styles.heroPaw} style={{ position: "absolute", top: "-30px", right: "-40px", opacity: 0.07 }}>
+          <Icon name="pata" size={240} />
+        </span>
+        <h2>
+          Seu pet merece
+          <br />o <em>melhor</em>.
+        </h2>
+        <p>Crie sua conta grátis e ganhe frete grátis na primeira compra.</p>
+        <div className={styles.ctaBtns}>
+          <a href={usuario ? "/produtos" : "/cadastro"}>
+            <button className={styles.btnCtaMain}>Começar agora →</button>
+          </a>
+          <a href="#servicos">
+            <button className={styles.btnCtaGhost}>Conhecer serviços</button>
+          </a>
+        </div>
+      </section>
+
+      <footer className={styles.footer}>
+        <div className={styles.footInner}>
+          <div>
+            <div className={styles.footLogo}>
+              <img src="/logo.jpg" alt="Pet Sister" />
+            </div>
+            <p className={styles.footAbout}>
+              Loja completa para cães e gatos. Rações premium, farmácia veterinária e acessórios — com disk
+              entrega para você não se preocupar com nada.
+            </p>
+            <div className={styles.footContact}>
+              <a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener" className={styles.footLink}>
+                <Icon name="caminhao" size={16} /> {WHATSAPP_LABEL} · WhatsApp
+              </a>
+              <a href={`https://instagram.com/${INSTAGRAM}`} target="_blank" rel="noopener" className={styles.footLink}>
+                <Icon name="coracao" size={16} /> @{INSTAGRAM}
+              </a>
+            </div>
+          </div>
+          <div className={styles.footCol}>
+            <h4>Loja</h4>
+            <a href="/produtos">Produtos</a>
+           <a href="/produtos">Categorias</a>
+            <a href="#servicos">Serviços</a>
+            {usuario && <a href="/pedidos">Meus pedidos</a>}
+          </div>
+          <div className={styles.footCol}>
+            <h4>Conta</h4>
+            {usuario ? (
+              <>
+                <a href="/pedidos">Meus pedidos</a>
+                <a href="/agendamentos">Agendamentos</a>
+                <form action={sair}>
+                  <button type="submit" style={{ background: "none", border: "none", color: "inherit", padding: ".25rem 0", fontSize: ".85rem" }}>
+                    Sair
+                  </button>
+                </form>
+              </>
+            ) : (
+              <>
+                <a href="/login">Entrar</a>
+                <a href="/cadastro">Criar conta</a>
+              </>
+            )}
+          </div>
+         
+<div className={styles.footCol}>
+  <h4>Atendimento</h4>
+
+  <a
+    href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Olá! Preciso de ajuda com a PetSister.")}`}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Central de ajuda
+  </a>
+
+  <a
+    href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Olá! Preciso de informações sobre trocas e devoluções na PetSister.")}`}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Trocas e devoluções
+  </a>
+
+  <a
+    href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Olá! Quero falar com o atendimento da PetSister.")}`}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Fale conosco
+  </a>
+</div>
+
+        </div>
+        <div className={styles.footBottom}>
+          © {new Date().getFullYear()} Pet Sister · Cães e gatos · Feito com carinho · {WHATSAPP_LABEL}
+        </div>
+      </footer>
+    </div>
+  );
+}
