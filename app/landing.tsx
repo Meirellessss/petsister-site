@@ -760,7 +760,42 @@ function adicionarDireto(p: Produto) {
         </div>
       </section>
 
-      {banners.length > 0 && (
+      <div className={styles.adv}>
+        <div className={styles.advInner}>
+          <div className={styles.advItem}>
+               <div className={styles.advIc}>🚚</div>
+            <div>
+              <div className={styles.advT}>Entrega rápida</div>
+              <div className={styles.advS}>
+  {mensagemEntregaExibida}
+</div>
+            </div>
+          </div>
+          <div className={styles.advItem}>
+              <div className={styles.advIc}>💊</div>
+            <div>
+              <div className={styles.advT}>Até 3x sem juros</div>
+              <div className={styles.advS}>No cartão de crédito</div>
+            </div>
+          </div>
+          <div className={styles.advItem}>
+            <div className={styles.advIc}>🥣</div>
+            <div>
+              <div className={styles.advT}>Troca facilitada</div>
+              <div className={styles.advS}>Em até 7 dias úteis</div>
+            </div>
+          </div>
+          <div className={styles.advItem}>
+             <div className={styles.advIc}>❤️</div>
+            <div>
+              <div className={styles.advT}>Cães e gatos</div>
+              <div className={styles.advS}>Curadoria especializada</div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+     {banners.length > 0 && (
         <section
           className={styles.bannerCarousel}
           aria-label="Anúncios da PetSister"
@@ -839,43 +874,10 @@ function adicionarDireto(p: Produto) {
           )}
         </section>
       )}
-
-      <div className={styles.adv}>
-        <div className={styles.advInner}>
-          <div className={styles.advItem}>
-               <div className={styles.advIc}>🚚</div>
-            <div>
-              <div className={styles.advT}>Entrega rápida</div>
-              <div className={styles.advS}>
-  {mensagemEntregaExibida}
-</div>
-            </div>
-          </div>
-          <div className={styles.advItem}>
-              <div className={styles.advIc}>💊</div>
-            <div>
-              <div className={styles.advT}>Até 3x sem juros</div>
-              <div className={styles.advS}>No cartão de crédito</div>
-            </div>
-          </div>
-          <div className={styles.advItem}>
-            <div className={styles.advIc}>🥣</div>
-            <div>
-              <div className={styles.advT}>Troca facilitada</div>
-              <div className={styles.advS}>Em até 7 dias úteis</div>
-            </div>
-          </div>
-          <div className={styles.advItem}>
-             <div className={styles.advIc}>❤️</div>
-            <div>
-              <div className={styles.advT}>Cães e gatos</div>
-              <div className={styles.advS}>Curadoria especializada</div>
-            </div>
-          </div>
-        </div>
-      </div>
-  
-    {produtos.filter(
+      
+      
+      
+      {produtos.filter(
   (p) =>
     Number(p.desconto_percentual ?? 0) > 0 &&
     p.estoque > 0
