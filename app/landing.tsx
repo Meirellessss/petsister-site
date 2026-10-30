@@ -839,6 +839,86 @@ function adicionarDireto(p: Produto) {
         </div>
       </section>
 
+      {banners.length > 0 && (
+        <section
+          className={styles.bannerCarousel}
+          aria-label="Anúncios da PetSister"
+        >
+          <div className={styles.bannerViewport}>
+            {banners.map((banner, indice) => (
+              <article
+                key={banner.id}
+                className={`${styles.bannerSlide} ${
+                  indice === bannerAtual
+                    ? styles.bannerSlideActive
+                    : ""
+                }`}
+                aria-hidden={indice !== bannerAtual}
+              >
+                
+                <a
+                  href={banner.link_destino || "/produtos"}
+                  className={styles.bannerArtworkLink}
+                  aria-label={`Abrir ${banner.titulo}`}
+                >
+                  <img
+                    className={styles.bannerImage}
+                    src={banner.imagem_url}
+                    alt={banner.titulo}
+                  />
+                </a>
+
+              </article>
+            ))}
+          </div>
+
+          {banners.length > 1 && (
+            <>
+              <button
+                type="button"
+                className={`${styles.bannerArrow} ${styles.bannerPrev}`}
+                aria-label="Anúncio anterior"
+                onClick={() =>
+                  setBannerAtual(
+                    (atual) => (atual - 1 + banners.length) % banners.length
+                  )
+                }
+              >
+                ‹
+              </button>
+
+              <button
+                type="button"
+                className={`${styles.bannerArrow} ${styles.bannerNext}`}
+                aria-label="Próximo anúncio"
+                onClick={() =>
+                  setBannerAtual((atual) => (atual + 1) % banners.length)
+                }
+              >
+                ›
+              </button>
+
+              <div className={styles.bannerDots}>
+                {banners.map((banner, indice) => (
+                  <button
+                    type="button"
+                    key={banner.id}
+                    aria-label={`Ver anúncio ${indice + 1}`}
+                    aria-current={indice === bannerAtual}
+                    className={`${styles.bannerDot} ${
+                      indice === bannerAtual
+                        ? styles.bannerDotActive
+                        : ""
+                    }`}
+                    onClick={() => setBannerAtual(indice)}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </section>
+      )}
+
       <div className={styles.adv}>
         <div className={styles.advInner}>
           <div className={styles.advItem}>
