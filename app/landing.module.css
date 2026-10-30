@@ -4297,3 +4297,69 @@ a.topbarItem:hover {
   display: block;
   cursor: pointer;
 }
+
+
+/* Carrossel PetSister: tamanho e navegação manual */
+
+.bannerCarousel {
+  width: min(calc(100% - 40px), 1100px);
+  max-width: 1100px;
+  margin: 30px auto 42px;
+  padding: 0;
+}
+
+.bannerCarousel .bannerViewport {
+  height: 350px;
+  border-radius: 20px;
+}
+
+/* Setas transparentes, escondidas inicialmente */
+
+.bannerArrow {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.20);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  color: #ffffff;
+  backdrop-filter: blur(8px);
+  transition:
+    opacity 250ms ease,
+    visibility 250ms ease,
+    background 250ms ease,
+    transform 250ms ease;
+}
+
+/* Mostrar somente quando o mouse estiver sobre o carrossel */
+
+.bannerCarousel:hover .bannerArrow,
+.bannerCarousel:focus-within .bannerArrow {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.bannerArrow:hover {
+  background: rgba(12, 24, 64, 0.65);
+  border-color: #ffbd59;
+}
+
+/* No celular, as setas ficam sempre disponíveis */
+
+@media (max-width: 700px) {
+  .bannerCarousel {
+    width: calc(100% - 24px);
+    margin: 18px auto 28px;
+  }
+
+  .bannerCarousel .bannerViewport {
+    height: 260px;
+    border-radius: 16px;
+  }
+
+  .bannerArrow {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+}
