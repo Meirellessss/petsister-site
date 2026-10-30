@@ -4234,3 +4234,12 @@ a.topbarItem:hover {
     width: min(180px, 42vw);
   }
 }
+
+
+.bannerArtworkLink {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: block;
+  cursor: pointer;
+}
