@@ -4084,3 +4084,153 @@ a.topbarItem:hover {
     transform: none;
   }
 }
+
+
+/* ==========================================
+   BANNER PRINCIPAL ORIGINAL NO CARROSSEL
+   ========================================== */
+
+.bannerViewportPrincipal {
+  height: clamp(430px, 38vw, 500px);
+}
+
+.bannerPrincipalHero {
+  height: 100%;
+  min-height: 0;
+  padding-top: 0;
+  border-bottom: 0;
+  border-radius: inherit;
+  box-sizing: border-box;
+}
+
+.bannerPrincipalHero .heroInner {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  padding: 2rem clamp(2.5rem, 5.5vw, 5rem);
+  gap: clamp(1rem, 3vw, 3.25rem);
+}
+
+.bannerPrincipalTexto {
+  min-width: 0;
+}
+
+.bannerPrincipalHero .heroTag {
+  margin-bottom: 1rem;
+  font-size: clamp(.62rem, .8vw, .78rem);
+}
+
+.bannerPrincipalHero h1 {
+  font-size: clamp(2rem, 3.7vw, 3.8rem);
+  line-height: 1.07;
+}
+
+.bannerPrincipalHero .heroSub {
+  margin-bottom: 1.35rem;
+  font-size: clamp(.9rem, 1.15vw, 1.08rem);
+}
+
+.bannerPrincipalHero .heroActions {
+  margin-bottom: 1.25rem;
+}
+
+.bannerPrincipalHero .heroTrust {
+  gap: .45rem;
+}
+
+.bannerPrincipalHero .heroTrustItem {
+  padding: .38rem .48rem;
+  font-size: clamp(.65rem, .72vw, .78rem);
+}
+
+.bannerPrincipalHero .heroLogoStage {
+  width: min(360px, 100%);
+}
+
+/* Tablets */
+@media (max-width: 900px) {
+  .bannerViewportPrincipal {
+    height: 620px;
+  }
+
+  .bannerPrincipalHero .heroInner {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    align-content: center;
+    gap: 1rem;
+    padding: 1.75rem 2rem;
+  }
+
+  .bannerPrincipalHero .heroVisual {
+    display: flex;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .bannerPrincipalHero .heroLogoStage {
+    width: min(210px, 46vw);
+  }
+
+  .bannerPrincipalHero h1 {
+    font-size: clamp(1.85rem, 5vw, 2.8rem);
+  }
+
+  .bannerPrincipalHero .heroSub {
+    margin-bottom: 1rem;
+  }
+
+  .bannerPrincipalHero .heroActions {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Celulares */
+@media (max-width: 560px) {
+  .bannerViewportPrincipal {
+    height: 690px;
+  }
+
+  .bannerPrincipalHero .heroInner {
+    padding: 1.2rem 1rem 2.4rem;
+    gap: .7rem;
+  }
+
+  .bannerPrincipalHero .heroTag {
+    font-size: .58rem;
+    line-height: 1.4;
+    padding: .35rem .55rem;
+  }
+
+  .bannerPrincipalHero h1 {
+    font-size: clamp(1.8rem, 8vw, 2.5rem);
+  }
+
+  .bannerPrincipalHero .heroSub {
+    font-size: .88rem;
+    line-height: 1.5;
+  }
+
+  .bannerPrincipalHero .heroActions {
+    gap: .4rem;
+  }
+
+  .bannerPrincipalHero .btnHero {
+    min-height: 40px;
+    padding: .65rem .8rem;
+    font-size: .78rem;
+  }
+
+  .bannerPrincipalHero .heroTrust {
+    gap: .3rem;
+  }
+
+  .bannerPrincipalHero .heroTrustItem {
+    padding: .28rem .35rem;
+    font-size: .62rem;
+  }
+
+  .bannerPrincipalHero .heroLogoStage {
+    width: min(180px, 42vw);
+  }
+}
