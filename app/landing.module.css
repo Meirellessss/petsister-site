@@ -4363,3 +4363,68 @@ a.topbarItem:hover {
     pointer-events: auto;
   }
 }
+
+
+/* ==========================================
+   ANIMAÇÃO PREMIUM DO CARROSSEL PETSISTER
+   ========================================== */
+
+.bannerSlide {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(35px);
+  transition:
+    opacity 950ms cubic-bezier(.22, .61, .36, 1),
+    transform 1100ms cubic-bezier(.22, .61, .36, 1),
+    visibility 950ms ease;
+  pointer-events: none;
+}
+
+.bannerSlideActive {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+  z-index: 1;
+  animation: petsisterSlideEnter 1100ms cubic-bezier(.22, .61, .36, 1) both;
+}
+
+/* Zoom suave na imagem durante a exibição */
+
+.bannerSlideActive .bannerImage {
+  animation: petsisterImageZoom 6s ease-out both;
+}
+
+@keyframes petsisterSlideEnter {
+  from {
+    opacity: 0;
+    transform: translateX(35px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes petsisterImageZoom {
+  from {
+    transform: scale(1.07);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+/* Respeitar preferência por movimento reduzido */
+
+@media (prefers-reduced-motion: reduce) {
+  .bannerSlide,
+  .bannerSlideActive,
+  .bannerSlideActive .bannerImage {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}
