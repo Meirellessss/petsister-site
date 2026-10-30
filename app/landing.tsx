@@ -103,7 +103,20 @@ export default function Landing({
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [bannerAtual, setBannerAtual] = useState(0);
+    useEffect(() => {
+    if (banners.length <= 1) {
+      setBannerAtual(0);
+      return;
+    }
 
+    const intervalo = window.setInterval(() => {
+      setBannerAtual((atual) => (atual + 1) % banners.length);
+    }, 6000);
+
+    return () => window.clearInterval(intervalo);
+  }, [banners.length]);
+
+  
 useEffect(() => {
   const handleScroll = () => {
     setScrolled(window.scrollY > 40);
