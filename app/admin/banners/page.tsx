@@ -4,6 +4,7 @@ import styles from "../admin.module.css";
 
 type Banner = {
   id: number;
+  tipo: "principal" | "anuncio";
   titulo: string;
   descricao: string;
   etiqueta: string;
