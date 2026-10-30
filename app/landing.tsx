@@ -687,40 +687,19 @@ function adicionarDireto(p: Produto) {
                 }`}
                 aria-hidden={indice !== bannerAtual}
               >
-                <img
-                  className={styles.bannerImage}
-                  src={banner.imagem_url}
-                  alt={banner.titulo}
-                />
+                
+                <a
+                  href={banner.link_destino || "/produtos"}
+                  className={styles.bannerArtworkLink}
+                  aria-label={`Abrir ${banner.titulo}`}
+                >
+                  <img
+                    className={styles.bannerImage}
+                    src={banner.imagem_url}
+                    alt={banner.titulo}
+                  />
+                </a>
 
-                <div className={styles.bannerOverlay} />
-
-                <div className={styles.bannerContent}>
-                  {banner.etiqueta && (
-                    <span className={styles.bannerTag}>
-                      {banner.etiqueta}
-                    </span>
-                  )}
-
-                  <p className={styles.bannerSlogan}>
-                    O cuidado que ele merece, pertinho de você.
-                  </p>
-
-                  <h1>{banner.titulo}</h1>
-
-                  {banner.descricao && (
-                    <p className={styles.bannerDescription}>
-                      {banner.descricao}
-                    </p>
-                  )}
-
-                  <a
-                    href={banner.link_destino || "/produtos"}
-                    className={styles.bannerCta}
-                  >
-                    {banner.texto_botao || "Ver produtos"} →
-                  </a>
-                </div>
               </article>
             ))}
           </div>
