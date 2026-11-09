@@ -90,6 +90,23 @@ const intervaloAgendaInicial =
   [10, 15, 20, 30, 60].includes(intervaloSalvo)
     ? intervaloSalvo
     : 30;
+  
+const diasValidosAgenda = ["0", "1", "2", "3", "4", "5", "6"];
+
+const diasBanhoTosaInicial = Array.isArray(valores.dias_banho_tosa)
+  ? valores.dias_banho_tosa.filter(
+      (dia): dia is string =>
+        typeof dia === "string" && diasValidosAgenda.includes(dia)
+    )
+  : diasValidosAgenda;
+
+const diasVeterinarioInicial = Array.isArray(valores.dias_veterinario)
+  ? valores.dias_veterinario.filter(
+      (dia): dia is string =>
+        typeof dia === "string" && diasValidosAgenda.includes(dia)
+    )
+  : diasValidosAgenda;
+
 
 
 const parcelasMaximasIniciais =
@@ -154,7 +171,9 @@ const parcelasMaximasIniciais =
   mensagemEntregaInicial={mensagemEntregaInicial}
   horaAberturaInicial={horaAberturaInicial}
 horaFechamentoInicial={horaFechamentoInicial}
-intervaloAgendaInicial={intervaloAgendaInicial}        
+intervaloAgendaInicial={intervaloAgendaInicial}
+diasBanhoTosaInicial={diasBanhoTosaInicial}
+diasVeterinarioInicial={diasVeterinarioInicial}
 />
 
         <p
