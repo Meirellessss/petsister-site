@@ -69,6 +69,29 @@ const mensagemEntregaInicial = String(
   valores.mensagem_entrega ?? ""
 );  
 
+  
+const horaAberturaInicial =
+  typeof valores.hora_abertura === "string" &&
+  /^([01]\d|2[0-3]):[0-5]\d$/.test(valores.hora_abertura)
+    ? valores.hora_abertura
+    : "08:00";
+
+const horaFechamentoInicial =
+  typeof valores.hora_fechamento === "string" &&
+  /^([01]\d|2[0-3]):[0-5]\d$/.test(valores.hora_fechamento)
+    ? valores.hora_fechamento
+    : "18:00";
+
+const intervaloSalvo = Number(
+  valores.intervalo_agendamentos_minutos ?? 30
+);
+
+const intervaloAgendaInicial =
+  [10, 15, 20, 30, 60].includes(intervaloSalvo)
+    ? intervaloSalvo
+    : 30;
+
+
 const parcelasMaximasIniciais =
   Number.isInteger(parcelasSalvas) &&
   parcelasSalvas >= 1 &&
@@ -129,6 +152,9 @@ const parcelasMaximasIniciais =
   telefoneInicial={telefoneInicial}
   whatsappInicial={whatsappInicial}
   mensagemEntregaInicial={mensagemEntregaInicial}
+  horaAberturaInicial={horaAberturaInicial}
+horaFechamentoInicial={horaFechamentoInicial}
+intervaloAgendaInicial={intervaloAgendaInicial}        
 />
 
         <p
