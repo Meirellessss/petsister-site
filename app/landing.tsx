@@ -709,7 +709,7 @@ function adicionarDireto(p: Produto) {
   </a>
 
   <a
-    href={`https://wa.me/${WHATSAPP}`}
+    href={`https://wa.me/${whatsappNumber}`}
     target="_blank"
     rel="noopener noreferrer"
     className={`${styles.btnHero} ${styles.btnHeroGhost}`}
@@ -1267,7 +1267,7 @@ function adicionarDireto(p: Produto) {
             </p>
             <div className={styles.footContact}>
               <a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener" className={styles.footLink}>
-                <Icon name="caminhao" size={16} /> {WHATSAPP_LABEL} · WhatsApp
+                <Icon name="caminhao" size={16} /> {telefoneExibicao} · WhatsApp
               </a>
               <a href={`https://instagram.com/${INSTAGRAM}`} target="_blank" rel="noopener" className={styles.footLink}>
                 <Icon name="coracao" size={16} /> @{INSTAGRAM}
@@ -1331,7 +1331,7 @@ function adicionarDireto(p: Produto) {
 
         </div>
         <div className={styles.footBottom}>
-          © {new Date().getFullYear()} Pet Sister · Cães e gatos · Feito com carinho · {WHATSAPP_LABEL}
+          © {new Date().getFullYear()} Pet Sister · Cães e gatos · Feito com carinho · {telefoneExibicao}
         </div>
       </footer>
     </div>
