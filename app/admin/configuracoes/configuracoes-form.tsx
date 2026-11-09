@@ -6,6 +6,7 @@ import {
   salvarLimiteEstoqueBaixo,
   salvarConfiguracaoParcelamento,
   salvarDadosLoja,
+  salvarConfiguracaoAgenda,
 } from "../actions";
 import styles from "../admin.module.css";
 
@@ -21,6 +22,9 @@ export default function ConfiguracoesForm({
   telefoneInicial = "",
   whatsappInicial = "",
   mensagemEntregaInicial = "",
+   horaAberturaInicial,
+  horaFechamentoInicial,
+  intervaloAgendaInicial,
 }: {
   limiteInicial: number;
   parcelamentoAtivoInicial: boolean;
@@ -28,6 +32,9 @@ export default function ConfiguracoesForm({
   telefoneInicial?: string;
   whatsappInicial?: string;
   mensagemEntregaInicial?: string;
+   horaAberturaInicial: string;
+  horaFechamentoInicial: string;
+  intervaloAgendaInicial: number;
 }) {
   const [estadoEstoque, salvarEstoque, pendenteEstoque] =
     useActionState(salvarLimiteEstoqueBaixo, estadoInicial);
@@ -37,6 +44,8 @@ export default function ConfiguracoesForm({
 
     const [estadoLoja, salvarLoja, pendenteLoja] =
     useActionState(salvarDadosLoja, estadoInicial);
+  const [estadoAgenda, salvarAgenda, pendenteAgenda] =
+  useActionState(salvarConfiguracaoAgenda, estadoInicial);
 
   return (
     <div style={{ display: "grid", gap: "1rem" }}>
@@ -300,6 +309,86 @@ export default function ConfiguracoesForm({
           </div>
         </form>
       </section>
+
+      
+      <section className={styles.card}>
+        <div className={styles.cardHead}>
+          <div>
+            <h3>Horários de atendimento</h3>
+            <p style={{ marginTop: ".3rem", color: "var(--muted)", fontSize: ".8rem" }}>
+              Defina os horários disponíveis para banho, tosa e veterinário.
+            </p>
+          </div>
+        </div>
+
+        <form action={salvarAgenda} className={styles.modalBody}>
+          <div className={styles.fg}>
+            <label htmlFor="hora_abertura">Horário de abertura</label>
+            <input
+              id="hora_abertura"
+              name="hora_abertura"
+              type="time"
+              className={styles.fc}
+              defaultValue={horaAberturaInicial}
+              required
+            />
+          </div>
+
+          <div className={styles.fg}>
+            <label htmlFor="hora_fechamento">Horário de fechamento</label>
+            <input
+              id="hora_fechamento"
+              name="hora_fechamento"
+              type="time"
+              className={styles.fc}
+              defaultValue={horaFechamentoInicial}
+              required
+            />
+          </div>
+
+          <div className={styles.fg}>
+            <label htmlFor="intervalo_agendamentos_minutos">
+              Intervalo entre agendamentos
+            </label>
+            <select
+              id="intervalo_agendamentos_minutos"
+              name="intervalo_agendamentos_minutos"
+              className={styles.fc}
+              defaultValue={intervaloAgendaInicial}
+              required
+            >
+              <option value="10">10 minutos</option>
+              <option value="15">15 minutos</option>
+              <option value="20">20 minutos</option>
+              <option value="30">30 minutos</option>
+              <option value="60">60 minutos</option>
+            </select>
+          </div>
+
+          {estadoAgenda.mensagem && (
+            <div
+              className={styles.alert}
+              role="status"
+              style={{
+                background: estadoAgenda.ok ? "#f0fdf4" : "#fef2f2",
+                color: estadoAgenda.ok ? "#166534" : "#991b1b",
+                border: `1px solid ${estadoAgenda.ok ? "#bbf7d0" : "#fecaca"}`,
+              }}
+            >
+              {estadoAgenda.mensagem}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            className={`${styles.btn} ${styles.btnPrimary}`}
+            disabled={pendenteAgenda}
+          >
+            {pendenteAgenda ? "Salvando..." : "Salvar horários"}
+          </button>
+        </form>
+      </section>
+
 
     </div>
   );
