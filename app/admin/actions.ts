@@ -443,6 +443,7 @@ export async function salvarDadosLoja(
   }
 }
 
+
 export async function salvarConfiguracaoAgenda(
   _estadoAtual: { ok: boolean; mensagem: string },
   formData: FormData
@@ -450,17 +451,27 @@ export async function salvarConfiguracaoAgenda(
   try {
     const supabase = await exigirAdmin();
 
-    const abertura = String(
-      formData.get("hora_abertura") ?? ""
-    ).trim();
+    const abertura = String(formData.get("hora_abertura") ?? "").trim();
+    const fechamento = String(formData.get("hora_fechamento") ?? "").trim();
+    const intervalo = Number(formData.get("intervalo_agendamentos_minutos"));
 
-    const fechamento = String(
-      formData.get("hora_fechamento") ?? ""
-    ).trim();
+    const diasValidos = ["0", "1", "2", "3", "4", "5", "6"];
 
-    const intervalo = Number(
-      formData.get("intervalo_agendamentos_minutos")
-    );
+    const diasBanhoTosaRaw = formData.getAll("dias_banho_tosa").map(String);
+    const diasVeterinarioRaw = formData.getAll("dias_veterinario").map(String);
+
+    if (
+      diasBanhoTosaRaw.some((dia) => !diasValidos.includes(dia)) ||
+      diasVeterinarioRaw.some((dia) => !diasValidos.includes(dia))
+    ) {
+      return {
+        ok: false,
+        mensagem: "Existem dias de funcionamento inválidos.",
+      };
+    }
+
+    const diasBanhoTosa = [...new Set(diasBanhoTosaRaw)];
+    const diasVeterinario = [...new Set(diasVeterinarioRaw)];
 
     const formatoHora = /^([01]\d|2[0-3]):[0-5]\d$/;
 
@@ -488,15 +499,14 @@ export async function salvarConfiguracaoAgenda(
     if (![10, 15, 20, 30, 60].includes(intervalo)) {
       return {
         ok: false,
-        mensagem: "Escolha um intervalo de 10, 15, 20, 30 ou 60 minutos.",
+        mensagem: "Escolha um intervalo válido.",
       };
     }
 
     if (duracao % intervalo !== 0) {
       return {
         ok: false,
-        mensagem:
-          "A duração do expediente deve ser divisível pelo intervalo escolhido.",
+        mensagem: "A duração do expediente deve ser divisível pelo intervalo escolhido.",
       };
     }
 
@@ -528,6 +538,8 @@ export async function salvarConfiguracaoAgenda(
           hora_abertura: abertura,
           hora_fechamento: fechamento,
           intervalo_agendamentos_minutos: intervalo,
+          dias_banho_tosa: diasBanhoTosa,
+          dias_veterinario: diasVeterinario,
         },
         atualizado_em: new Date().toISOString(),
       })
@@ -546,13 +558,12 @@ export async function salvarConfiguracaoAgenda(
 
     return {
       ok: true,
-      mensagem: "Horários de atendimento salvos com sucesso!",
+      mensagem: "Horários e dias de atendimento salvos com sucesso!",
     };
   } catch {
     return {
       ok: false,
-      mensagem:
-        "Não foi possível salvar. Verifique seu acesso de administrador.",
+      mensagem: "Não foi possível salvar. Verifique seu acesso de administrador.",
     };
   }
 }
