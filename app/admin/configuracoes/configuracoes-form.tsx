@@ -14,6 +14,15 @@ const estadoInicial = {
   ok: false,
   mensagem: "",
 };
+const DIAS_SEMANA = [
+  { valor: "1", nome: "Segunda-feira" },
+  { valor: "2", nome: "Terça-feira" },
+  { valor: "3", nome: "Quarta-feira" },
+  { valor: "4", nome: "Quinta-feira" },
+  { valor: "5", nome: "Sexta-feira" },
+  { valor: "6", nome: "Sábado" },
+  { valor: "0", nome: "Domingo" },
+];
 
 export default function ConfiguracoesForm({
   limiteInicial,
@@ -25,6 +34,8 @@ export default function ConfiguracoesForm({
    horaAberturaInicial,
   horaFechamentoInicial,
   intervaloAgendaInicial,
+   diasBanhoTosaInicial,
+  diasVeterinarioInicial,
 }: {
   limiteInicial: number;
   parcelamentoAtivoInicial: boolean;
@@ -35,6 +46,8 @@ export default function ConfiguracoesForm({
    horaAberturaInicial: string;
   horaFechamentoInicial: string;
   intervaloAgendaInicial: number;
+  diasBanhoTosaInicial: string[];
+  diasVeterinarioInicial: string[];
 }) {
   const [estadoEstoque, salvarEstoque, pendenteEstoque] =
     useActionState(salvarLimiteEstoqueBaixo, estadoInicial);
@@ -364,6 +377,56 @@ export default function ConfiguracoesForm({
               <option value="60">60 minutos</option>
             </select>
           </div>
+
+          
+          <div className={styles.fg}>
+            <label>Dias de banho e tosa</label>
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(145px, 1fr))",
+              gap: ".7rem",
+            }}>
+              {DIAS_SEMANA.map((dia) => (
+                <label
+                  key={dia.valor}
+                  style={{ display: "flex", alignItems: "center", gap: ".5rem" }}
+                >
+                  <input
+                    type="checkbox"
+                    name="dias_banho_tosa"
+                    value={dia.valor}
+                    defaultChecked={diasBanhoTosaInicial.includes(dia.valor)}
+                  />
+                  {dia.nome}
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className={styles.fg}>
+            <label>Dias de atendimento veterinário</label>
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(145px, 1fr))",
+              gap: ".7rem",
+            }}>
+              {DIAS_SEMANA.map((dia) => (
+                <label
+                  key={dia.valor}
+                  style={{ display: "flex", alignItems: "center", gap: ".5rem" }}
+                >
+                  <input
+                    type="checkbox"
+                    name="dias_veterinario"
+                    value={dia.valor}
+                    defaultChecked={diasVeterinarioInicial.includes(dia.valor)}
+                  />
+                  {dia.nome}
+                </label>
+              ))}
+            </div>
+          </div>
+
 
           {estadoAgenda.mensagem && (
             <div
