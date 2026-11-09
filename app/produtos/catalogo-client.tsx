@@ -14,6 +14,7 @@ import homeStyles from "@/app/landing.module.css";
 type CatalogoProps = {
   categorias: Categoria[];
   produtos: Produto[];
+  limiteEstoqueBaixo: number;
   usuario: { nome: string; perfil: Perfil } | null;
   categoriaInicial?: string;
   buscaInicial?: string;
@@ -53,6 +54,7 @@ function precoFinal(produto: Produto) {
 export default function CatalogoClient({
    categorias,
   produtos,
+  limiteEstoqueBaixo,
   usuario,
   categoriaInicial = "",
   buscaInicial = "",
@@ -358,10 +360,12 @@ export default function CatalogoClient({
                             </span>
                           ) : null}
 
-                          {produto.estoque > 0 && produto.estoque <= 8 && (
+                         {produto.estoque <= limiteEstoqueBaixo && (
                             <div className={homeStyles.prodStockLow}>
                               <Icon name="raio" size={13} />
-                              Últimas {produto.estoque} unidades
+                              {produto.estoque <= 0
+  ? "Produto esgotado"
+  : `Últimas ${produto.estoque} unidades`}
                             </div>
                           )}
 
