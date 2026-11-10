@@ -4428,3 +4428,143 @@ a.topbarItem:hover {
     transform: none !important;
   }
 }
+
+
+/* PETSISTER — área de gerenciamento de produtos */
+
+.productAdminHeading {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.productAdminHeading h3 {
+  color: var(--p900);
+  font-size: 1.08rem;
+  font-weight: 900;
+}
+
+.productAdminHeading p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.productAdminFilters {
+  display: grid;
+  grid-template-columns: minmax(220px, 2fr) repeat(3, minmax(140px, 1fr));
+  gap: 12px;
+  padding: 18px 20px 10px;
+}
+
+.productAdminMetrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 10px 20px 16px;
+}
+
+.productAdminMetric {
+  padding: 15px 17px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: var(--bg);
+}
+
+.productAdminMetricLabel {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.productAdminCount {
+  margin: 0 20px 13px;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.productAdminName {
+  color: var(--ink);
+  font-size: 0.88rem;
+  font-weight: 850;
+}
+
+.productAdminDescription {
+  display: -webkit-box;
+  overflow: hidden;
+  max-width: 290px;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.productAdminActions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.productAdminModal {
+  width: min(780px, 100%);
+  max-width: 780px;
+  max-height: 90vh;
+  border: 1px solid var(--border);
+  border-radius: 19px;
+}
+
+.productAdminModal .modalBody {
+  gap: 1rem;
+  padding: 22px;
+}
+
+.productAdminModal .modalBody > div[style*="grid-template-columns"] {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+}
+
+.productAdminModal .fc {
+  min-height: 43px;
+  border-radius: 10px;
+}
+
+@media (max-width: 850px) {
+  .productAdminFilters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .productAdminFilters > :first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .productAdminFilters {
+    grid-template-columns: 1fr;
+    padding: 13px;
+  }
+
+  .productAdminFilters > :first-child {
+    grid-column: auto;
+  }
+
+  .productAdminMetrics {
+    grid-template-columns: 1fr;
+    margin: 10px 13px;
+  }
+
+  .productAdminCount {
+    margin: 0 13px 12px;
+  }
+
+  .productAdminModal .modalBody {
+    padding: 15px;
+  }
+
+  .productAdminModal .modalBody > div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+  }
+}
