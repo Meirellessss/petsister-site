@@ -35,9 +35,11 @@ function formatarMoeda(valor: number) {
 export default function PedidosClient({
   pedidos,
   infoUsuario,
+  statusInicial,
 }: {
   pedidos: Pedido[];
   infoUsuario: Record<string, { nome: string; email: string }>;
+  statusInicial: "" | StatusPedido;
 }) {
   const [, startTransition] = useTransition();
   const router = useRouter();
@@ -52,6 +54,9 @@ export default function PedidosClient({
   const termo = busca.trim().toLocaleLowerCase("pt-BR");
 
   const pedidosFiltrados = pedidos.filter((p) => {
+    const totalPendentes = pedidos.filter((p) => p.status === "pendente").length;
+    const totalPagos = pedidos.filter((p) => p.status === "pago").length;
+    const totalCancelados = pedidos.filter((p) => p.status === "cancelado").length;   
     const cliente = infoUsuario[p.usuario_id];
     const texto = [
       String(p.id),
@@ -106,56 +111,55 @@ export default function PedidosClient({
 
   return (
     <>
-      <section
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: "1rem",
-          marginBottom: "1rem",
-        }}
-      >
-        <div>
-          <h3 style={{ color: "var(--ink)", fontSize: "1rem" }}>
-            Gestão de pedidos
-          </h3>
-          <p
-            style={{
-              marginTop: ".3rem",
-              color: "var(--muted)",
-              fontSize: ".82rem",
-            }}
-          >
-            {pedidosFiltrados.length} de {pedidos.length} pedido(s)
-          </p>
-        </div>
+     
+<section className={styles.ordersStats}>
+  <div className={styles.ordersStat}>
+    <span className={styles.ordersStatLabel}>Total de pedidos</span>
+    <strong className={styles.ordersStatValue}>{pedidos.length}</strong>
+    <span className={styles.ordersStatHint}>Pedidos cadastrados</span>
+  </div>
 
-        <div style={{ width: "100%", maxWidth: "360px" }}>
-          <input
-            type="search"
-            className={styles.fc}
-            value={busca}
-            onChange={(e) => setBusca(e.target.value)}
-            placeholder="Buscar por pedido, cliente ou e-mail..."
-            aria-label="Buscar pedidos"
-          />
-        </div>
-      </section>
+  <div className={styles.ordersStat}>
+    <span className={styles.ordersStatLabel}>Pendentes</span>
+    <strong className={styles.ordersStatValue}>{totalPendentes}</strong>
+    <span className={styles.ordersStatHint}>Aguardando pagamento</span>
+  </div>
+
+  <div className={styles.ordersStat}>
+    <span className={styles.ordersStatLabel}>Pagos</span>
+    <strong className={styles.ordersStatValue}>{totalPagos}</strong>
+    <span className={styles.ordersStatHint}>Pagamentos confirmados</span>
+  </div>
+
+  <div className={styles.ordersStat}>
+    <span className={styles.ordersStatLabel}>Cancelados</span>
+    <strong className={styles.ordersStatValue}>{totalCancelados}</strong>
+    <span className={styles.ordersStatHint}>Pedidos cancelados</span>
+  </div>
+</section>
+
+<section className={styles.ordersToolbar}>
+  <div className={styles.ordersToolbarText}>
+    <h3>Lista de pedidos</h3>
+    <p>
+      {pedidosFiltrados.length} de {pedidos.length} pedido(s) exibidos
+    </p>
+  </div>
+
+  <div className={styles.ordersSearch}>
+    <input
+      type="search"
+      className={styles.fc}
+      value={busca}
+      onChange={(e) => setBusca(e.target.value)}
+      placeholder="Buscar pedido, cliente ou e-mail..."
+      aria-label="Buscar pedidos"
+    />
+  </div>
+</section>
 
       {erroStatus && (
-        <div
-          role="alert"
-          style={{
-            padding: "12px 14px",
-            marginBottom: "1rem",
-            borderRadius: "9px",
-            background: "#fef2f2",
-            border: "1px solid #fecaca",
-            color: "#991b1b",
-            fontSize: ".85rem",
-          }}
-        >
+  <div role="alert" className={styles.ordersError}>
           {erroStatus}
         </div>
       )}
