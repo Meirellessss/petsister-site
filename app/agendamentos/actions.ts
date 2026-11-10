@@ -455,11 +455,20 @@ if (!inicio || !fim) {
       observacoes: observacoes || null,
     });
 
-  if (insertError) {
+  
+if (insertError) {
+  if (insertError.code === "23505") {
     return {
-      erro: `Erro ao salvar o agendamento: ${insertError.message}`,
+      erro:
+        "Esse horário acabou de ser reservado por outra pessoa. Escolha outro horário disponível.",
     };
   }
+
+  return {
+    erro:
+      "Não foi possível concluir o agendamento. Tente novamente ou entre em contato com a PetSister.",
+  };
+}
 
   revalidatePath("/agendamentos");
   revalidatePath("/admin/agendamentos");
