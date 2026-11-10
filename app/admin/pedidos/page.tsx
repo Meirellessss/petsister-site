@@ -11,9 +11,15 @@ export default async function PedidosAdminPage({
   const supabase = await createClient();
   const { status } = await searchParams;
 
-  let query = supabase.from("petsister_pedidos").select("*").order("criado_em", { ascending: false });
-  if (status) query = query.eq("status", status as StatusPedido);
-  const { data: pedidos } = await query;
+  const statusFiltro: "" | StatusPedido =
+  status === "pendente" || status === "pago" || status === "cancelado"
+    ? status
+    : "";
+
+const { data: pedidos } = await supabase
+  .from("petsister_pedidos")
+  .select("*")
+  .order("criado_em", { ascending: false });
 
   const { data: usuarios } = await supabase.rpc("petsister_admin_usuarios");
   const infoUsuario = new Map(
@@ -22,9 +28,14 @@ export default async function PedidosAdminPage({
 
   return (
     <>
-      <div className={styles.topbar}>
-        <h2>Pedidos</h2>
-        <div style={{ display: "flex", gap: ".4rem" }}>
+     <div className={styles.topbar}>
+  <div className={styles.pageHeading}>
+    <h2>Pedidos</h2>
+    <p className={styles.pageSubtitle}>
+      Acompanhe as vendas, pagamentos e situação dos pedidos da PetSister.
+    </p>
+  </div>
+  <div className={styles.ordersFilters}>
           {[
             ["", "Todos"],
             ["pendente", "Pendentes"],
@@ -34,7 +45,7 @@ export default async function PedidosAdminPage({
             <a
               key={v}
               href={`/admin/pedidos${v ? `?status=${v}` : ""}`}
-              className={`${styles.btn} ${styles.btnSm} ${(status ?? "") === v ? styles.btnPrimary : styles.btnOutline}`}
+              className={`${styles.btn} ${styles.btnSm} ${statusFiltro === v ? styles.btnPrimary : styles.btnOutline}`}
             >
               {l}
             </a>
@@ -45,6 +56,7 @@ export default async function PedidosAdminPage({
         <PedidosClient
           pedidos={(pedidos as Pedido[]) ?? []}
           infoUsuario={Object.fromEntries(infoUsuario)}
+          statusInicial={statusFiltro}
         />
       </div>
     </>
