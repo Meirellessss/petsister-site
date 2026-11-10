@@ -51,39 +51,40 @@ export default function PedidosClient({
   const [detalhe, setDetalhe] = useState<Detalhe | null>(null);
   const [carregandoDetalhe, setCarregandoDetalhe] = useState(false);
 
-  const termo = busca.trim().toLocaleLowerCase("pt-BR");
-
   
-  const totalPendentes = pedidos.filter(
-    (p) => p.status === "pendente"
-  ).length;
+const termo = busca.trim().toLocaleLowerCase("pt-BR");
 
-  const totalPagos = pedidos.filter(
-    (p) => p.status === "pago"
-  ).length;
+const totalPendentes = pedidos.filter(
+  (p) => p.status === "pendente"
+).length;
 
-  const totalCancelados = pedidos.filter(
-    (p) => p.status === "cancelado"
-  ).length;
+const totalPagos = pedidos.filter(
+  (p) => p.status === "pago"
+).length;
 
-  const pedidosFiltrados = pedidos.filter((p) => {
-    if (statusInicial && p.status !== statusInicial) {
-      return false;
-    }
+const totalCancelados = pedidos.filter(
+  (p) => p.status === "cancelado"
+).length;
 
-    const cliente = infoUsuario[p.usuario_id];
+const pedidosFiltrados = pedidos.filter((p) => {
+  if (statusInicial && p.status !== statusInicial) {
+    return false;
+  }
 
-    const texto = [
-      String(p.id),
-      cliente?.nome ?? "",
-      cliente?.email ?? "",
-      statusLabel[p.status],
-    ]
-      .join(" ")
-      .toLocaleLowerCase("pt-BR");
+  const cliente = infoUsuario[p.usuario_id];
 
-    return texto.includes(termo);
-  });
+  const texto = [
+    String(p.id),
+    cliente?.nome ?? "",
+    cliente?.email ?? "",
+    statusLabel[p.status],
+  ]
+    .join(" ")
+    .toLocaleLowerCase("pt-BR");
+
+  return texto.includes(termo);
+});
+
 
 
   function mudarStatus(id: number, status: StatusPedido) {
