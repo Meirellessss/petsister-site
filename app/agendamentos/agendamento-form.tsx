@@ -43,19 +43,42 @@ const SERVICOS = [
   },
 ] as const;
 
-const HORARIOS = Array.from(
-  { length: 21 },
-  (_, index) => {
-    const minutos = 8 * 60 + index * 30;
 
+type ConfiguracaoAgenda = {
+  horaAbertura: string;
+  horaFechamento: string;
+  intervaloMinutos: number;
+  diasBanhoTosa: string[];
+  diasVeterinario: string[];
+};
+
+function gerarHorarios(
+  abertura: string,
+  fechamento: string,
+  intervalo: number
+): string[] {
+  const [h1, m1] = abertura.split(":").map(Number);
+  const [h2, m2] = fechamento.split(":").map(Number);
+
+  const inicio = h1 * 60 + m1;
+  const fim = h2 * 60 + m2;
+
+  if (fim < inicio || intervalo <= 0) return [];
+
+  const horarios: string[] = [];
+
+  for (let minutos = inicio; minutos <= fim; minutos += intervalo) {
     const hora = Math.floor(minutos / 60);
     const minuto = minutos % 60;
 
-    return `${String(hora).padStart(2, "0")}:${String(
-      minuto,
-    ).padStart(2, "0")}`;
-  },
-);
+    horarios.push(
+      `${String(hora).padStart(2, "0")}:${String(minuto).padStart(2, "0")}`
+    );
+  }
+
+  return horarios;
+}
+
 
 function dataLocal(date: Date) {
   const ano = date.getFullYear();
