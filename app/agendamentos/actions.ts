@@ -1,3 +1,4 @@
+
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -21,18 +22,15 @@ const SERVICOS_VETERINARIO = [
   "Vacinação",
 ];
 
-const HORARIOS = Array.from(
-  { length: 21 },
-  (_, index) => {
-    const minutos = 8 * 60 + index * 30;
-    const hora = Math.floor(minutos / 60);
-    const minuto = minutos % 60;
+const DIAS_PADRAO = ["1", "2", "3", "4", "5", "6", "0"];
 
-    return `${String(hora).padStart(2, "0")}:${String(
-      minuto
-    ).padStart(2, "0")}`;
-  }
-);
+type ConfiguracaoAgenda = {
+  abertura: string;
+  fechamento: string;
+  intervalo: number;
+  diasBanhoTosa: string[];
+  diasVeterinario: string[];
+};
 
 function obterCategoriaServico(
   servico: string
@@ -48,11 +46,175 @@ function obterCategoriaServico(
   return "outro";
 }
 
+function normalizarDias(valor: unknown): string[] {
+  if (!Array.isArray(valor)) {
+    return DIAS_PADRAO;
+  }
+
+  return [...new Set(
+    valor.filter(
+      (dia): dia is string =>
+        typeof dia === "string" &&
+        DIAS_PADRAO.includes(dia)
+    )
+  )];
+}
+
+function validarHora(valor: unknown, padrao: string) {
+  return typeof valor === "string" &&
+    /^([01]\d|2[0-3]):[0-5]\d$/.test(valor)
+      ? valor
+      : padrao;
+}
+
+function minutosDaHora(hora: string) {
+  const [h, m] = hora.split(":").map(Number);
+  return h * 60 + m;
+}
+
+function obterDiaSemana(data: string) {
+  const [ano, mes, dia] = data.split("-").map(Number);
+
+  return String(
+    new Date(Date.UTC(ano, mes - 1, dia)).getUTCDay()
+  );
+}
+
+function dataValida(data: string) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(data)) {
+    return false;
+  }
+
+  const [ano, mes, dia] = data.split("-").map(Number);
+  const dataTeste = new Date(Date.UTC(ano, mes - 1, dia));
+
+  return (
+    dataTeste.getUTCFullYear() === ano &&
+    dataTeste.getUTCMonth() === mes - 1 &&
+    dataTeste.getUTCDate() === dia
+  );
+}
+
+function gerarHorarios(config: ConfiguracaoAgenda) {
+  const inicio = minutosDaHora(config.abertura);
+  const fim = minutosDaHora(config.fechamento);
+
+  if (fim <= inicio || config.intervalo <= 0) {
+    return [];
+  }
+
+  const horarios: string[] = [];
+
+  for (
+    let minutos = inicio;
+    minutos <= fim;
+    minutos += config.intervalo
+  ) {
+    horarios.push(
+      `${String(Math.floor(minutos / 60)).padStart(2, "0")}:${String(
+        minutos % 60
+      ).padStart(2, "0")}`
+    );
+  }
+
+  return horarios;
+}
+
+async function carregarConfiguracaoAgenda() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.rpc(
+    "petsister_agenda_config_publica"
+  );
+
+  const registro = (
+    error ? undefined : data?.[0]
+  ) as unknown as Record<string, unknown> | undefined;
+
+  if (!registro) {
+    return {
+      supabase,
+      erro: "Não foi possível carregar a configuração da agenda.",
+      configuracao: null,
+    };
+  }
+
+  const abertura = validarHora(
+    registro.hora_abertura,
+    "08:00"
+  );
+
+  const fechamento = validarHora(
+    registro.hora_fechamento,
+    "18:00"
+  );
+
+  const intervaloSalvo = Number(
+    registro.intervalo_agendamentos_minutos
+  );
+
+  const intervalo = [10, 15, 20, 30, 60].includes(intervaloSalvo)
+    ? intervaloSalvo
+    : 30;
+
+  if (
+    minutosDaHora(fechamento) <= minutosDaHora(abertura) ||
+    (minutosDaHora(fechamento) - minutosDaHora(abertura)) % intervalo !== 0
+  ) {
+    return {
+      supabase,
+      erro: "A configuração de horários da agenda é inválida.",
+      configuracao: null,
+    };
+  }
+
+  return {
+    supabase,
+    erro: null,
+    configuracao: {
+      abertura,
+      fechamento,
+      intervalo,
+      diasBanhoTosa: normalizarDias(registro.dias_banho_tosa),
+      diasVeterinario: normalizarDias(registro.dias_veterinario),
+    } satisfies ConfiguracaoAgenda,
+  };
+}
+
+function horarioAtualSaoPaulo() {
+  const partes = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(new Date());
+
+  const valor = (tipo: string) =>
+    partes.find((p) => p.type === tipo)?.value ?? "";
+
+  return (
+    `${valor("year")}-${valor("month")}-${valor("day")}T` +
+    `${valor("hour")}:${valor("minute")}`
+  );
+}
+
 export async function obterHorariosOcupados(
   data: string,
   categoria: "banho_tosa" | "veterinario"
 ): Promise<string[]> {
-  const supabase = await createClient();
+  if (!dataValida(data)) {
+    return [];
+  }
+
+  const { supabase, configuracao } =
+    await carregarConfiguracaoAgenda();
+
+  if (!configuracao) {
+    return [];
+  }
 
   const {
     data: { user },
@@ -62,25 +224,29 @@ export async function obterHorariosOcupados(
     return [];
   }
 
-  const inicio = `${data}T08:00`;
-  const fim = `${data}T18:00`;
+  const diasAtivos =
+    categoria === "banho_tosa"
+      ? configuracao.diasBanhoTosa
+      : configuracao.diasVeterinario;
 
-  const {
-    data: registros,
-    error,
-  } = await supabase
+  if (!diasAtivos.includes(obterDiaSemana(data))) {
+    return [];
+  }
+
+  const inicio = `${data}T${configuracao.abertura}:00`;
+  const fim = `${data}T${configuracao.fechamento}:59.999`;
+
+  const { data: registros, error } = await supabase
     .from("petsister_agendamentos")
     .select("data_hora, servico, status")
     .gte("data_hora", inicio)
     .lte("data_hora", fim);
 
-  /*
-   * Se houver problema de permissão no SELECT,
-   * não derruba a tela do cliente.
-   */
   if (error || !registros) {
     return [];
   }
+
+  const horariosValidos = gerarHorarios(configuracao);
 
   return registros
     .filter((registro) => {
@@ -89,16 +255,11 @@ export async function obterHorariosOcupados(
       }
 
       return (
-        obterCategoriaServico(registro.servico) ===
-        categoria
+        obterCategoriaServico(registro.servico) === categoria
       );
     })
-    .map((registro) =>
-      String(registro.data_hora).slice(11, 16)
-    )
-    .filter((horario) =>
-      HORARIOS.includes(horario)
-    );
+    .map((registro) => String(registro.data_hora).slice(11, 16))
+    .filter((horario) => horariosValidos.includes(horario));
 }
 
 export async function criarAgendamento(
@@ -113,7 +274,11 @@ export async function criarAgendamento(
   erro?: string;
   sucesso?: boolean;
 }> {
-  const supabase = await createClient();
+  const {
+    supabase,
+    configuracao,
+    erro: erroConfiguracao,
+  } = await carregarConfiguracaoAgenda();
 
   const {
     data: { user },
@@ -121,66 +286,48 @@ export async function criarAgendamento(
 
   if (!user) {
     return {
-      erro:
-        "Sua sessão expirou. Entre novamente na sua conta.",
+      erro: "Sua sessão expirou. Entre novamente na sua conta.",
     };
   }
 
-  const servico = String(
-    formData.get("servico") ?? ""
-  ).trim();
+  if (!configuracao) {
+    return {
+      erro: erroConfiguracao ?? "Agenda indisponível no momento.",
+    };
+  }
 
-  const dataHora = String(
-    formData.get("data_hora") ?? ""
-  ).trim();
+  const servico = String(formData.get("servico") ?? "").trim();
+  const dataHora = String(formData.get("data_hora") ?? "").trim();
+  const petNome = String(formData.get("pet_nome") ?? "").trim();
+  const petRaca = String(formData.get("pet_raca") ?? "").trim();
+  const observacoes = String(formData.get("observacoes") ?? "").trim();
 
-  const petNome = String(
-    formData.get("pet_nome") ?? ""
-  ).trim();
+  const petPorteRaw = String(formData.get("pet_porte") ?? "").trim();
 
-  const petRaca = String(
-    formData.get("pet_raca") ?? ""
-  ).trim();
-
-  const observacoes = String(
-    formData.get("observacoes") ?? ""
-  ).trim();
-
-  const petPorteRaw = String(
-    formData.get("pet_porte") ?? ""
-  ).trim();
-
-  const petPorte: PortePet = PORTES.includes(
-    petPorteRaw as PortePet
-  )
+  const petPorte: PortePet = PORTES.includes(petPorteRaw as PortePet)
     ? (petPorteRaw as PortePet)
     : "Medio";
 
   if (!servico || !dataHora) {
     return {
-      erro:
-        "Preencha o serviço e escolha um horário.",
+      erro: "Preencha o serviço e escolha um horário.",
     };
   }
 
-  const [data, horario] =
-    dataHora.split("T");
+  const [data, horario] = dataHora.split("T");
 
-  if (!data || !horario) {
+  if (
+    !data ||
+    !horario ||
+    !dataValida(data) ||
+    !/^([01]\d|2[0-3]):[0-5]\d$/.test(horario)
+  ) {
     return {
-      erro: "Horário inválido.",
+      erro: "Data ou horário inválido.",
     };
   }
 
-  if (!HORARIOS.includes(horario)) {
-    return {
-      erro:
-        "Escolha um horário entre 08:00 e 18:00, de 30 em 30 minutos.",
-    };
-  }
-
-  const categoria =
-    obterCategoriaServico(servico);
+  const categoria = obterCategoriaServico(servico);
 
   if (categoria === "outro") {
     return {
@@ -188,66 +335,62 @@ export async function criarAgendamento(
     };
   }
 
-  /*
-   * Verifica se o horário já está ocupado
-   * dentro da mesma categoria.
-   */
-  const inicio = `${data}T${horario}`;
-  const fim = `${data}T${horario}:59`;
+  const diasAtivos =
+    categoria === "banho_tosa"
+      ? configuracao.diasBanhoTosa
+      : configuracao.diasVeterinario;
 
-  const {
-    data: existentes,
-    error: consultaError,
-  } = await supabase
-    .from("petsister_agendamentos")
-    .select("data_hora, servico, status")
-    .gte("data_hora", inicio)
-    .lte("data_hora", fim);
-
-  /*
-   * IMPORTANTE:
-   * Não escondemos mais o erro do Supabase.
-   * Assim conseguimos descobrir exatamente
-   * o que está impedindo o salvamento.
-   */
-  if (consultaError) {
+  if (!diasAtivos.includes(obterDiaSemana(data))) {
     return {
-      erro:
-        `Erro ao verificar o horário: ${consultaError.message}`,
+      erro: "Esse serviço não funciona nesse dia. Escolha outro.",
     };
   }
 
-  const horarioOcupado =
-    (existentes ?? []).some(
-      (registro) => {
-        if (
-          registro.status ===
-          "cancelado"
-        ) {
-          return false;
-        }
+  const horariosValidos = gerarHorarios(configuracao);
 
-        return (
-          obterCategoriaServico(
-            registro.servico
-          ) === categoria
-        );
-      }
-    );
+  if (!horariosValidos.includes(horario)) {
+    return {
+      erro: "Esse horário não está disponível na agenda.",
+    };
+  }
+
+  if (`${data}T${horario}` <= horarioAtualSaoPaulo()) {
+    return {
+      erro: "Esse horário já passou. Escolha outra data ou horário.",
+    };
+  }
+
+  const inicio = `${data}T${horario}:00`;
+  const fim = `${data}T${horario}:59.999`;
+
+  const { data: existentes, error: consultaError } =
+    await supabase
+      .from("petsister_agendamentos")
+      .select("data_hora, servico, status")
+      .gte("data_hora", inicio)
+      .lte("data_hora", fim);
+
+  if (consultaError) {
+    return {
+      erro: `Erro ao verificar o horário: ${consultaError.message}`,
+    };
+  }
+
+  const horarioOcupado = (existentes ?? []).some((registro) => {
+    if (registro.status === "cancelado") {
+      return false;
+    }
+
+    return obterCategoriaServico(registro.servico) === categoria;
+  });
 
   if (horarioOcupado) {
     return {
-      erro:
-        "Esse horário já está ocupado. Escolha outro horário.",
+      erro: "Esse horário já está ocupado. Escolha outro.",
     };
   }
 
-  /*
-   * Salva o agendamento.
-   */
-  const {
-    error: insertError,
-  } = await supabase
+  const { error: insertError } = await supabase
     .from("petsister_agendamentos")
     .insert({
       usuario_id: user.id,
@@ -257,18 +400,17 @@ export async function criarAgendamento(
       pet_porte: petPorte,
       data_hora: dataHora,
       status: "agendado",
-      observacoes:
-        observacoes || null,
+      observacoes: observacoes || null,
     });
 
   if (insertError) {
     return {
-      erro:
-        `Erro ao salvar o agendamento: ${insertError.message}`,
+      erro: `Erro ao salvar o agendamento: ${insertError.message}`,
     };
   }
 
   revalidatePath("/agendamentos");
+  revalidatePath("/admin/agendamentos");
 
   return {
     sucesso: true,
