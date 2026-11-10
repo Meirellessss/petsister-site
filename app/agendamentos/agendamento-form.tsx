@@ -246,6 +246,7 @@ useEffect(() => {
   setHorariosOcupados([]);
   setCarregando(false);
   return;
+      }
 
       setHorario("");
       setCarregando(true);
