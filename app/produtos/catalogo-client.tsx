@@ -9,7 +9,7 @@ import { adicionarAoCarrinho } from "@/app/carrinho/actions";
 import AreaHeader from "@/components/AreaHeader";
 import Icon from "@/components/Icon";
 import catalogoStyles from "./catalogo.module.css";
-import homeStyles from "@/app/landing.module.css";
+import homeStyles from "./catalogo.module.css";
 
 type CatalogoProps = {
   categorias: Categoria[];
