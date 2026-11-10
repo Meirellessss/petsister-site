@@ -95,6 +95,24 @@ function dataValida(data: string) {
   );
 }
 
+
+function horarioLocalParaISO(
+  data: string,
+  hora: string,
+  segundos = "00"
+): string | null {
+  const instante = new Date(
+    `${data}T${hora}:${segundos}-03:00`
+  );
+
+  if (Number.isNaN(instante.getTime())) {
+    return null;
+  }
+
+  return instante.toISOString();
+}
+
+
 function gerarHorarios(config: ConfiguracaoAgenda) {
   const inicio = minutosDaHora(config.abertura);
   const fim = minutosDaHora(config.fechamento);
@@ -233,8 +251,21 @@ export async function obterHorariosOcupados(
     return [];
   }
 
-  const inicio = `${data}T${configuracao.abertura}:00`;
-  const fim = `${data}T${configuracao.fechamento}:59.999`;
+  const inicio = horarioLocalParaISO(
+  data,
+  configuracao.abertura,
+  "00"
+);
+
+const fim = horarioLocalParaISO(
+  data,
+  configuracao.fechamento,
+  "59.999"
+);
+
+if (!inicio || !fim) {
+  return [];
+}
 
   const { data: registros, error } = await supabase
     .from("petsister_agendamentos")
@@ -258,7 +289,14 @@ export async function obterHorariosOcupados(
         obterCategoriaServico(registro.servico) === categoria
       );
     })
-    .map((registro) => String(registro.data_hora).slice(11, 16))
+    .map((registro) =>
+  new Date(registro.data_hora).toLocaleTimeString("pt-BR", {
+    timeZone: "America/Sao_Paulo",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  })
+)
     .filter((horario) => horariosValidos.includes(horario));
 }
 
@@ -360,8 +398,22 @@ export async function criarAgendamento(
     };
   }
 
-  const inicio = `${data}T${horario}:00`;
-  const fim = `${data}T${horario}:59.999`;
+  const dataHoraISO = horarioLocalParaISO(data, horario, "00");
+
+if (!dataHoraISO) {
+  return {
+    erro: "Não foi possível interpretar a data e o horário escolhidos.",
+  };
+}
+  
+ const inicio = horarioLocalParaISO(data, horario, "00");
+const fim = horarioLocalParaISO(data, horario, "59.999");
+
+if (!inicio || !fim) {
+  return {
+    erro: "Não foi possível validar o horário escolhido.",
+  };
+}
 
   const { data: existentes, error: consultaError } =
     await supabase
@@ -398,7 +450,7 @@ export async function criarAgendamento(
       pet_nome: petNome || null,
       pet_raca: petRaca || null,
       pet_porte: petPorte,
-      data_hora: dataHora,
+      data_hora: dataHoraISO,
       status: "agendado",
       observacoes: observacoes || null,
     });
