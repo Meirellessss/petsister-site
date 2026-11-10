@@ -123,7 +123,11 @@ function formatarDia(data: string) {
   };
 }
 
-export default function AgendamentoForm() {
+export default function AgendamentoForm({
+  configuracao,
+}: {
+  configuracao: ConfiguracaoAgenda;
+}) {
   const [state, formAction, pending] =
     useActionState(
       criarAgendamento,
@@ -152,29 +156,96 @@ export default function AgendamentoForm() {
       item.nome === servico,
   );
 
-  const proximosDias = useMemo(() => {
-    return Array.from(
-      { length: 7 },
-      (_, index) => {
-        const date = new Date();
+ 
+const diasAtivos = useMemo(() => {
+  if (!servicoAtual) {
+    return [
+      ...new Set([
+        ...configuracao.diasBanhoTosa,
+        ...configuracao.diasVeterinario,
+      ]),
+    ];
+  }
 
-        date.setDate(
-          date.getDate() + index,
-        );
+  return servicoAtual.grupo === "banho_tosa"
+    ? configuracao.diasBanhoTosa
+    : configuracao.diasVeterinario;
+}, [
+  servicoAtual,
+  configuracao.diasBanhoTosa,
+  configuracao.diasVeterinario,
+]);
 
-        return dataLocal(date);
-      },
-    );
-  }, []);
+const proximosDias = useMemo(() => {
+  const permitidos = new Set(diasAtivos);
+  const disponiveis: string[] = [];
+
+  for (
+    let indice = 0;
+    indice < 90 && disponiveis.length < 7;
+    indice++
+  ) {
+    const date = new Date();
+    date.setHours(12, 0, 0, 0);
+    date.setDate(date.getDate() + indice);
+
+    if (permitidos.has(String(date.getDay()))) {
+      disponiveis.push(dataLocal(date));
+    }
+  }
+
+  return disponiveis;
+}, [diasAtivos]);
+
+const horariosDisponiveis = useMemo(
+  () =>
+    gerarHorarios(
+      configuracao.horaAbertura,
+      configuracao.horaFechamento,
+      configuracao.intervaloMinutos
+    ),
+  [
+    configuracao.horaAbertura,
+    configuracao.horaFechamento,
+    configuracao.intervaloMinutos,
+  ]
+);
+
+const horariosDoDia = useMemo(() => {
+  if (data !== dataLocal(new Date())) {
+    return horariosDisponiveis;
+  }
+
+  const agora = new Date();
+  const horaAtual =
+    `${String(agora.getHours()).padStart(2, "0")}:` +
+    `${String(agora.getMinutes()).padStart(2, "0")}`;
+
+  return horariosDisponiveis.filter((hora) => hora > horaAtual);
+}, [data, horariosDisponiveis]);
+
+useEffect(() => {
+  if (proximosDias.length === 0) {
+    setData("");
+    setHorario("");
+    return;
+  }
+
+  if (!proximosDias.includes(data)) {
+    setData(proximosDias[0]);
+    setHorario("");
+  }
+}, [data, proximosDias]);
+
 
   useEffect(() => {
     let cancelado = false;
 
     async function carregarHorarios() {
-      if (!data || !servicoAtual) {
-        setHorariosOcupados([]);
-        return;
-      }
+      if (!data || !servicoAtual || !proximosDias.includes(data)) {
+  setHorariosOcupados([]);
+  setCarregando(false);
+  return;
 
       setHorario("");
       setCarregando(true);
@@ -201,7 +272,7 @@ export default function AgendamentoForm() {
     return () => {
       cancelado = true;
     };
-  }, [data, servicoAtual]);
+  }, [data, servicoAtual, proximosDias]);
 
   return (
     <form
@@ -326,7 +397,12 @@ export default function AgendamentoForm() {
         <div
           className={styles.dateScroller}
         >
-          {proximosDias.map((item) => {
+         {proximosDias.length === 0 ? (
+  <div className={styles.emptyTime}>
+    Não há dias de atendimento disponíveis para esse serviço.
+  </div>
+) : (
+  proximosDias.map((item) => {
             const info =
               formatarDia(item);
 
@@ -360,7 +436,8 @@ export default function AgendamentoForm() {
                 </small>
               </button>
             );
-          })}
+         })
+        )}
         </div>
       </section>
 
@@ -380,7 +457,7 @@ export default function AgendamentoForm() {
             </strong>
 
             <small>
-              Atendimento das 08:00 às 18:00
+              {`Atendimento das ${configuracao.horaAbertura} às ${configuracao.horaFechamento} · Intervalos de ${configuracao.intervaloMinutos} min`}
             </small>
           </div>
         </div>
@@ -391,6 +468,18 @@ export default function AgendamentoForm() {
           >
             Primeiro escolha o atendimento acima.
           </div>
+        ) : proximosDias.length === 0 ? (
+  <div className={styles.emptyTime}>
+    Esse serviço não possui dias de atendimento configurados.
+  </div>
+) : !data || !proximosDias.includes(data) ? (
+  <div className={styles.emptyTime}>
+    Escolha um dia disponível.
+  </div>
+) : horariosDoDia.length === 0 ? (
+  <div className={styles.emptyTime}>
+    Não há horários disponíveis para esta data.
+  </div>
         ) : carregando ? (
           <div
             className={styles.emptyTime}
@@ -402,7 +491,7 @@ export default function AgendamentoForm() {
             <div
               className={styles.timeGrid}
             >
-              {HORARIOS.map((item) => {
+              {horariosDoDia.map((item) => {
                 const ocupado =
                   horariosOcupados.includes(
                     item,
