@@ -300,7 +300,7 @@ export default function ProdutosClient({
                   </td>
                   <td>{p.destaque ? "⭐" : "—"}</td>
                   <td>
-                    <div style={{ display: "flex", gap: ".4rem" }}>
+                    <div className={styles.productAdminActions}>
                       <button className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`} onClick={() => editar(p)}>
                         ✏
                       </button>
