@@ -53,11 +53,26 @@ export default function PedidosClient({
 
   const termo = busca.trim().toLocaleLowerCase("pt-BR");
 
+  
+  const totalPendentes = pedidos.filter(
+    (p) => p.status === "pendente"
+  ).length;
+
+  const totalPagos = pedidos.filter(
+    (p) => p.status === "pago"
+  ).length;
+
+  const totalCancelados = pedidos.filter(
+    (p) => p.status === "cancelado"
+  ).length;
+
   const pedidosFiltrados = pedidos.filter((p) => {
-    const totalPendentes = pedidos.filter((p) => p.status === "pendente").length;
-    const totalPagos = pedidos.filter((p) => p.status === "pago").length;
-    const totalCancelados = pedidos.filter((p) => p.status === "cancelado").length;   
+    if (statusInicial && p.status !== statusInicial) {
+      return false;
+    }
+
     const cliente = infoUsuario[p.usuario_id];
+
     const texto = [
       String(p.id),
       cliente?.nome ?? "",
@@ -69,6 +84,7 @@ export default function PedidosClient({
 
     return texto.includes(termo);
   });
+
 
   function mudarStatus(id: number, status: StatusPedido) {
     setErroStatus("");
