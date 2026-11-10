@@ -1,3 +1,4 @@
+
 @import "tailwindcss";
 
 *,
@@ -9,49 +10,64 @@
 }
 
 :root {
-  --p50: #fff5eb;
-  --p100: #ffe5cc;
-  --p200: #ffc999;
-  --p300: #ffa866;
-  --p400: #ff8633;
-  --p500: #ff6b1a;
-  --p600: #ea580c;
-  --p700: #c2410c;
+  /* Identidade original PetSister */
+  --brand-red: #e84030;
+  --brand-orange: #f08030;
+  --brand-navy: #0c1840;
+
+  /* Paleta geral */
+  --p50: #fff4f0;
+  --p100: #ffe5dd;
+  --p200: #ffc8b9;
+  --p300: #f5a08c;
+  --p400: #f08030;
+  --p500: #e84030;
+  --p600: #d9372b;
+  --p700: #b72d27;
   --p800: #1e3a8a;
-  --p900: #0f1e4a;
-  --ink: #0c1840;
-  --muted: #5b6b8a;
-  --soft: #94a3b8;
-  --border: #ffe2c4;
-  --bg: #fffaf3;
-  --white: #fff;
-  --amber: #fbbf24;
+  --p900: #0c1840;
+
+  --ink: #18233d;
+  --muted: #667085;
+  --soft: #929bad;
+  --border: #f0ded6;
+  --bg: #fffaf6;
+  --white: #ffffff;
+  --amber: #f8ad3a;
+
   --r: 12px;
   --r-lg: 18px;
   --r-xl: 26px;
-   --font-serif: var(--font-roboto), sans-serif;
+
+  --font-serif: var(--font-roboto), sans-serif;
   --font-sans: var(--font-roboto), sans-serif;
 }
-[data-theme="dark"] {
-  --p50: #17213a;
-  --p100: #202d49;
-  --p200: #304466;
-  --p300: #58729f;
-  --p400: #ff985f;
-  --p500: #ff6b1a;
-  --p600: #f15a16;
-  --p700: #ff7a38;
-  --p800: #9eb6ff;
-  --p900: #071126;
 
-  --ink: #f8fafc;
-  --muted: #cbd5e1;
-  --soft: #94a3b8;
-  --border: #2b3a58;
-  --bg: #090f1d;
-  --white: #111a2c;
-  --amber: #fbbf24;
+[data-theme="dark"] {
+  --brand-red: #ff6658;
+  --brand-orange: #ffa05f;
+  --brand-navy: #a9bdf1;
+
+  --p50: #1c2942;
+  --p100: #293852;
+  --p200: #3c5173;
+  --p300: #63799d;
+  --p400: #ff9b63;
+  --p500: #ff6658;
+  --p600: #ff7666;
+  --p700: #ff9885;
+  --p800: #a9bdf1;
+  --p900: #071226;
+
+  --ink: #f7f8fb;
+  --muted: #c2ccdb;
+  --soft: #8f9db3;
+  --border: #2b3a57;
+  --bg: #0a1120;
+  --white: #141e32;
+  --amber: #ffc15e;
 }
+
 html {
   scroll-behavior: smooth;
 }
@@ -86,6 +102,11 @@ img {
 button {
   font-family: inherit;
   cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--p400);
+  outline-offset: 3px;
 }
 
 ::selection {
