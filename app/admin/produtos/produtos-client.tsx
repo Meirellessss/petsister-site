@@ -124,19 +124,15 @@ export default function ProdutosClient({
     <>
       <div className={styles.card}>
         <div className={styles.cardHead}>
-          <h3>Produtos</h3>
+  <div className={styles.productAdminHeading}>
+    <h3>Catálogo de produtos</h3>
+    <p>Gerencie os produtos, preços, promoções e estoque da PetSister.</p>
+  </div>
           <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnSm}`} onClick={novo}>
             + Novo produto
           </button>
         </div>
-                <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-            gap: ".8rem",
-            marginBottom: "1rem",
-          }}
-        >
+                <div className={styles.productAdminFilters}>
           <input
             type="search"
             className={styles.fc}
@@ -187,14 +183,7 @@ export default function ProdutosClient({
         </div>
 
        
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-            gap: ".8rem",
-            marginBottom: "1rem",
-          }}
-        >
+        <div className={styles.productAdminMetrics}>
           <div
             style={{
               padding: "1rem",
@@ -277,8 +266,8 @@ export default function ProdutosClient({
                 <tr key={p.id}>
                   <td>{p.id}</td>
                   <td>
-                    <div style={{ fontWeight: 600 }}>{p.nome}</div>
-                    <div style={{ fontSize: ".75rem", color: "var(--muted)" }}>
+                    <div className={styles.productAdminName}>{p.nome}</div>
+                    <div className={styles.productAdminDescription}>
                       {(p.descricao ?? "").slice(0, 50)}…
                     </div>
                   </td>
@@ -333,7 +322,7 @@ export default function ProdutosClient({
 
       {aberto && (
         <div className={styles.overlay} onClick={() => setAberto(false)}>
-          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+          <div className={`${styles.modal} ${styles.productAdminModal}`} onClick={(e) => e.stopPropagation()}>
             <div className={styles.modalHead}>
               <h3>{editando ? "Editar produto" : "Novo produto"}</h3>
               <button className={styles.modalClose} onClick={() => setAberto(false)}>
