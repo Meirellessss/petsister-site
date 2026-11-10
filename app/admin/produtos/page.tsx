@@ -53,8 +53,13 @@ export default async function ProdutosAdminPage() {
   return (
     <>
       <div className={styles.topbar}>
-        <h2>Produtos</h2>
-      </div>
+  <div className={styles.pageHeading}>
+    <h2>Produtos</h2>
+    <p className={styles.pageSubtitle}>
+      Gerencie o catálogo, os preços, o estoque e as promoções da PetSister.
+    </p>
+  </div>
+</div>
 
       <div className={styles.content}>
         <ProdutosClient
