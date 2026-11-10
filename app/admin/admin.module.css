@@ -1847,3 +1847,11 @@ textarea.fc {
     border-top: 1px solid var(--border);
   }
 }
+
+.label {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: var(--p800);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
