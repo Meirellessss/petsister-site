@@ -9,7 +9,7 @@ import { adicionarAoCarrinho } from "@/app/carrinho/actions";
 import AreaHeader from "@/components/AreaHeader";
 import Icon from "@/components/Icon";
 import catalogoStyles from "./catalogo.module.css";
-import homeStyles from "./catalogo.module.css";
+
 
 type CatalogoProps = {
   categorias: Categoria[];
@@ -269,8 +269,8 @@ export default function CatalogoClient({
                 </p>
               </div>
             ) : (
-              <section className={homeStyles.section}>
-                <div className={homeStyles.prodGrid}>
+              <section className={catalogoStyles.section}>
+                <div className={catalogoStyles.prodGrid}>
                   {produtosVisiveis.map((produto) => {
                     const desconto = Math.min(
                       90,
@@ -300,16 +300,16 @@ export default function CatalogoClient({
 
                     return (
                       <article
-                        className={homeStyles.prodCard}
+                        className={catalogoStyles.prodCard}
                         key={produto.id}
                       >
                         <Link
                           href={`/produto/${produto.id}`}
-                          className={homeStyles.prodThumb}
+                          className={catalogoStyles.prodThumb}
                           aria-label={`Ver ${produto.nome}`}
                         >
                           {produto.destaque && (
-                            <span className={homeStyles.prodTag}>
+                            <span className={catalogoStyles.prodTag}>
                               Destaque
                             </span>
                           )}
@@ -320,7 +320,7 @@ export default function CatalogoClient({
                               alt={produto.nome}
                             />
                           ) : (
-                            <span className={homeStyles.phIc}>
+                            <span className={catalogoStyles.phIc}>
                               <Icon
                                 name={
                                   ICONES[produto.categoria ?? ""] ?? "pata"
@@ -331,26 +331,26 @@ export default function CatalogoClient({
                           )}
                         </Link>
 
-                        <div className={homeStyles.prodBody}>
-                          <div className={homeStyles.prodCat}>
+                        <div className={catalogoStyles.prodBody}>
+                          <div className={catalogoStyles.prodCat}>
                             {produto.categoria}
                           </div>
 
                           <Link
                             href={`/produto/${produto.id}`}
-                            className={homeStyles.prodName}
+                            className={catalogoStyles.prodName}
                           >
                             {produto.nome}
                           </Link>
 
                           {produto.descricao?.trim() ? (
-                            <p className={homeStyles.prodDescription}>
+                            <p className={catalogoStyles.prodDescription}>
                               {produto.descricao.trim()}
                             </p>
                           ) : null}
 
                           {produto.porte ? (
-                            <span className={homeStyles.prodPorte}>
+                            <span className={catalogoStyles.prodPorte}>
                               Porte:{" "}
                               {produto.porte === "Medio"
                                 ? "Médio"
@@ -361,7 +361,7 @@ export default function CatalogoClient({
                           ) : null}
 
                          {produto.estoque <= limiteEstoqueBaixo && (
-                            <div className={homeStyles.prodStockLow}>
+                            <div className={catalogoStyles.prodStockLow}>
                               <Icon name="raio" size={13} />
                               {produto.estoque <= 0
   ? "Produto esgotado"
@@ -369,26 +369,26 @@ export default function CatalogoClient({
                             </div>
                           )}
 
-                          <div className={homeStyles.prodPriceRow}>
+                          <div className={catalogoStyles.prodPriceRow}>
                             {desconto > 0 && (
-                              <span className={homeStyles.prodOldPrice}>
+                              <span className={catalogoStyles.prodOldPrice}>
                                 R$ {formatarPreco(precoOriginal)}
                               </span>
                             )}
 
-                            <span className={homeStyles.prodPrice}>
+                            <span className={catalogoStyles.prodPrice}>
                               R$ {formatarPreco(precoAtual)}
                             </span>
 
                             {desconto > 0 && (
-                              <span className={homeStyles.prodDiscountBadge}>
+                              <span className={catalogoStyles.prodDiscountBadge}>
                                 -{desconto}%
                               </span>
                             )}
                           </div>
 
                           {parcelamentoAtivo && (
-                            <div className={homeStyles.prodInstallment}>
+                            <div className={catalogoStyles.prodInstallment}>
                               Em até {parcelas}x de R${" "}
                               {formatarPreco(valorParcela)}
                             </div>
@@ -397,7 +397,7 @@ export default function CatalogoClient({
                           {usuario ? (
                             <button
                               type="button"
-                              className={homeStyles.btnComprar}
+                              className={catalogoStyles.btnComprar}
                               onClick={() => adicionarProduto(produto)}
                               disabled={
                                 pending &&
@@ -412,7 +412,7 @@ export default function CatalogoClient({
                           ) : (
                             <Link
                               href="/login"
-                              className={homeStyles.btnComprar}
+                              className={catalogoStyles.btnComprar}
                             >
                               Entrar para comprar
                             </Link>
