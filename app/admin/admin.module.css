@@ -1855,3 +1855,67 @@ textarea.fc {
   font-size: 0.75rem;
   font-weight: 800;
 }
+
+/* Cabeçalho das páginas administrativas */
+.pageHeading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pageSubtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.productCardHeading {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.productCardHeading h3 {
+  color: var(--p900);
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+
+.productCardHeading p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.productFilters {
+  align-items: center;
+}
+
+.productFilters > * {
+  min-width: 0;
+}
+
+.productMetrics {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+.productMetrics > div {
+  min-width: 0;
+  border-radius: 14px !important;
+  box-shadow: 0 3px 12px rgba(12, 24, 64, 0.035);
+}
+
+.productCount {
+  color: var(--muted);
+  margin-bottom: 0.8rem;
+  font-size: 0.82rem;
+}
+
+@media (max-width: 650px) {
+  .productMetrics {
+    grid-template-columns: 1fr !important;
+  }
+}
