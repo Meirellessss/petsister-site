@@ -2134,3 +2134,199 @@ textarea.fc {
   background: #1d342b !important;
   border-color: #365c47 !important;
 }
+
+
+/* ======================================
+   PETSISTER - GESTÃO DE PEDIDOS
+   ====================================== */
+
+.ordersFilters {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.ordersStats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.ordersStat {
+  display: flex;
+  min-width: 0;
+  min-height: 106px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 7px;
+  padding: 17px 19px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--white);
+  box-shadow: 0 3px 12px rgba(12, 24, 64, .035);
+}
+
+.ordersStatLabel {
+  color: var(--muted);
+  font-size: .77rem;
+  font-weight: 750;
+}
+
+.ordersStatValue {
+  color: var(--p900);
+  font-size: 1.8rem;
+  font-weight: 950;
+  line-height: 1.1;
+}
+
+.ordersStatHint {
+  color: var(--soft);
+  font-size: .7rem;
+}
+
+.ordersStat:nth-child(2) {
+  border-left: 4px solid #e99436;
+}
+
+.ordersStat:nth-child(3) {
+  border-left: 4px solid #29945a;
+}
+
+.ordersStat:nth-child(4) {
+  border-left: 4px solid var(--brand-red);
+}
+
+.ordersToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 17px;
+}
+
+.ordersToolbarText h3 {
+  margin: 0;
+  color: var(--p900);
+  font-family: var(--font-sans);
+  font-size: 1.02rem;
+  font-weight: 900;
+}
+
+.ordersToolbarText p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: .79rem;
+}
+
+.ordersSearch {
+  width: 100%;
+  max-width: 390px;
+}
+
+.ordersSearch input {
+  width: 100%;
+}
+
+.ordersError {
+  margin-bottom: 16px;
+  padding: 12px 15px;
+  border: 1px solid #efb5ad;
+  border-radius: 10px;
+  background: #fff0ed;
+  color: #a52f24;
+  font-size: .85rem;
+}
+
+.ordersActions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ordersStatusSelect {
+  width: auto;
+  min-width: 125px;
+  min-height: 36px;
+  padding: .4rem .55rem;
+  font-size: .78rem;
+}
+
+.ordersCardTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 19px;
+  border-bottom: 1px solid var(--border);
+}
+
+.ordersCardTitle strong {
+  color: var(--p900);
+  font-size: .94rem;
+  font-weight: 900;
+}
+
+.ordersCardTitle span {
+  color: var(--muted);
+  font-size: .76rem;
+}
+
+:global([data-theme="dark"]) .ordersStat {
+  background: var(--white);
+  border-color: var(--border);
+}
+
+:global([data-theme="dark"]) .ordersError {
+  background: #351f25;
+  border-color: #74413b;
+  color: #ffb5a9;
+}
+
+@media (max-width: 900px) {
+  .ordersStats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ordersFilters {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  .ordersStats {
+    gap: 9px;
+  }
+
+  .ordersStat {
+    min-height: 86px;
+    padding: 12px;
+  }
+
+  .ordersStatValue {
+    font-size: 1.45rem;
+  }
+
+  .ordersToolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ordersSearch {
+    max-width: none;
+  }
+
+  .ordersFilters {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .ordersFilters a {
+    flex: 1;
+    text-align: center;
+  }
+}
