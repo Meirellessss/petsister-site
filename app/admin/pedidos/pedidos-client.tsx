@@ -294,7 +294,7 @@ const pedidosFiltrados = pedidos.filter((p) => {
                             minWidth: "120px",
                           }}
                           value={p.status}
-                          disabled={salvando}
+                          disabled={salvando || p.status !== "pendente"}
                           onChange={(e) =>
                             mudarStatus(
                               p.id,
@@ -303,7 +303,7 @@ const pedidosFiltrados = pedidos.filter((p) => {
                           }
                         >
                           <option value="pendente">Pendente</option>
-                          <option value="pago">Pago</option>
+                          <option value="pago" disabled>Pago</option>
                           <option value="cancelado">Cancelado</option>
                         </select>
 
