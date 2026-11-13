@@ -218,6 +218,7 @@ export async function atualizarStatusPedido(
 
   revalidatePath("/admin/pedidos");
   return { ok: true };
+}
 
 export async function atualizarStatusAgendamento(
   id: number,
