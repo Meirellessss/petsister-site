@@ -90,8 +90,6 @@ export default function CarrinhoInterativo({
 >
   Pagamento online em configuração
 </button>
-            {pending ? "Processando…" : "Finalizar pedido →"}
-          </button>
           <Link href="/" className={styles.btnBack}>
           ← Continuar comprando
           </Link>
