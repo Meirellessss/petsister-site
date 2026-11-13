@@ -164,7 +164,61 @@ export async function excluirCategoria(id: number): Promise<Resultado> {
   return { ok: true };
 }
 
-export async function atualizarStatusPedido(id: number, status: StatusPedido): Promise<Resultado> {
+export async function export async function atualizarStatusPedido(
+  id: number,
+  status: StatusPedido
+): Promise<Resultado> {
+  const supabase = await exigirAdmin();
+
+  if (status !== "pendente" && status !== "cancelado") {
+    return {
+      ok: false,
+      error: "Somente o Mercado Pago pode confirmar um pagamento.",
+    };
+  }
+
+  const { data, error: erroLeitura } = await supabase
+    .from("petsister_pedidos")
+    .select("status")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (erroLeitura || !data) {
+    return {
+      ok: false,
+      error: "Não foi possível localizar o pedido.",
+    };
+  }
+
+  if (data.status === "pago") {
+    return {
+      ok: false,
+      error: "Um pedido pago não pode ser alterado manualmente.",
+    };
+  }
+
+  const { data: atualizado, error } = await supabase
+    .from("petsister_pedidos")
+    .update({ status })
+    .eq("id", id)
+    .eq("status", "pendente")
+    .select("id")
+    .maybeSingle();
+
+  if (error) {
+    return { ok: false, error: error.message };
+  }
+
+  if (!atualizado) {
+    return {
+      ok: false,
+      error: "O pedido não está mais pendente.",
+    };
+  }
+
+  revalidatePath("/admin/pedidos");
+  return { ok: true };
+}(id: number, status: StatusPedido): Promise<Resultado> {
   const supabase = await exigirAdmin();
   const { error } = await supabase.from("petsister_pedidos").update({ status }).eq("id", id);
   if (error) return { ok: false, error: error.message };
