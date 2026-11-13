@@ -164,7 +164,7 @@ export async function excluirCategoria(id: number): Promise<Resultado> {
   return { ok: true };
 }
 
-export async function export async function atualizarStatusPedido(
+export async function atualizarStatusPedido(
   id: number,
   status: StatusPedido
 ): Promise<Resultado> {
@@ -218,13 +218,6 @@ export async function export async function atualizarStatusPedido(
 
   revalidatePath("/admin/pedidos");
   return { ok: true };
-}(id: number, status: StatusPedido): Promise<Resultado> {
-  const supabase = await exigirAdmin();
-  const { error } = await supabase.from("petsister_pedidos").update({ status }).eq("id", id);
-  if (error) return { ok: false, error: error.message };
-  revalidatePath("/admin/pedidos");
-  return { ok: true };
-}
 
 export async function atualizarStatusAgendamento(
   id: number,
