@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { ItemPedidoComProduto } from "@/lib/types";
-import { removerItem, finalizarPedido } from "./actions";
+import { removerItem } from "./actions";
 import styles from "./carrinho.module.css";
 
 function formatarPreco(v: number) {
@@ -25,23 +25,22 @@ export default function CarrinhoInterativo({
   const router = useRouter();
 
   function remover(itemId: number) {
-    if (!confirm("Remover item?")) return;
-    startTransition(async () => {
-      await removerItem(itemId, pedidoId);
-      router.refresh();
-    });
-  }
+  if (!confirm("Remover item?")) return;
 
-  function checkout() {
-    startTransition(async () => {
-      const res = await finalizarPedido();
-      if (res.ok) {
-        router.push("/pedidos?ok=1");
-      } else {
-        setErro(res.error);
-      }
-    });
-  }
+  setErro("");
+
+  startTransition(async () => {
+    const resultado = await removerItem(itemId, pedidoId);
+
+    if (!resultado.ok) {
+      setErro(resultado.error);
+      return;
+    }
+
+    router.refresh();
+  });
+}
+
 
   return (
     <div className={styles.grid}>
@@ -83,7 +82,14 @@ export default function CarrinhoInterativo({
             <span>R$ {formatarPreco(subtotal)}</span>
           </div>
           {erro && <div style={{ color: "#991b1b", fontSize: ".85rem", marginTop: ".6rem" }}>⚠ {erro}</div>}
-          <button className={styles.btnCheckout} onClick={checkout} disabled={pending}>
+          <button
+  className={styles.btnCheckout}
+  type="button"
+  disabled
+  title="O pagamento online está sendo configurado."
+>
+  Pagamento online em configuração
+</button>
             {pending ? "Processando…" : "Finalizar pedido →"}
           </button>
           <Link href="/" className={styles.btnBack}>
