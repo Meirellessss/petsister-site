@@ -170,56 +170,69 @@ export async function atualizarStatusPedido(
 ): Promise<Resultado> {
   const supabase = await exigirAdmin();
 
-  if (status !== "pendente" && status !== "cancelado") {
+  if (!Number.isSafeInteger(id) || id <= 0) {
+    return {
+      ok: false,
+      error: "Pedido inválido.",
+    };
+  }
+
+  if (status === "pago") {
     return {
       ok: false,
       error: "Somente o Mercado Pago pode confirmar um pagamento.",
     };
   }
 
-  const { data, error: erroLeitura } = await supabase
-    .from("petsister_pedidos")
-    .select("status")
-    .eq("id", id)
-    .maybeSingle();
+  if (status === "pendente") {
+    const { data, error } = await supabase
+      .from("petsister_pedidos")
+      .select("status")
+      .eq("id", id)
+      .maybeSingle();
 
-  if (erroLeitura || !data) {
+    if (error || !data) {
+      return {
+        ok: false,
+        error: "Não foi possível localizar o pedido.",
+      };
+    }
+
+    if (data.status === "pendente") {
+      return { ok: true };
+    }
+
     return {
       ok: false,
-      error: "Não foi possível localizar o pedido.",
+      error: "Pedidos cancelados não podem ser reativados manualmente.",
     };
   }
 
-  if (data.status === "pago") {
+  if (status !== "cancelado") {
     return {
       ok: false,
-      error: "Um pedido pago não pode ser alterado manualmente.",
+      error: "Status inválido.",
     };
   }
 
-  const { data: atualizado, error } = await supabase
-    .from("petsister_pedidos")
-    .update({ status })
-    .eq("id", id)
-    .eq("status", "pendente")
-    .select("id")
-    .maybeSingle();
+  const { error } = await supabase.rpc(
+    "petsister_admin_cancelar_pedido",
+    {
+      p_pedido_id: id,
+    }
+  );
 
   if (error) {
-    return { ok: false, error: error.message };
-  }
-
-  if (!atualizado) {
     return {
       ok: false,
-      error: "O pedido não está mais pendente.",
+      error: error.message,
     };
   }
 
   revalidatePath("/admin/pedidos");
+
   return { ok: true };
 }
-
 export async function atualizarStatusAgendamento(
   id: number,
   status: StatusAgendamento,
