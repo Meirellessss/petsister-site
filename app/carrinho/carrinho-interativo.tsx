@@ -22,6 +22,7 @@ export default function CarrinhoInterativo({
 }) {
   const [pending, startTransition] = useTransition();
   const [erro, setErro] = useState("");
+  const [iniciandoPagamento, setIniciandoPagamento] = useState(false);
   const router = useRouter();
 
   function remover(itemId: number) {
@@ -41,6 +42,48 @@ export default function CarrinhoInterativo({
   });
 }
 
+  async function iniciarPagamentoTeste() {
+  if (iniciandoPagamento || pending) return;
+
+  setIniciandoPagamento(true);
+  setErro("");
+
+  try {
+    const resposta = await fetch("/api/pagamentos/teste/criar", {
+      method: "POST",
+    });
+
+    const resultado = (await resposta.json().catch(() => null)) as {
+      ok?: boolean;
+      erro?: string;
+      checkoutUrl?: string;
+    } | null;
+
+    if (!resposta.ok) {
+      throw new Error(
+        resultado?.erro || "Não foi possível iniciar o pagamento."
+      );
+    }
+
+    if (
+      resultado?.ok !== true ||
+      typeof resultado.checkoutUrl !== "string" ||
+      !/^\/pagamento-teste\/\d+$/.test(resultado.checkoutUrl)
+    ) {
+      throw new Error("Endereço de pagamento inválido.");
+    }
+
+    router.push(resultado.checkoutUrl);
+  } catch (e) {
+    setErro(
+      e instanceof Error
+        ? e.message
+        : "Erro ao iniciar o pagamento."
+    );
+  } finally {
+    setIniciandoPagamento(false);
+  }
+}
 
   return (
     <div className={styles.grid}>
@@ -85,10 +128,13 @@ export default function CarrinhoInterativo({
           <button
   className={styles.btnCheckout}
   type="button"
-  disabled
-  title="O pagamento online está sendo configurado."
+  onClick={iniciarPagamentoTeste}
+  disabled={pending || iniciandoPagamento}
+  title="Simulação de pagamento, sem cobrança real."
 >
-  Pagamento online em configuração
+  {iniciandoPagamento
+    ? "Preparando pagamento..."
+    : "Continuar para pagamento (teste)"}
 </button>
           <Link href="/" className={styles.btnBack}>
           ← Continuar comprando
