@@ -13,6 +13,15 @@ const WHATSAPP = "552124900947";
 const WHATSAPP_LABEL = "2490-0947";
 const INSTAGRAM = "petsisterracoes";
 
+function normalizarTextoBusca(valor: string | null | undefined) {
+  return (valor ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("pt-BR")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
 // Ícone por categoria — mantém o mesmo mapeamento (levemente peculiar) do site original,
 // onde "Ração" mostra o ícone de cão em vez de ração.
 const CATEGORIA_ICON: Record<string, string> = {
