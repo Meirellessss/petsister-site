@@ -32,6 +32,15 @@ const ICONES: Record<string, string> = {
   "Petiscos": "petiscos",
 };
 
+function normalizarTextoBusca(valor: string | null | undefined) {
+  return (valor ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("pt-BR")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
 function formatarPreco(valor: number) {
   return Number(valor).toLocaleString("pt-BR", {
     minimumFractionDigits: 2,
@@ -70,53 +79,49 @@ export default function CatalogoClient({
   const [pending, startTransition] = useTransition();
 
   const produtosVisiveis = useMemo(() => {
-    const termo = busca.trim().toLocaleLowerCase("pt-BR");
-    const categoriaNormalizada = categoria
-      .trim()
-      .toLocaleLowerCase("pt-BR");
+  const termo = normalizarTextoBusca(busca);
+  const categoriaNormalizada = normalizarTextoBusca(categoria);
 
-    const resultado = produtos.filter((produto) => {
-      const nome = (produto.nome ?? "").toLocaleLowerCase("pt-BR");
-      const descricao = (produto.descricao ?? "")
-        .toLocaleLowerCase("pt-BR");
-      const categoriaProduto = (produto.categoria ?? "")
-        .trim()
-        .toLocaleLowerCase("pt-BR");
+  const resultado = produtos.filter((produto) => {
+    const nome = normalizarTextoBusca(produto.nome);
+    const descricao = normalizarTextoBusca(produto.descricao);
+    const categoriaProduto = normalizarTextoBusca(produto.categoria);
 
-      const correspondeBusca =
-        !termo ||
-        nome.includes(termo) ||
-        descricao.includes(termo);
+    const correspondeBusca =
+      !termo ||
+      nome.includes(termo) ||
+      descricao.includes(termo) ||
+      categoriaProduto.includes(termo);
 
-      const correspondeCategoria =
-        !categoriaNormalizada ||
-        categoriaProduto === categoriaNormalizada;
+    const correspondeCategoria =
+      !categoriaNormalizada ||
+      categoriaProduto === categoriaNormalizada;
 
-      return correspondeBusca && correspondeCategoria;
-    });
+    return correspondeBusca && correspondeCategoria;
+  });
 
-    return resultado.sort((a, b) => {
-      switch (ordenacao) {
-        case "preco-menor":
-          return precoFinal(a) - precoFinal(b);
+  return resultado.sort((a, b) => {
+    switch (ordenacao) {
+      case "preco-menor":
+        return precoFinal(a) - precoFinal(b);
 
-        case "preco-maior":
-          return precoFinal(b) - precoFinal(a);
+      case "preco-maior":
+        return precoFinal(b) - precoFinal(a);
 
-        case "nome-az":
-          return a.nome.localeCompare(b.nome, "pt-BR");
+      case "nome-az":
+        return a.nome.localeCompare(b.nome, "pt-BR");
 
-        case "nome-za":
-          return b.nome.localeCompare(a.nome, "pt-BR");
+      case "nome-za":
+        return b.nome.localeCompare(a.nome, "pt-BR");
 
-        default:
-          return (
-            Number(b.destaque) - Number(a.destaque) ||
-            a.nome.localeCompare(b.nome, "pt-BR")
-          );
-      }
-    });
-  }, [produtos, busca, categoria, ordenacao]);
+      default:
+        return (
+          Number(b.destaque) - Number(a.destaque) ||
+          a.nome.localeCompare(b.nome, "pt-BR")
+        );
+    }
+  });
+}, [produtos, busca, categoria, ordenacao]);
 
   function selecionarCategoria(nome: string) {
     setCategoria(nome);
