@@ -50,10 +50,6 @@ export default function FiltroBairros({
           aria-label="Filtrar por zona"
           value={zonaSelecionada}
           onChange={(e) => setZonaSelecionada(e.target.value)}
-          style={{
-            gridColumn: "1 / -1",
-            maxWidth: "360px",
-          }}
         >
           <option value="Todas">Todas as zonas</option>
 
@@ -80,10 +76,7 @@ export default function FiltroBairros({
           <tbody>
             {bairrosFiltrados.length === 0 ? (
               <tr>
-                <td
-                  colSpan={5}
-                  style={{ textAlign: "center", padding: "2rem" }}
-                >
+                <td colSpan={5} style={{ textAlign: "center", padding: "2rem" }}>
                   Nenhum bairro encontrado.
                 </td>
               </tr>
@@ -107,7 +100,6 @@ export default function FiltroBairros({
                   </td>
 
                   <td>{Number(r.clientes)}</td>
-
                   <td>{Number(r.pedidos_pagos)}</td>
 
                   <td style={{ color: "#c83b2d", fontWeight: 750 }}>
