@@ -1,446 +1,358 @@
 
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import styles from "./admin.module.css";
+import type { AdminUsuarioRow } from "@/lib/types";
+import styles from "../admin.module.css";
 
-const badgeStyle: Record<string, { background: string; color: string }> = {
-  pendente: { background: "#fff7ed", color: "#c2410c" },
-  pago: { background: "#f0fdf4", color: "#166534" },
-  cancelado: { background: "#fef2f2", color: "#991b1b" },
-};
+interface AdminBairroRow {
+  zona: string;
+  bairro: string;
+  clientes: number | string;
+  pedidos_pagos: number | string;
+  faturamento_pago: number | string;
+}
 
-export default async function AdminDashboard() {
+function moeda(valor: number) {
+  return Number(valor || 0).toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+}
+
+export default async function UsuariosAdminPage() {
   const supabase = await createClient();
-  const agora = new Date().toISOString();
-  
-const { data: registroConfiguracao } = await supabase
-  .from("petsister_configuracoes")
-  .select("configuracoes")
-  .eq("id", "global")
-  .maybeSingle();
-
-const configuracoes =
-  registroConfiguracao?.configuracoes &&
-  typeof registroConfiguracao.configuracoes === "object" &&
-  !Array.isArray(registroConfiguracao.configuracoes)
-    ? registroConfiguracao.configuracoes as Record<string, unknown>
-    : {};
-
-const valorLimite = Number(
-  configuracoes.estoque_limite_baixo ?? 8
-);
-
-const limiteEstoqueBaixo =
-  Number.isInteger(valorLimite) &&
-  valorLimite >= 0 &&
-  valorLimite <= 10000
-    ? valorLimite
-    : 8;
-
 
   const [
-    { count: clientes },
-    { count: produtos },
-    { count: pedidosTotal },
-    { data: pagos },
-    { count: agends },
-    { count: pedidosPendentes },
-    { count: estoqueBaixoTotal },
-    { count: produtosEsgotados },
-    { data: produtosBaixo },
+    { data: usuarios },
+    { data: bairros, error: erroBairros },
   ] = await Promise.all([
-    supabase
-      .from("petsister_profiles")
-      .select("*", { count: "exact", head: true })
-      .eq("perfil", "cliente"),
-
-    supabase
-      .from("petsister_produtos")
-      .select("*", { count: "exact", head: true }),
-
-    supabase
-      .from("petsister_pedidos")
-      .select("*", { count: "exact", head: true }),
-
-    supabase
-      .from("petsister_pedidos")
-      .select("total")
-      .eq("status", "pago"),
-
-    supabase
-      .from("petsister_agendamentos")
-      .select("*", { count: "exact", head: true })
-      .eq("status", "agendado")
-      .gte("data_hora", agora),
-
-    supabase
-      .from("petsister_pedidos")
-      .select("*", { count: "exact", head: true })
-      .eq("status", "pendente"),
-
-    supabase
-      .from("petsister_produtos")
-      .select("*", { count: "exact", head: true })
-     .lte("estoque", limiteEstoqueBaixo),
-
-    supabase
-      .from("petsister_produtos")
-      .select("*", { count: "exact", head: true })
-      .lte("estoque", 0),
-
-    supabase
-      .from("petsister_produtos")
-      .select("id,nome,estoque,categoria")
-      .lte("estoque", limiteEstoqueBaixo)
-      .order("estoque", { ascending: true })
-      .limit(5),
+    supabase.rpc("petsister_admin_usuarios"),
+    supabase.rpc("petsister_admin_bairros"),
   ]);
 
-  const receita = (pagos ?? []).reduce(
-    (s, p) => s + Number(p.total ?? 0),
+  const lista = (usuarios ?? []) as AdminUsuarioRow[];
+  const listaBairros = (bairros ?? []) as AdminBairroRow[];
+
+  const totalClientes = listaBairros.reduce(
+    (s, r) => s + Number(r.clientes || 0),
     0
   );
 
-  const { data: recentesPedidos } = await supabase
-    .from("petsister_pedidos")
-    .select("*")
-    .order("criado_em", { ascending: false })
-    .limit(6);
+  const clientesSemBairro = listaBairros
+    .filter(
+      (r) =>
+        r.zona === "Localização não informada" ||
+        r.bairro === "Bairro não informado" ||
+        r.bairro === "Endereço incompleto"
+    )
+    .reduce((s, r) => s + Number(r.clientes || 0), 0);
 
-  const { data: proxAgendamentos } = await supabase
-    .from("petsister_agendamentos")
-    .select("*")
-    .eq("status", "agendado")
-    .gte("data_hora", agora)
-    .order("data_hora", { ascending: true })
-    .limit(6);
+  const totalPedidosPagos = listaBairros.reduce(
+    (s, r) => s + Number(r.pedidos_pagos || 0),
+    0
+  );
 
-  const idsUsuarios = [
-    ...new Set([
-      ...(recentesPedidos ?? []).map((p) => p.usuario_id),
-      ...(proxAgendamentos ?? []).map((a) => a.usuario_id),
-    ]),
-  ];
+  const faturamentoRegional = listaBairros.reduce(
+    (s, r) => s + Number(r.faturamento_pago || 0),
+    0
+  );
 
-  const { data: perfis } = idsUsuarios.length
-    ? await supabase
-        .from("petsister_profiles")
-        .select("id,nome")
-        .in("id", idsUsuarios)
-    : { data: [] };
-
-  const nomeDe = (id: string) =>
-    perfis?.find((p) => p.id === id)?.nome ?? "—";
-
-  const dataHoje = new Date().toLocaleDateString("pt-BR", {
-    weekday: "long",
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
+  const bairrosIdentificados = listaBairros.filter(
+    (r) =>
+      r.zona !== "Localização não informada" &&
+      r.bairro !== "Bairro não informado" &&
+      r.bairro !== "Endereço incompleto"
+  ).length;
 
   return (
     <>
       <div className={styles.topbar}>
-        <div>
-          <h2>Dashboard</h2>
-          <span className={styles.dashboardDate}>{dataHoje}</span>
-        </div>
-        <Link href="/" className={styles.dashboardStoreLink}>
-          Ver loja ↗
-        </Link>
+        <h2>Clientes e regiões</h2>
+        <span style={{ fontSize: ".82rem", color: "var(--muted)" }}>
+          {lista.length} usuários cadastrados
+        </span>
       </div>
 
       <div className={styles.content}>
-        <div className={styles.dashboardWelcome}>
-          <div>
-            <span className={styles.attentionEyebrow}>
-              PAINEL DE GESTÃO
-            </span>
-            <h1>Visão geral da PetSister</h1>
-            <p>
-              Acompanhe as vendas, os produtos e os atendimentos da sua loja.
+        <div style={{ marginBottom: "1.4rem" }}>
+          <span
+            style={{
+              color: "var(--p600)",
+              fontSize: ".7rem",
+              fontWeight: 800,
+              letterSpacing: ".12em",
+            }}
+          >
+            INTELIGÊNCIA COMERCIAL
+          </span>
+
+          <h1
+            style={{
+              marginTop: ".4rem",
+              color: "var(--ink)",
+              fontSize: "1.5rem",
+              fontWeight: 850,
+            }}
+          >
+            Clientes e vendas por bairro
+          </h1>
+
+          <p
+            style={{
+              marginTop: ".45rem",
+              color: "var(--muted)",
+              fontSize: ".88rem",
+            }}
+          >
+            Veja onde estão seus clientes no município do Rio de Janeiro
+            e quais bairros mais compram.
+          </p>
+        </div>
+
+        {erroBairros ? (
+          <div
+            className={styles.card}
+            style={{
+              padding: "1.2rem",
+              marginBottom: "1.2rem",
+              color: "#991b1b",
+              background: "#fef2f2",
+            }}
+          >
+            Não foi possível carregar o relatório por bairro.
+            <p style={{ marginTop: ".5rem", fontSize: ".82rem" }}>
+              {erroBairros.message}
             </p>
+            Confira a função petsister_admin_bairros e suas permissões
+            no Supabase.
           </div>
-          <div className={styles.welcomePaw} aria-hidden="true">
-            🐾
-          </div>
-        </div>
-
-        <div className={styles.statsGrid}>
-          <div className={styles.stat}>
-            <div className={`${styles.statIc} ${styles.statIcP}`}>👥</div>
-            <div>
-              <div className={styles.statNum}>{clientes ?? 0}</div>
-              <div className={styles.statLbl}>Clientes cadastrados</div>
-            </div>
-          </div>
-
-          <div className={styles.stat}>
-            <div className={`${styles.statIc} ${styles.statIcG}`}>📦</div>
-            <div>
-              <div className={styles.statNum}>{produtos ?? 0}</div>
-              <div className={styles.statLbl}>Produtos cadastrados</div>
-            </div>
-          </div>
-
-          <div className={styles.stat}>
-            <div className={`${styles.statIc} ${styles.statIcO}`}>🛒</div>
-            <div>
-              <div className={styles.statNum}>{pedidosTotal ?? 0}</div>
-              <div className={styles.statLbl}>Pedidos totais</div>
-            </div>
-          </div>
-
-          <div className={styles.stat}>
-            <div className={`${styles.statIc} ${styles.statIcB}`}>💰</div>
-            <div>
-              <div className={styles.statNum} style={{ fontSize: "1.25rem" }}>
-                {receita.toLocaleString("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                })}
+        ) : (
+          <>
+            <div className={styles.statsGrid}>
+              <div className={styles.stat}>
+                <div className={styles.statIc + " " + styles.statIcP}>
+                  👥
+                </div>
+                <div>
+                  <div className={styles.statNum}>{totalClientes}</div>
+                  <div className={styles.statLbl}>Clientes analisados</div>
+                </div>
               </div>
-              <div className={styles.statLbl}>Total de pedidos pagos</div>
-            </div>
-          </div>
 
-          <div className={styles.stat}>
-            <div className={`${styles.statIc} ${styles.statIcP}`}>📅</div>
-            <div>
-              <div className={styles.statNum}>{agends ?? 0}</div>
-              <div className={styles.statLbl}>Agendamentos futuros</div>
-            </div>
-          </div>
-        </div>
+              <div className={styles.stat}>
+                <div className={styles.statIc + " " + styles.statIcO}>
+                  📍
+                </div>
+                <div>
+                  <div className={styles.statNum}>
+                    {bairrosIdentificados}
+                  </div>
+                  <div className={styles.statLbl}>Bairros identificados</div>
+                </div>
+              </div>
 
-        <section className={styles.attentionSection}>
-          <div className={styles.attentionHeading}>
-            <div>
-              <span className={styles.attentionEyebrow}>
-                GESTÃO DO DIA
-              </span>
-              <h3>Central de atenção PetSister</h3>
-              <p>
-                Pendências e avisos para ajudar você a manter a loja em dia.
-              </p>
-            </div>
-          </div>
-
-          <div className={styles.attentionGrid}>
-            <article className={styles.attentionCard}>
-              <div className={styles.attentionCardTop}>
-                <span
-                  className={`${styles.attentionIcon} ${styles.attentionIconOrange}`}
-                >
+              <div className={styles.stat}>
+                <div className={styles.statIc + " " + styles.statIcB}>
                   🛒
-                </span>
-                <span className={styles.attentionCount}>
-                  {pedidosPendentes ?? 0}
+                </div>
+                <div>
+                  <div className={styles.statNum}>{totalPedidosPagos}</div>
+                  <div className={styles.statLbl}>Pedidos pagos</div>
+                </div>
+              </div>
+
+              <div className={styles.stat}>
+                <div className={styles.statIc + " " + styles.statIcG}>
+                  💰
+                </div>
+                <div>
+                  <div
+                    className={styles.statNum}
+                    style={{ fontSize: "1.25rem" }}
+                  >
+                    {moeda(faturamentoRegional)}
+                  </div>
+                  <div className={styles.statLbl}>Faturamento regional</div>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.card} style={{ marginBottom: "1.2rem" }}>
+              <div className={styles.cardHead}>
+                <h3>Ranking de bairros</h3>
+                <span style={{ color: "var(--muted)", fontSize: ".78rem" }}>
+                  Ordenado pelo faturamento
                 </span>
               </div>
 
-              <h4>Pedidos pendentes</h4>
-              <p>
-                {(pedidosPendentes ?? 0) > 0
-                  ? "Existem pedidos aguardando conferência."
-                  : "Nenhum pedido está marcado como pendente."}
-              </p>
+              <div className={styles.tw}>
+                <table className={styles.table}>
+                  <thead>
+                    <tr>
+                      <th>Zona</th>
+                      <th>Bairro</th>
+                      <th>Clientes</th>
+                      <th>Pedidos pagos</th>
+                      <th>Faturamento</th>
+                    </tr>
+                  </thead>
 
-              <Link href="/admin/pedidos" className={styles.attentionLink}>
-                Conferir pedidos <span aria-hidden="true">→</span>
-              </Link>
-            </article>
+                  <tbody>
+                    {listaBairros.length === 0 && (
+                      <tr>
+                        <td
+                          colSpan={5}
+                          style={{ textAlign: "center", padding: "2rem" }}
+                        >
+                          Ainda não existem dados por bairro.
+                        </td>
+                      </tr>
+                    )}
 
-            <article className={styles.attentionCard}>
-              <div className={styles.attentionCardTop}>
-                <span
-                  className={`${styles.attentionIcon} ${styles.attentionIconBlue}`}
-                >
-                  📦
-                </span>
-                <span className={styles.attentionCount}>
-                  {estoqueBaixoTotal ?? 0}
-                </span>
+                    {listaBairros.map((r) => (
+                      <tr key={`${r.zona}-${r.bairro}`}>
+                        <td>
+                          <span
+                            className={styles.badge}
+                            style={{
+                              background: "var(--p100)",
+                              color: "var(--p700)",
+                            }}
+                          >
+                            {r.zona}
+                          </span>
+                        </td>
+
+                        <td style={{ fontWeight: 700 }}>
+                          {r.bairro}
+                        </td>
+
+                        <td>{Number(r.clientes)}</td>
+
+                        <td>{Number(r.pedidos_pagos)}</td>
+
+                        <td style={{ color: "var(--p700)", fontWeight: 750 }}>
+                          {moeda(Number(r.faturamento_pago))}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
 
-              <h4>Estoque para acompanhar</h4>
-              <p>
-                {(produtosEsgotados ?? 0) > 0
-                  ? `${produtosEsgotados} produto(s) sem estoque.`
-                  : "Nenhum produto está com estoque zerado."}
-                {" "}
-                {limiteEstoqueBaixo === 0
-  ? "O alerta considera produtos sem estoque."
-  : `O alerta considera ${limiteEstoqueBaixo} unidades ou menos.`}
-              </p>
+              <div
+                style={{
+                  padding: "1rem",
+                  borderTop: "1px solid var(--border)",
+                  color: "var(--muted)",
+                  fontSize: ".8rem",
+                }}
+              >
+                Clientes sem bairro identificado:{" "}
+                <strong style={{ color: "var(--ink)" }}>
+                  {clientesSemBairro}
+                </strong>
+              </div>
+            </div>
+          </>
+        )}
 
-              {(produtosBaixo ?? []).length > 0 && (
-                <div className={styles.attentionStockList}>
-                  {(produtosBaixo ?? []).map((item) => (
-                    <div className={styles.attentionStockRow} key={item.id}>
-                      <span className={styles.attentionStockName}>
-                        {item.nome}
-                      </span>
+        <div className={styles.card}>
+          <div className={styles.cardHead}>
+            <h3>Todos os clientes cadastrados</h3>
+          </div>
+
+          <div className={styles.tw}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>E-mail</th>
+                  <th>Perfil</th>
+                  <th>Pedidos</th>
+                  <th>Total gasto</th>
+                  <th>Cadastro</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {lista.map((u) => (
+                  <tr key={u.id}>
+                    <td>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: ".6rem",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: 30,
+                            height: 30,
+                            borderRadius: "50%",
+                            background:
+                              u.perfil === "admin"
+                                ? "var(--p600)"
+                                : "var(--p100)",
+                            color:
+                              u.perfil === "admin" ? "#fff" : "var(--p700)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontWeight: 700,
+                            fontSize: ".75rem",
+                          }}
+                        >
+                          {(u.nome || "?").charAt(0).toUpperCase()}
+                        </div>
+
+                        <span style={{ fontWeight: 600 }}>
+                          {u.nome || "—"}
+                        </span>
+                      </div>
+                    </td>
+
+                    <td style={{ fontSize: ".82rem", color: "var(--muted)" }}>
+                      {u.email}
+                    </td>
+
+                    <td>
                       <span
-                        className={
-                          item.estoque <= 0
-                            ? styles.attentionQtyCritical
-                            : styles.attentionQty
+                        className={styles.badge}
+                        style={
+                          u.perfil === "admin"
+                            ? { background: "var(--p100)", color: "var(--p700)" }
+                            : { background: "#f3f4f6", color: "#6b7280" }
                         }
                       >
-                        {item.estoque <= 0
-                          ? "Esgotado"
-                          : `${item.estoque} un.`}
+                        {u.perfil}
                       </span>
-                    </div>
-                  ))}
-                </div>
-              )}
+                    </td>
 
-              <Link href="/admin/produtos" className={styles.attentionLink}>
-                Gerenciar produtos <span aria-hidden="true">→</span>
-              </Link>
-            </article>
+                    <td>{u.total_pedidos}</td>
 
-            <article className={styles.attentionCard}>
-              <div className={styles.attentionCardTop}>
-                <span
-                  className={`${styles.attentionIcon} ${styles.attentionIconBlue}`}
-                >
-                  📅
-                </span>
-                <span className={styles.attentionCount}>
-                  {agends ?? 0}
-                </span>
-              </div>
+                    <td style={{ fontWeight: 700, color: "var(--p700)" }}>
+                      {moeda(Number(u.total_gasto))}
+                    </td>
 
-              <h4>Próximos atendimentos</h4>
-              <p>
-                {(agends ?? 0) > 0
-                  ? "Confira os horários futuros e prepare os atendimentos."
-                  : "Não há agendamentos futuros com status agendado."}
-              </p>
-
-              <Link
-                href="/admin/agendamentos"
-                className={styles.attentionLink}
-              >
-                Abrir agenda <span aria-hidden="true">→</span>
-              </Link>
-            </article>
-          </div>
-        </section>
-
-        <div className={styles.grid2}>
-          <div className={styles.card}>
-            <div className={styles.cardHead}>
-              <h3>Pedidos recentes</h3>
-              <Link
-                href="/admin/pedidos"
-                className={styles.dashboardTableLink}
-              >
-                Ver todos →
-              </Link>
-            </div>
-
-            <div className={styles.tw}>
-              <table className={styles.table}>
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Cliente</th>
-                    <th>Total</th>
-                    <th>Status</th>
+                    <td style={{ fontSize: ".8rem", color: "var(--muted)" }}>
+                      {new Date(u.criado_em).toLocaleDateString("pt-BR")}
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {(recentesPedidos ?? []).length === 0 && (
-                    <tr>
-                      <td
-                        colSpan={4}
-                        className={styles.dashboardEmpty}
-                      >
-                        Ainda não há pedidos cadastrados.
-                      </td>
-                    </tr>
-                  )}
+                ))}
 
-                  {(recentesPedidos ?? []).map((p) => (
-                    <tr key={p.id}>
-                      <td>
-                        <strong>#{p.id}</strong>
-                      </td>
-                      <td>{nomeDe(p.usuario_id)}</td>
-                      <td className={styles.dashboardMoney}>
-                        {Number(p.total).toLocaleString("pt-BR", {
-                          style: "currency",
-                          currency: "BRL",
-                        })}
-                      </td>
-                      <td>
-                        <span
-                          className={styles.badge}
-                          style={badgeStyle[p.status] ?? badgeStyle.pendente}
-                        >
-                          {p.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div className={styles.card}>
-            <div className={styles.cardHead}>
-              <h3>Próximos agendamentos</h3>
-              <Link
-                href="/admin/agendamentos"
-                className={styles.dashboardTableLink}
-              >
-                Ver todos →
-              </Link>
-            </div>
-
-            <div className={styles.tw}>
-              <table className={styles.table}>
-                <thead>
+                {lista.length === 0 && (
                   <tr>
-                    <th>Cliente</th>
-                    <th>Serviço</th>
-                    <th>Data</th>
+                    <td
+                      colSpan={6}
+                      style={{ textAlign: "center", padding: "2rem" }}
+                    >
+                      Nenhum usuário cadastrado.
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {(proxAgendamentos ?? []).length === 0 && (
-                    <tr>
-                      <td
-                        colSpan={3}
-                        className={styles.dashboardEmpty}
-                      >
-                        Nenhum agendamento futuro pendente.
-                      </td>
-                    </tr>
-                  )}
-
-                  {(proxAgendamentos ?? []).map((a) => (
-                    <tr key={a.id}>
-                      <td>{nomeDe(a.usuario_id)}</td>
-                      <td>{a.servico}</td>
-                      <td className={styles.dashboardDateCell}>
-                        {new Date(a.data_hora).toLocaleDateString("pt-BR")}{" "}
-                        {new Date(a.data_hora).toLocaleTimeString("pt-BR", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
