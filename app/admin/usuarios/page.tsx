@@ -1,4 +1,4 @@
-
+import FiltroBairros from "./filtro-bairros";
 import { createClient } from "@/lib/supabase/server";
 import type { AdminUsuarioRow } from "@/lib/types";
 import styles from "../admin.module.css";
@@ -184,60 +184,7 @@ export default async function UsuariosAdminPage() {
                 </span>
               </div>
 
-              <div className={styles.tw}>
-                <table className={styles.table}>
-                  <thead>
-                    <tr>
-                      <th>Zona</th>
-                      <th>Bairro</th>
-                      <th>Clientes</th>
-                      <th>Pedidos pagos</th>
-                      <th>Faturamento</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {listaBairros.length === 0 && (
-                      <tr>
-                        <td
-                          colSpan={5}
-                          style={{ textAlign: "center", padding: "2rem" }}
-                        >
-                          Ainda não existem dados por bairro.
-                        </td>
-                      </tr>
-                    )}
-
-                    {listaBairros.map((r) => (
-                      <tr key={`${r.zona}-${r.bairro}`}>
-                        <td>
-                          <span
-                            className={styles.badge}
-                            style={{
-                              background: "var(--p100)",
-                              color: "var(--p700)",
-                            }}
-                          >
-                            {r.zona}
-                          </span>
-                        </td>
-
-                        <td style={{ fontWeight: 700 }}>
-                          {r.bairro}
-                        </td>
-
-                        <td>{Number(r.clientes)}</td>
-
-                        <td>{Number(r.pedidos_pagos)}</td>
-
-                        <td style={{ color: "var(--p700)", fontWeight: 750 }}>
-                          {moeda(Number(r.faturamento_pago))}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <FiltroBairros bairros={listaBairros} />
 
               <div
                 style={{
