@@ -188,30 +188,27 @@ const mensagemEntregaExibida =
 
   
   const visiveis = useMemo(() => {
-    const termo = busca.trim().toLocaleLowerCase("pt-BR");
-    const categoriaSelecionada = catAtiva
-      .trim()
-      .toLocaleLowerCase("pt-BR");
+  const termo = normalizarTextoBusca(busca);
+  const categoriaSelecionada = normalizarTextoBusca(catAtiva);
 
-    return produtos.filter((p) => {
-      const nome = (p.nome ?? "").toLocaleLowerCase("pt-BR");
-      const descricao = (p.descricao ?? "").toLocaleLowerCase("pt-BR");
-      const categoria = (p.categoria ?? "")
-        .trim()
-        .toLocaleLowerCase("pt-BR");
+  return produtos.filter((p) => {
+    const nome = normalizarTextoBusca(p.nome);
+    const descricao = normalizarTextoBusca(p.descricao);
+    const categoria = normalizarTextoBusca(p.categoria);
 
-      const correspondeBusca =
-        !termo ||
-        nome.includes(termo) ||
-        descricao.includes(termo);
+    const correspondeBusca =
+      !termo ||
+      nome.includes(termo) ||
+      descricao.includes(termo) ||
+      categoria.includes(termo);
 
-      const correspondeCategoria =
-        !categoriaSelecionada ||
-        categoria === categoriaSelecionada;
+    const correspondeCategoria =
+      !categoriaSelecionada ||
+      categoria === categoriaSelecionada;
 
-      return correspondeBusca && correspondeCategoria;
-    });
-  }, [produtos, busca, catAtiva]);
+    return correspondeBusca && correspondeCategoria;
+  });
+}, [produtos, busca, catAtiva]);
 
 
   
