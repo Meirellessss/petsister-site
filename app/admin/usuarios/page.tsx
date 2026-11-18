@@ -180,7 +180,7 @@ export default async function UsuariosAdminPage() {
               <div className={styles.cardHead}>
                 <h3>Ranking de bairros</h3>
                 <span style={{ color: "var(--muted)", fontSize: ".78rem" }}>
-                  Ordenado pelo faturamento
+                 Escolha como deseja ordenar o ranking
                 </span>
               </div>
 
