@@ -63,6 +63,39 @@ export default async function UsuariosAdminPage() {
       r.bairro !== "Endereço incompleto"
   ).length;
 
+  const resumoPorZona = Array.from(
+  listaBairros.reduce(
+    (acumulado, bairro) => {
+      const zona = bairro.zona || "Localização não informada";
+
+      const atual = acumulado.get(zona) ?? {
+        zona,
+        clientes: 0,
+        pedidos_pagos: 0,
+        faturamento_pago: 0,
+      };
+
+      atual.clientes += Number(bairro.clientes || 0);
+      atual.pedidos_pagos += Number(bairro.pedidos_pagos || 0);
+      atual.faturamento_pago += Number(bairro.faturamento_pago || 0);
+
+      acumulado.set(zona, atual);
+      return acumulado;
+    },
+    new Map<
+      string,
+      {
+        zona: string;
+        clientes: number;
+        pedidos_pagos: number;
+        faturamento_pago: number;
+      }
+    >()
+  ).values()
+).sort(
+  (a, b) => b.faturamento_pago - a.faturamento_pago
+);
+
   return (
     <>
       <div className={styles.topbar}>
@@ -179,6 +212,50 @@ export default async function UsuariosAdminPage() {
             <div className={styles.card} style={{ marginBottom: "1.2rem" }}>
               <div className={styles.cardHead}>
                 <h3>Ranking de bairros</h3>
+                <div className={styles.card} style={{ marginBottom: "1.2rem" }}>
+  <div className={styles.cardHead}>
+    <h3>Resumo por zona</h3>
+    <span style={{ color: "var(--muted)", fontSize: ".78rem" }}>
+      Comparativo de clientes e vendas
+    </span>
+  </div>
+
+  <div className={styles.tw}>
+    <table className={styles.table}>
+      <thead>
+        <tr>
+          <th>Zona</th>
+          <th>Clientes</th>
+          <th>Pedidos pagos</th>
+          <th>Faturamento</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {resumoPorZona.map((r) => (
+          <tr key={r.zona}>
+            <td style={{ fontWeight: 700 }}>
+              {r.zona}
+            </td>
+            <td>{r.clientes}</td>
+            <td>{r.pedidos_pagos}</td>
+            <td style={{ color: "#c83b2d", fontWeight: 750 }}>
+              {moeda(r.faturamento_pago)}
+            </td>
+          </tr>
+        ))}
+
+        {resumoPorZona.length === 0 && (
+          <tr>
+            <td colSpan={4} style={{ textAlign: "center", padding: "2rem" }}>
+              Nenhuma região encontrada.
+            </td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+  </div>
+</div>
                 <span style={{ color: "var(--muted)", fontSize: ".78rem" }}>
                  Escolha como deseja ordenar o ranking
                 </span>
