@@ -45,57 +45,22 @@ export default function FiltroBairros({
   return (
     <>
       <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: ".8rem",
-          padding: "1rem 1.2rem",
-          background: "#fffaf6",
-          borderBottom: "1px solid #f1dfd4",
-        }}
-      >
-        <div>
-          <strong
-            style={{
-              display: "block",
-              color: "#0f1e4a",
-              fontSize: ".85rem",
-            }}
-          >
-            Visualizar por região
-          </strong>
-          <span style={{ color: "#7b8497", fontSize: ".75rem" }}>
-            Selecione uma zona para filtrar os bairros
-          </span>
-        </div>
+        <div className={styles.productAdminFilters}>
+  <select
+    className={styles.fc}
+    aria-label="Filtrar por zona"
+    value={zonaSelecionada}
+    onChange={(e) => setZonaSelecionada(e.target.value)}
+  >
+    <option value="Todas">Todas as zonas</option>
 
-        <select
-          aria-label="Filtrar bairros por zona"
-          value={zonaSelecionada}
-          onChange={(e) => setZonaSelecionada(e.target.value)}
-          style={{
-            width: "100%",
-            maxWidth: "250px",
-            padding: ".65rem 2.2rem .65rem .85rem",
-            border: "1px solid #eadfd2",
-            borderRadius: "9px",
-            background: "#fff",
-            color: "#0f1e4a",
-            fontSize: ".83rem",
-            fontWeight: 600,
-            outlineColor: "#ea580c",
-            cursor: "pointer",
-          }}
-        >
-          <option value="Todas">Todas as zonas</option>
-          {zonas.map((zona) => (
-            <option key={zona} value={zona}>
-              {zona}
-            </option>
-          ))}
-        </select>
+    {zonas.map((zona) => (
+      <option key={zona} value={zona}>
+        {zona}
+      </option>
+    ))}
+  </select>
+</div>
       </div>
 
       <div className={styles.tw}>
