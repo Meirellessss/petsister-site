@@ -1,14 +1,14 @@
 
 import { createClient } from "@/lib/supabase/server";
 import type { AdminUsuarioRow } from "@/lib/types";
-import styles from "../admin.module.css";
+import styles from "./admin.module.css";
 
-interface AdminRegiaoRow {
-  cidade: string;
-  estado: string;
-  clientes: number;
-  pedidos_pagos: number;
-  faturamento_pago: number;
+interface AdminBairroRow {
+  zona: string;
+  bairro: string;
+  clientes: number | string;
+  pedidos_pagos: number | string;
+  faturamento_pago: number | string;
 }
 
 function moeda(valor: number) {
@@ -23,33 +23,45 @@ export default async function UsuariosAdminPage() {
 
   const [
     { data: usuarios },
-    { data: regioes, error: erroRegioes },
+    { data: bairros, error: erroBairros },
   ] = await Promise.all([
     supabase.rpc("petsister_admin_usuarios"),
-    supabase.rpc("petsister_admin_regioes"),
+    supabase.rpc("petsister_admin_bairros"),
   ]);
 
   const lista = (usuarios ?? []) as AdminUsuarioRow[];
-  const listaRegioes = (regioes ?? []) as AdminRegiaoRow[];
+  const listaBairros = (bairros ?? []) as AdminBairroRow[];
 
-  const totalClientes = listaRegioes.reduce(
+  const totalClientes = listaBairros.reduce(
     (s, r) => s + Number(r.clientes || 0),
     0
   );
 
-  const clientesSemRegiao = listaRegioes
-    .filter((r) => r.cidade === "Não informado")
+  const clientesSemBairro = listaBairros
+    .filter(
+      (r) =>
+        r.zona === "Localização não informada" ||
+        r.bairro === "Bairro não informado" ||
+        r.bairro === "Endereço incompleto"
+    )
     .reduce((s, r) => s + Number(r.clientes || 0), 0);
 
-  const totalPedidosPagos = listaRegioes.reduce(
+  const totalPedidosPagos = listaBairros.reduce(
     (s, r) => s + Number(r.pedidos_pagos || 0),
     0
   );
 
-  const faturamentoRegional = listaRegioes.reduce(
+  const faturamentoRegional = listaBairros.reduce(
     (s, r) => s + Number(r.faturamento_pago || 0),
     0
   );
+
+  const bairrosIdentificados = listaBairros.filter(
+    (r) =>
+      r.zona !== "Localização não informada" &&
+      r.bairro !== "Bairro não informado" &&
+      r.bairro !== "Endereço incompleto"
+  ).length;
 
   return (
     <>
@@ -81,7 +93,7 @@ export default async function UsuariosAdminPage() {
               fontWeight: 850,
             }}
           >
-            Clientes e vendas por região
+            Clientes e vendas por bairro
           </h1>
 
           <p
@@ -91,11 +103,12 @@ export default async function UsuariosAdminPage() {
               fontSize: ".88rem",
             }}
           >
-            Entenda onde estão seus clientes e quais regiões mais compram.
+            Veja onde estão seus clientes no município do Rio de Janeiro
+            e quais bairros mais compram.
           </p>
         </div>
 
-        {erroRegioes ? (
+        {erroBairros ? (
           <div
             className={styles.card}
             style={{
@@ -105,11 +118,11 @@ export default async function UsuariosAdminPage() {
               background: "#fef2f2",
             }}
           >
-            Não foi possível carregar o relatório regional.
+            Não foi possível carregar o relatório por bairro.
             <p style={{ marginTop: ".5rem", fontSize: ".82rem" }}>
-              {erroRegioes.message}
+              {erroBairros.message}
             </p>
-            Confira a função petsister_admin_regioes e suas permissões
+            Confira a função petsister_admin_bairros e suas permissões
             no Supabase.
           </div>
         ) : (
@@ -130,10 +143,10 @@ export default async function UsuariosAdminPage() {
                   📍
                 </div>
                 <div>
-                  <div className={styles.statNum}>{listaRegioes.filter(
-                    (r) => r.cidade !== "Não informado"
-                  ).length}</div>
-                  <div className={styles.statLbl}>Localidades identificadas</div>
+                  <div className={styles.statNum}>
+                    {bairrosIdentificados}
+                  </div>
+                  <div className={styles.statLbl}>Bairros identificados</div>
                 </div>
               </div>
 
@@ -165,7 +178,7 @@ export default async function UsuariosAdminPage() {
 
             <div className={styles.card} style={{ marginBottom: "1.2rem" }}>
               <div className={styles.cardHead}>
-                <h3>Ranking de regiões</h3>
+                <h3>Ranking de bairros</h3>
                 <span style={{ color: "var(--muted)", fontSize: ".78rem" }}>
                   Ordenado pelo faturamento
                 </span>
@@ -175,8 +188,8 @@ export default async function UsuariosAdminPage() {
                 <table className={styles.table}>
                   <thead>
                     <tr>
-                      <th>Cidade</th>
-                      <th>Estado</th>
+                      <th>Zona</th>
+                      <th>Bairro</th>
                       <th>Clientes</th>
                       <th>Pedidos pagos</th>
                       <th>Faturamento</th>
@@ -184,22 +197,39 @@ export default async function UsuariosAdminPage() {
                   </thead>
 
                   <tbody>
-                    {listaRegioes.length === 0 && (
+                    {listaBairros.length === 0 && (
                       <tr>
-                        <td colSpan={5} style={{ textAlign: "center", padding: "2rem" }}>
-                          Ainda não existem dados regionais.
+                        <td
+                          colSpan={5}
+                          style={{ textAlign: "center", padding: "2rem" }}
+                        >
+                          Ainda não existem dados por bairro.
                         </td>
                       </tr>
                     )}
 
-                    {listaRegioes.map((r, i) => (
-                      <tr key={`${r.cidade}-${r.estado}-${i}`}>
-                        <td style={{ fontWeight: 700 }}>
-                          {r.cidade}
+                    {listaBairros.map((r) => (
+                      <tr key={`${r.zona}-${r.bairro}`}>
+                        <td>
+                          <span
+                            className={styles.badge}
+                            style={{
+                              background: "var(--p100)",
+                              color: "var(--p700)",
+                            }}
+                          >
+                            {r.zona}
+                          </span>
                         </td>
-                        <td>{r.estado}</td>
+
+                        <td style={{ fontWeight: 700 }}>
+                          {r.bairro}
+                        </td>
+
                         <td>{Number(r.clientes)}</td>
+
                         <td>{Number(r.pedidos_pagos)}</td>
+
                         <td style={{ color: "var(--p700)", fontWeight: 750 }}>
                           {moeda(Number(r.faturamento_pago))}
                         </td>
@@ -217,9 +247,9 @@ export default async function UsuariosAdminPage() {
                   fontSize: ".8rem",
                 }}
               >
-                Clientes sem cidade informada:{" "}
+                Clientes sem bairro identificado:{" "}
                 <strong style={{ color: "var(--ink)" }}>
-                  {clientesSemRegiao}
+                  {clientesSemBairro}
                 </strong>
               </div>
             </div>
@@ -264,7 +294,8 @@ export default async function UsuariosAdminPage() {
                               u.perfil === "admin"
                                 ? "var(--p600)"
                                 : "var(--p100)",
-                            color: u.perfil === "admin" ? "#fff" : "var(--p700)",
+                            color:
+                              u.perfil === "admin" ? "#fff" : "var(--p700)",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
@@ -312,7 +343,10 @@ export default async function UsuariosAdminPage() {
 
                 {lista.length === 0 && (
                   <tr>
-                    <td colSpan={6} style={{ textAlign: "center", padding: "2rem" }}>
+                    <td
+                      colSpan={6}
+                      style={{ textAlign: "center", padding: "2rem" }}
+                    >
                       Nenhum usuário cadastrado.
                     </td>
                   </tr>
