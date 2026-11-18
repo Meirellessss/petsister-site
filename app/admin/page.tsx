@@ -1,7 +1,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import type { AdminUsuarioRow } from "@/lib/types";
-import styles from "../admin.module.css";
+import styles from "./admin.module.css";
 
 interface AdminBairroRow {
   zona: string;
