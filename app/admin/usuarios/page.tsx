@@ -1,4 +1,4 @@
-import PainelRegioes from "./painel-regioes";
+
 import FiltroBairros from "./filtro-bairros";
 import { createClient } from "@/lib/supabase/server";
 import type { AdminUsuarioRow } from "@/lib/types";
@@ -23,7 +23,7 @@ export default async function UsuariosAdminPage() {
   const supabase = await createClient();
 
   const [
-    { data: usuarios },
+    { data: usuarios, error: erroUsuarios },
     { data: bairros, error: erroBairros },
   ] = await Promise.all([
     supabase.rpc("petsister_admin_usuarios"),
@@ -34,86 +34,57 @@ export default async function UsuariosAdminPage() {
   const listaBairros = (bairros ?? []) as AdminBairroRow[];
 
   const totalClientes = listaBairros.reduce(
-    (s, r) => s + Number(r.clientes || 0),
+    (total, item) => total + Number(item.clientes || 0),
     0
   );
 
   const clientesSemBairro = listaBairros
     .filter(
-      (r) =>
-        r.zona === "Localização não informada" ||
-        r.bairro === "Bairro não informado" ||
-        r.bairro === "Endereço incompleto"
+      (item) =>
+        item.zona === "Localização não informada" ||
+        item.bairro === "Bairro não informado" ||
+        item.bairro === "Endereço incompleto"
     )
-    .reduce((s, r) => s + Number(r.clientes || 0), 0);
+    .reduce(
+      (total, item) => total + Number(item.clientes || 0),
+      0
+    );
 
   const totalPedidosPagos = listaBairros.reduce(
-    (s, r) => s + Number(r.pedidos_pagos || 0),
+    (total, item) => total + Number(item.pedidos_pagos || 0),
     0
   );
 
   const faturamentoRegional = listaBairros.reduce(
-    (s, r) => s + Number(r.faturamento_pago || 0),
+    (total, item) => total + Number(item.faturamento_pago || 0),
     0
   );
 
   const bairrosIdentificados = listaBairros.filter(
-    (r) =>
-      r.zona !== "Localização não informada" &&
-      r.bairro !== "Bairro não informado" &&
-      r.bairro !== "Endereço incompleto"
+    (item) =>
+      item.zona !== "Localização não informada" &&
+      item.bairro !== "Bairro não informado" &&
+      item.bairro !== "Endereço incompleto"
   ).length;
-
-  const resumoPorZona = Array.from(
-  listaBairros.reduce(
-    (acumulado, bairro) => {
-      const zona = bairro.zona || "Localização não informada";
-
-      const atual = acumulado.get(zona) ?? {
-        zona,
-        clientes: 0,
-        pedidos_pagos: 0,
-        faturamento_pago: 0,
-      };
-
-      atual.clientes += Number(bairro.clientes || 0);
-      atual.pedidos_pagos += Number(bairro.pedidos_pagos || 0);
-      atual.faturamento_pago += Number(bairro.faturamento_pago || 0);
-
-      acumulado.set(zona, atual);
-      return acumulado;
-    },
-    new Map<
-      string,
-      {
-        zona: string;
-        clientes: number;
-        pedidos_pagos: number;
-        faturamento_pago: number;
-      }
-    >()
-  ).values()
-).sort(
-  (a, b) => b.faturamento_pago - a.faturamento_pago
-);
 
   return (
     <>
       <div className={styles.topbar}>
         <h2>Clientes e regiões</h2>
+
         <span style={{ fontSize: ".82rem", color: "var(--muted)" }}>
           {lista.length} usuários cadastrados
         </span>
       </div>
 
-      <div className={styles.content}>
-        <div style={{ marginBottom: "1.4rem" }}>
+      <main className={styles.content}>
+        <div style={{ marginBottom: 26 }}>
           <span
             style={{
-              color: "var(--p600)",
+              color: "#e76b32",
               fontSize: ".7rem",
-              fontWeight: 800,
-              letterSpacing: ".12em",
+              fontWeight: 850,
+              letterSpacing: ".13em",
             }}
           >
             INTELIGÊNCIA COMERCIAL
@@ -122,12 +93,12 @@ export default async function UsuariosAdminPage() {
           <h1
             style={{
               marginTop: ".4rem",
-              color: "var(--ink)",
-              fontSize: "1.5rem",
+              color: "#10204b",
+              fontSize: "1.55rem",
               fontWeight: 850,
             }}
           >
-            Clientes e vendas por bairro
+            Clientes e vendas por região
           </h1>
 
           <p
@@ -137,8 +108,7 @@ export default async function UsuariosAdminPage() {
               fontSize: ".88rem",
             }}
           >
-            Veja onde estão seus clientes no município do Rio de Janeiro
-            e quais bairros mais compram.
+            Entenda onde estão seus clientes e quais bairros movimentam as vendas.
           </p>
         </div>
 
@@ -152,23 +122,26 @@ export default async function UsuariosAdminPage() {
               background: "#fef2f2",
             }}
           >
-            Não foi possível carregar o relatório por bairro.
+            Não foi possível carregar os dados regionais.
+
             <p style={{ marginTop: ".5rem", fontSize: ".82rem" }}>
               {erroBairros.message}
             </p>
-            Confira a função petsister_admin_bairros e suas permissões
-            no Supabase.
           </div>
         ) : (
           <>
+            {/* INDICADORES PRINCIPAIS */}
             <div className={styles.statsGrid}>
               <div className={styles.stat}>
                 <div className={styles.statIc + " " + styles.statIcP}>
                   👥
                 </div>
+
                 <div>
                   <div className={styles.statNum}>{totalClientes}</div>
-                  <div className={styles.statLbl}>Clientes analisados</div>
+                  <div className={styles.statLbl}>
+                    Clientes analisados
+                  </div>
                 </div>
               </div>
 
@@ -176,11 +149,14 @@ export default async function UsuariosAdminPage() {
                 <div className={styles.statIc + " " + styles.statIcO}>
                   📍
                 </div>
+
                 <div>
                   <div className={styles.statNum}>
                     {bairrosIdentificados}
                   </div>
-                  <div className={styles.statLbl}>Bairros identificados</div>
+                  <div className={styles.statLbl}>
+                    Bairros identificados
+                  </div>
                 </div>
               </div>
 
@@ -188,9 +164,14 @@ export default async function UsuariosAdminPage() {
                 <div className={styles.statIc + " " + styles.statIcB}>
                   🛒
                 </div>
+
                 <div>
-                  <div className={styles.statNum}>{totalPedidosPagos}</div>
-                  <div className={styles.statLbl}>Pedidos pagos</div>
+                  <div className={styles.statNum}>
+                    {totalPedidosPagos}
+                  </div>
+                  <div className={styles.statLbl}>
+                    Pedidos pagos
+                  </div>
                 </div>
               </div>
 
@@ -198,6 +179,7 @@ export default async function UsuariosAdminPage() {
                 <div className={styles.statIc + " " + styles.statIcG}>
                   💰
                 </div>
+
                 <div>
                   <div
                     className={styles.statNum}
@@ -205,182 +187,173 @@ export default async function UsuariosAdminPage() {
                   >
                     {moeda(faturamentoRegional)}
                   </div>
-                  <div className={styles.statLbl}>Faturamento regional</div>
+
+                  <div className={styles.statLbl}>
+                    Faturamento regional
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className={styles.card} style={{ marginBottom: "1.2rem" }}>
-              <div className={styles.cardHead}>
-                <h3>Ranking de bairros</h3>
-                <div className={styles.card} style={{ marginBottom: "1.2rem" }}>
-  <div className={styles.cardHead}>
-    <h3>Resumo por zona</h3>
-    <span style={{ color: "var(--muted)", fontSize: ".78rem" }}>
-      Comparativo de clientes e vendas
-    </span>
-  </div>
-
-  <div className={styles.tw}>
-    <table className={styles.table}>
-      <thead>
-        <tr>
-          <th>Zona</th>
-          <th>Clientes</th>
-          <th>Pedidos pagos</th>
-          <th>Faturamento</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {resumoPorZona.map((r) => (
-          <tr key={r.zona}>
-            <td style={{ fontWeight: 700 }}>
-              {r.zona}
-            </td>
-            <td>{r.clientes}</td>
-            <td>{r.pedidos_pagos}</td>
-            <td style={{ color: "#c83b2d", fontWeight: 750 }}>
-              {moeda(r.faturamento_pago)}
-            </td>
-          </tr>
-        ))}
-
-        {resumoPorZona.length === 0 && (
-          <tr>
-            <td colSpan={4} style={{ textAlign: "center", padding: "2rem" }}>
-              Nenhuma região encontrada.
-            </td>
-          </tr>
-        )}
-      </tbody>
-    </table>
-  </div>
-</div>
-                <span style={{ color: "var(--muted)", fontSize: ".78rem" }}>
-                 Escolha como deseja ordenar o ranking
-                </span>
-              </div>
-
-              <FiltroBairros bairros={listaBairros} />
-
-              <div
-                style={{
-                  padding: "1rem",
-                  borderTop: "1px solid var(--border)",
-                  color: "var(--muted)",
-                  fontSize: ".8rem",
-                }}
-              >
-                Clientes sem bairro identificado:{" "}
-                <strong style={{ color: "var(--ink)" }}>
-                  {clientesSemBairro}
-                </strong>
-              </div>
-            </div>
+            {/* GRÁFICO E RANKING */}
+            <FiltroBairros
+              bairros={listaBairros}
+              clientesSemBairro={clientesSemBairro}
+            />
           </>
         )}
 
-        <div className={styles.card}>
+        {/* TABELA DE CLIENTES */}
+        <section className={styles.card}>
           <div className={styles.cardHead}>
-            <h3>Todos os clientes cadastrados</h3>
+            <div>
+              <h3>Todos os clientes cadastrados</h3>
+              <span
+                style={{
+                  display: "block",
+                  color: "#8993a5",
+                  fontSize: 11,
+                  marginTop: 4,
+                }}
+              >
+                Consulte os dados e o histórico de compras dos usuários.
+              </span>
+            </div>
           </div>
 
-          <div className={styles.tw}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th>Nome</th>
-                  <th>E-mail</th>
-                  <th>Perfil</th>
-                  <th>Pedidos</th>
-                  <th>Total gasto</th>
-                  <th>Cadastro</th>
-                </tr>
-              </thead>
+          {erroUsuarios ? (
+            <div style={{ padding: 20, color: "#991b1b", fontSize: 13 }}>
+              Não foi possível carregar a lista de clientes:{" "}
+              {erroUsuarios.message}
+            </div>
+          ) : (
+            <div className={styles.tw}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Perfil</th>
+                    <th>Pedidos</th>
+                    <th>Total gasto</th>
+                    <th>Cadastro</th>
+                  </tr>
+                </thead>
 
-              <tbody>
-                {lista.map((u) => (
-                  <tr key={u.id}>
-                    <td>
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: ".6rem",
-                        }}
-                      >
+                <tbody>
+                  {lista.map((usuario) => (
+                    <tr key={usuario.id}>
+                      <td>
                         <div
                           style={{
-                            width: 30,
-                            height: 30,
-                            borderRadius: "50%",
-                            background:
-                              u.perfil === "admin"
-                                ? "var(--p600)"
-                                : "var(--p100)",
-                            color:
-                              u.perfil === "admin" ? "#fff" : "var(--p700)",
                             display: "flex",
                             alignItems: "center",
-                            justifyContent: "center",
-                            fontWeight: 700,
-                            fontSize: ".75rem",
+                            gap: ".6rem",
                           }}
                         >
-                          {(u.nome || "?").charAt(0).toUpperCase()}
+                          <div
+                            style={{
+                              width: 32,
+                              height: 32,
+                              borderRadius: "50%",
+                              background:
+                                usuario.perfil === "admin"
+                                  ? "var(--p600)"
+                                  : "var(--p100)",
+                              color:
+                                usuario.perfil === "admin"
+                                  ? "#fff"
+                                  : "var(--p700)",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              fontWeight: 800,
+                              fontSize: ".78rem",
+                              flexShrink: 0,
+                            }}
+                          >
+                            {(usuario.nome || "?")
+                              .charAt(0)
+                              .toUpperCase()}
+                          </div>
+
+                          <span style={{ fontWeight: 650 }}>
+                            {usuario.nome || "—"}
+                          </span>
                         </div>
+                      </td>
 
-                        <span style={{ fontWeight: 600 }}>
-                          {u.nome || "—"}
-                        </span>
-                      </div>
-                    </td>
-
-                    <td style={{ fontSize: ".82rem", color: "var(--muted)" }}>
-                      {u.email}
-                    </td>
-
-                    <td>
-                      <span
-                        className={styles.badge}
-                        style={
-                          u.perfil === "admin"
-                            ? { background: "var(--p100)", color: "var(--p700)" }
-                            : { background: "#f3f4f6", color: "#6b7280" }
-                        }
+                      <td
+                        style={{
+                          fontSize: ".82rem",
+                          color: "var(--muted)",
+                        }}
                       >
-                        {u.perfil}
-                      </span>
-                    </td>
+                        {usuario.email}
+                      </td>
 
-                    <td>{u.total_pedidos}</td>
+                      <td>
+                        <span
+                          className={styles.badge}
+                          style={
+                            usuario.perfil === "admin"
+                              ? {
+                                  background: "var(--p100)",
+                                  color: "var(--p700)",
+                                }
+                              : {
+                                  background: "#f3f4f6",
+                                  color: "#6b7280",
+                                }
+                          }
+                        >
+                          {usuario.perfil}
+                        </span>
+                      </td>
 
-                    <td style={{ fontWeight: 700, color: "var(--p700)" }}>
-                      {moeda(Number(u.total_gasto))}
-                    </td>
+                      <td>{usuario.total_pedidos}</td>
 
-                    <td style={{ fontSize: ".8rem", color: "var(--muted)" }}>
-                      {new Date(u.criado_em).toLocaleDateString("pt-BR")}
-                    </td>
-                  </tr>
-                ))}
+                      <td
+                        style={{
+                          fontWeight: 750,
+                          color: "var(--p700)",
+                        }}
+                      >
+                        {moeda(Number(usuario.total_gasto))}
+                      </td>
 
-                {lista.length === 0 && (
-                  <tr>
-                    <td
-                      colSpan={6}
-                      style={{ textAlign: "center", padding: "2rem" }}
-                    >
-                      Nenhum usuário cadastrado.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+                      <td
+                        style={{
+                          fontSize: ".8rem",
+                          color: "var(--muted)",
+                        }}
+                      >
+                        {new Date(usuario.criado_em).toLocaleDateString(
+                          "pt-BR"
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+
+                  {lista.length === 0 && (
+                    <tr>
+                      <td
+                        colSpan={6}
+                        style={{
+                          textAlign: "center",
+                          padding: "2rem",
+                        }}
+                      >
+                        Nenhum usuário cadastrado.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+      </main>
     </>
   );
 }
