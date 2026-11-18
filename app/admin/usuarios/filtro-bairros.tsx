@@ -25,6 +25,7 @@ export default function FiltroBairros({
   bairros: BairroRow[];
 }) {
   const [zonaSelecionada, setZonaSelecionada] = useState("Todas");
+  const [ordenacao, setOrdenacao] = useState("faturamento");
 
   const zonas = useMemo(
     () =>
@@ -34,17 +35,48 @@ export default function FiltroBairros({
     [bairros]
   );
 
-  const bairrosFiltrados = useMemo(
-    () =>
+  const bairrosFiltrados = useMemo(() => {
+    const resultado =
       zonaSelecionada === "Todas"
-        ? bairros
-        : bairros.filter((item) => item.zona === zonaSelecionada),
-    [bairros, zonaSelecionada]
-  );
+        ? [...bairros]
+        : bairros.filter((item) => item.zona === zonaSelecionada);
+
+    return resultado.sort((a, b) => {
+      switch (ordenacao) {
+        case "clientes":
+          return (
+            Number(b.clientes) - Number(a.clientes) ||
+            a.bairro.localeCompare(b.bairro, "pt-BR")
+          );
+
+        case "pedidos":
+          return (
+            Number(b.pedidos_pagos) - Number(a.pedidos_pagos) ||
+            a.bairro.localeCompare(b.bairro, "pt-BR")
+          );
+
+        case "bairro":
+          return a.bairro.localeCompare(b.bairro, "pt-BR");
+
+        default:
+          return (
+            Number(b.faturamento_pago) -
+              Number(a.faturamento_pago) ||
+            a.bairro.localeCompare(b.bairro, "pt-BR")
+          );
+      }
+    });
+  }, [bairros, zonaSelecionada, ordenacao]);
 
   return (
     <>
-      <div className={styles.productAdminFilters}>
+      <div
+        className={styles.productAdminFilters}
+        style={{
+          gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))",
+          maxWidth: "650px",
+        }}
+      >
         <select
           className={styles.fc}
           aria-label="Filtrar por zona"
@@ -58,6 +90,18 @@ export default function FiltroBairros({
               {zona}
             </option>
           ))}
+        </select>
+
+        <select
+          className={styles.fc}
+          aria-label="Ordenar ranking de bairros"
+          value={ordenacao}
+          onChange={(e) => setOrdenacao(e.target.value)}
+        >
+          <option value="faturamento">Maior faturamento</option>
+          <option value="clientes">Mais clientes</option>
+          <option value="pedidos">Mais pedidos pagos</option>
+          <option value="bairro">Nome do bairro (A–Z)</option>
         </select>
       </div>
 
@@ -76,7 +120,10 @@ export default function FiltroBairros({
           <tbody>
             {bairrosFiltrados.length === 0 ? (
               <tr>
-                <td colSpan={5} style={{ textAlign: "center", padding: "2rem" }}>
+                <td
+                  colSpan={5}
+                  style={{ textAlign: "center", padding: "2rem" }}
+                >
                   Nenhum bairro encontrado.
                 </td>
               </tr>
