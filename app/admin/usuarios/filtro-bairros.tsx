@@ -27,7 +27,10 @@ export default function FiltroBairros({
   const [zonaSelecionada, setZonaSelecionada] = useState("Todas");
 
   const zonas = useMemo(
-    () => [...new Set(bairros.map((item) => item.zona))].sort(),
+    () =>
+      [...new Set(bairros.map((item) => item.zona))]
+        .filter((zona) => zona !== "Localização não informada")
+        .sort(),
     [bairros]
   );
 
@@ -43,38 +46,47 @@ export default function FiltroBairros({
     <>
       <div
         style={{
-          padding: "1rem",
-          marginBottom: "1rem",
-          border: "1.5px solid #eadfd2",
-          borderRadius: "14px",
-          background: "#fff",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: ".8rem",
+          padding: "1rem 1.2rem",
+          background: "#fffaf6",
+          borderBottom: "1px solid #f1dfd4",
         }}
       >
-        <label
-          htmlFor="filtro-zona"
-          style={{
-            display: "block",
-            marginBottom: ".4rem",
-            color: "#64748b",
-            fontSize: ".75rem",
-            fontWeight: 700,
-          }}
-        >
-          FILTRAR POR ZONA
-        </label>
+        <div>
+          <strong
+            style={{
+              display: "block",
+              color: "#0f1e4a",
+              fontSize: ".85rem",
+            }}
+          >
+            Visualizar por região
+          </strong>
+          <span style={{ color: "#7b8497", fontSize: ".75rem" }}>
+            Selecione uma zona para filtrar os bairros
+          </span>
+        </div>
 
         <select
-          id="filtro-zona"
+          aria-label="Filtrar bairros por zona"
           value={zonaSelecionada}
           onChange={(e) => setZonaSelecionada(e.target.value)}
           style={{
             width: "100%",
-            maxWidth: "360px",
-            padding: ".7rem",
-            border: "1.5px solid #eadfd2",
-            borderRadius: "8px",
+            maxWidth: "250px",
+            padding: ".65rem 2.2rem .65rem .85rem",
+            border: "1px solid #eadfd2",
+            borderRadius: "9px",
             background: "#fff",
             color: "#0f1e4a",
+            fontSize: ".83rem",
+            fontWeight: 600,
+            outlineColor: "#ea580c",
+            cursor: "pointer",
           }}
         >
           <option value="Todas">Todas as zonas</option>
@@ -108,11 +120,23 @@ export default function FiltroBairros({
             ) : (
               bairrosFiltrados.map((r) => (
                 <tr key={`${r.zona}-${r.bairro}`}>
-                  <td>{r.zona}</td>
-                  <td style={{ fontWeight: 700 }}>{r.bairro}</td>
+                  <td>
+                    <span
+                      className={styles.badge}
+                      style={{
+                        background: "#fff0e7",
+                        color: "#b94b13",
+                      }}
+                    >
+                      {r.zona}
+                    </span>
+                  </td>
+                  <td style={{ fontWeight: 700, color: "#0f1e4a" }}>
+                    {r.bairro}
+                  </td>
                   <td>{Number(r.clientes)}</td>
                   <td>{Number(r.pedidos_pagos)}</td>
-                  <td style={{ color: "var(--p700)", fontWeight: 750 }}>
+                  <td style={{ color: "#c83b2d", fontWeight: 750 }}>
                     {moeda(Number(r.faturamento_pago))}
                   </td>
                 </tr>
