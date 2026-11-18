@@ -1,3 +1,4 @@
+import PainelRegioes from "./painel-regioes";
 import FiltroBairros from "./filtro-bairros";
 import { createClient } from "@/lib/supabase/server";
 import type { AdminUsuarioRow } from "@/lib/types";
