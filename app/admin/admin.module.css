@@ -16,21 +16,29 @@
   overflow-x: hidden;
 }
 .sbLogo {
-  padding: 0.9rem 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  min-height: 78px;
+  padding: 1rem 1.1rem;
+  border-bottom: 1px solid rgba(255,255,255,.08);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fff;
-  transition: filter 0.15s;
+  background: #0c1840;
+  text-decoration: none;
 }
+
 .sbLogo:hover {
-  filter: brightness(0.96);
+  background: #12234f;
 }
-.sbLogo img {
-  height: 44px;
-  width: auto;
-  display: block;
+
+.sbWordmark {
+  color: #ffffff;
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: -1.5px;
+}
+
+.sbWordmark span {
+  color: #f08030;
 }
 .sbSect {
   padding: 0.8rem 1rem 0.25rem;
