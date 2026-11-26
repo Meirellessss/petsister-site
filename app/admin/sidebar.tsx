@@ -23,8 +23,10 @@ export default function Sidebar({ nome }: { nome: string }) {
   return (
     <aside className={styles.sidebar}>
       <Link href="/" className={styles.sbLogo}>
-        <img src="/logo.jpg" alt="Pet Sister" />
-      </Link>
+  <span className={styles.sbWordmark}>
+    Pet<span>Sister</span>
+  </span>
+</Link>
       <div style={{ padding: ".4rem 0" }}>
         {ITENS.map((item) => (
           <div key={item.href}>
