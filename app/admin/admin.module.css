@@ -2338,3 +2338,33 @@ textarea.fc {
     text-align: center;
   }
 }
+
+/* IDENTIDADE VISUAL DA LOGO PETSISTER */
+.sbLogo {
+  min-height: 83px !important;
+  padding: 1rem 1.2rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #0c1840 !important;
+  border-bottom: 3px solid #ef6332 !important;
+  text-decoration: none !important;
+  filter: none !important;
+}
+
+.sbLogo:hover {
+  background: #142750 !important;
+}
+
+.sbWordmark {
+  display: inline-block;
+  color: #ffffff !important;
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: -1.5px;
+  white-space: nowrap;
+}
+
+.sbWordmark span {
+  color: #f08030 !important;
+}
