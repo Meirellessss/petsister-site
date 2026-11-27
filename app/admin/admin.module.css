@@ -2368,3 +2368,293 @@ textarea.fc {
 .sbWordmark span {
   color: #f08030 !important;
 }
+
+
+/* =========================================
+   PETSISTER ADMIN — AJUSTE FINAL DO LAYOUT
+   ========================================= */
+
+/* Indicadores padronizados no Dashboard e em Clientes */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat {
+  display: flex;
+  min-width: 0;
+  min-height: 108px;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--white);
+  box-shadow: 0 4px 15px rgba(12, 24, 64, .035);
+}
+
+.statIc {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  border-radius: 13px;
+}
+
+.statNum {
+  color: var(--p900);
+  font-family: var(--font-sans);
+  font-size: clamp(1.35rem, 1.65vw, 1.8rem);
+  font-weight: 900;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.statLbl {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: .76rem;
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+/* Proporções específicas do Dashboard */
+.dashboardPrimaryGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(290px, .9fr);
+  align-items: stretch;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.dashboardTablesGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, .9fr);
+  align-items: start;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.dashboardOrdersGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 20px;
+}
+
+/* Gráfico vertical: as seis zonas ficam visíveis e alinhadas */
+.dashboardChartViewport {
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.dashboardChart {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(68px, 1fr));
+  min-width: 540px;
+  height: 250px;
+  align-items: stretch;
+  gap: 10px;
+  padding: 12px 8px 0;
+  border-bottom: 1px solid var(--border);
+  background-image:
+    repeating-linear-gradient(
+      to top,
+      transparent 0,
+      transparent calc(25% - 1px),
+      #edf0f4 calc(25% - 1px),
+      #edf0f4 25%
+    );
+}
+
+.dashboardChartItem {
+  display: flex;
+  min-width: 0;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.dashboardChartValue {
+  min-height: 18px;
+  color: var(--ink);
+  font-size: .67rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.dashboardChartBarArea {
+  display: flex;
+  width: 100%;
+  min-height: 0;
+  flex: 1;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.dashboardChartBar {
+  width: min(44px, 65%);
+  min-height: 3px;
+  border-radius: 7px 7px 0 0;
+  transition: height .25s ease;
+}
+
+.dashboardChartLabel {
+  min-height: 34px;
+  color: var(--muted);
+  font-size: .66rem;
+  line-height: 1.25;
+  text-align: center;
+}
+
+/* Destaques compactos, sem três cartões grandes empilhados */
+.dashboardHighlightsList {
+  padding: 0 18px 8px;
+}
+
+.dashboardHighlightRow {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+}
+
+.dashboardHighlightRow:last-child {
+  border-bottom: 0;
+}
+
+.dashboardHighlightIcon {
+  display: flex;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: var(--p50);
+  font-size: 1.15rem;
+}
+
+.dashboardHighlightIconBlue {
+  background: #edf3ff;
+}
+
+.dashboardHighlightText {
+  min-width: 0;
+}
+
+.dashboardHighlightText strong {
+  display: block;
+  color: var(--ink);
+  font-size: .83rem;
+  font-weight: 800;
+}
+
+.dashboardHighlightText span {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: .72rem;
+  line-height: 1.4;
+}
+
+.dashboardHighlightCount {
+  color: var(--p600);
+  font-size: 1.45rem;
+  font-weight: 900;
+}
+
+/* Larguras e responsividade */
+@media (max-width: 1150px) {
+  .dashboardPrimaryGrid {
+    grid-template-columns: minmax(0, 1.35fr) minmax(270px, .9fr);
+    gap: 14px;
+  }
+
+  .dashboardTablesGrid,
+  .dashboardOrdersGrid {
+    gap: 14px;
+  }
+}
+
+@media (max-width: 900px) {
+  .dashboardPrimaryGrid,
+  .dashboardTablesGrid,
+  .dashboardOrdersGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Estas regras ficam no final para prevalecer sobre as antigas */
+@media (max-width: 800px) {
+  .wrap {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .sidebar {
+    position: relative !important;
+    top: auto !important;
+    flex: 0 0 auto !important;
+    align-self: stretch !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .sidebar > div:nth-child(2) {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px !important;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .sidebar .sbSect,
+  .sidebar .sbFoot {
+    display: none;
+  }
+
+  .main {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .content {
+    width: 100%;
+    padding: 16px;
+  }
+}
+
+@media (max-width: 560px) {
+  .statsGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .stat {
+    min-height: 88px;
+    padding: 14px;
+  }
+
+  .dashboardChart {
+    min-width: 540px;
+  }
+}
