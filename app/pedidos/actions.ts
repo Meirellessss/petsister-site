@@ -48,4 +48,4 @@ export async function detalhePedido(pedidoId: number) {
       preco_unitario: i.preco_unitario as number,
     })),
   };
-
+}
