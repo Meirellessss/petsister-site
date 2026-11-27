@@ -193,67 +193,57 @@ export default function ProdutosClient({
 
        
         
+        
         <div className={styles.productAdminMetrics}>
-          <div className={`${styles.productMetricCard} ${styles.productMetricTotal}`}>
-            <div className={styles.productMetricIcon}>🐾</div>
-            <div className={styles.productMetricInfo}>
-              <span className={styles.productMetricLabel}>
-                Produtos cadastrados
-              </span>
-              <strong className={styles.productMetricValue}>
-                {produtos.length}
-              </strong>
-              <span className={styles.productMetricHint}>
-                Total no catálogo
-              </span>
+          <div
+            style={{
+              padding: "1rem",
+              border: "1px solid var(--border)",
+              borderRadius: "12px",
+              background: "var(--bg)",
+            }}
+          >
+            <div style={{ color: "var(--muted)", fontSize: ".85rem" }}>
+              Produtos esgotados
             </div>
+            <strong style={{ color: "#991b1b", fontSize: "1.5rem" }}>
+              {totalEsgotados}
+            </strong>
           </div>
 
-          <div className={`${styles.productMetricCard} ${styles.productMetricEmpty}`}>
-            <div className={styles.productMetricIcon}>🚫</div>
-            <div className={styles.productMetricInfo}>
-              <span className={styles.productMetricLabel}>
-                Produtos esgotados
-              </span>
-              <strong className={styles.productMetricValue}>
-                {totalEsgotados}
-              </strong>
-              <span className={styles.productMetricHint}>
-                Precisam de reposição
-              </span>
+          <div
+            style={{
+              padding: "1rem",
+              border: "1px solid var(--border)",
+              borderRadius: "12px",
+              background: "var(--bg)",
+            }}
+          >
+            <div style={{ color: "var(--muted)", fontSize: ".85rem" }}>
+              Estoque baixo
             </div>
+            <strong style={{ color: "#9a3412", fontSize: "1.5rem" }}>
+              {totalEstoqueBaixo}
+            </strong>
           </div>
 
-          <div className={`${styles.productMetricCard} ${styles.productMetricLow}`}>
-            <div className={styles.productMetricIcon}>⚠️</div>
-            <div className={styles.productMetricInfo}>
-              <span className={styles.productMetricLabel}>
-                Estoque baixo
-              </span>
-              <strong className={styles.productMetricValue}>
-                {totalEstoqueBaixo}
-              </strong>
-              <span className={styles.productMetricHint}>
-                Próximos do limite mínimo
-              </span>
+          <div
+            style={{
+              padding: "1rem",
+              border: "1px solid var(--border)",
+              borderRadius: "12px",
+              background: "var(--bg)",
+            }}
+          >
+            <div style={{ color: "var(--muted)", fontSize: ".85rem" }}>
+              Estoque normal
             </div>
-          </div>
-
-          <div className={`${styles.productMetricCard} ${styles.productMetricOk}`}>
-            <div className={styles.productMetricIcon}>✓</div>
-            <div className={styles.productMetricInfo}>
-              <span className={styles.productMetricLabel}>
-                Estoque normal
-              </span>
-              <strong className={styles.productMetricValue}>
-                {totalDisponiveis}
-              </strong>
-              <span className={styles.productMetricHint}>
-                Produtos disponíveis
-              </span>
-            </div>
+            <strong style={{ color: "#166534", fontSize: "1.5rem" }}>
+              {totalDisponiveis}
+            </strong>
           </div>
         </div>
+
 
         <p style={{ color: "var(--muted)", marginBottom: ".8rem" }}>
           Exibindo {produtosFiltrados.length} de {produtos.length} produtos
