@@ -2973,3 +2973,62 @@ textarea.fc {
     grid-template-columns: 1fr !important;
   }
 }
+
+
+/* PETSISTER — APRESENTAÇÃO DOS PRODUTOS NA TABELA */
+
+.productAdminProductCell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 220px;
+}
+
+.productAdminThumb {
+  display: flex;
+  width: 54px;
+  height: 54px;
+  flex: 0 0 54px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: #fffaf6;
+  color: #e76b32;
+  font-size: 22px;
+}
+
+.productAdminThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 4px;
+}
+
+.productAdminProductInfo {
+  min-width: 0;
+}
+
+.productAdminProductMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 6px;
+}
+
+.productAdminProductMeta span {
+  padding: 3px 7px;
+  border-radius: 5px;
+  background: #fff0e7;
+  color: #b94b13;
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.productAdminPrice {
+  color: var(--p700);
+  font-size: .9rem;
+  font-weight: 850;
+  white-space: nowrap;
+}
