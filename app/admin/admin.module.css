@@ -2836,3 +2836,80 @@ textarea.fc {
   background: var(--p50);
   border-color: var(--border);
 }
+
+
+/* =========================================
+   PETSISTER — ESPAÇAMENTOS DO DASHBOARD
+   ========================================= */
+
+/* Mantém ranking e clientes com a mesma altura */
+.dashboardTablesGrid {
+  align-items: stretch;
+  column-gap: 18px;
+  row-gap: 18px;
+}
+
+.dashboardTablesGrid > .card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+}
+
+.dashboardTablesGrid > .card > .tw {
+  flex: 1;
+  min-height: 0;
+}
+
+/* Aproveita a largura dos cartões sem barra horizontal */
+.dashboardTablesGrid .table {
+  width: 100%;
+  min-width: 0;
+  table-layout: fixed;
+}
+
+.dashboardTablesGrid .table th,
+.dashboardTablesGrid .table td {
+  padding: .78rem .7rem;
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+
+/* Alinha também pedidos e agendamentos */
+.dashboardOrdersGrid {
+  align-items: stretch;
+  gap: 18px;
+}
+
+.dashboardOrdersGrid > .card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+}
+
+.dashboardOrdersGrid > .card > .tw {
+  flex: 1;
+  min-height: 0;
+}
+
+.dashboardOrdersGrid .table {
+  width: 100%;
+  min-width: 0;
+  table-layout: fixed;
+}
+
+.dashboardOrdersGrid .table th,
+.dashboardOrdersGrid .table td {
+  padding: .78rem .7rem;
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+
+/* Mantém boa aparência em telas menores */
+@media (max-width: 900px) {
+  .dashboardTablesGrid > .card,
+  .dashboardOrdersGrid > .card {
+    height: auto;
+  }
+}
