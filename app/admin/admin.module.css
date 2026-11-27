@@ -3203,3 +3203,215 @@ textarea.fc {
     min-width: 0;
   }
 }
+
+
+/* =========================================
+   PETSISTER — MODAL PROFISSIONAL DE PEDIDOS
+   ========================================= */
+
+.orderDetailModal {
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  border-radius: 18px;
+}
+
+.orderDetailHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 24px;
+  background: #fffaf6;
+  border-bottom: 1px solid var(--border);
+}
+
+.orderDetailHeader h3 {
+  margin-top: 5px;
+  color: var(--p900);
+  font-size: 1.35rem;
+  font-weight: 900;
+}
+
+.orderDetailHeader p {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: .78rem;
+}
+
+.orderDetailEyebrow {
+  display: block;
+  color: #df7137;
+  font-size: .65rem;
+  font-weight: 900;
+  letter-spacing: .1em;
+}
+
+.orderDetailBody {
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+  padding: 23px;
+}
+
+.orderDetailSummary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid #f2dfd1;
+  border-radius: 13px;
+  background: #fff6ef;
+}
+
+.orderDetailSummary strong {
+  display: block;
+  margin-top: 6px;
+  color: var(--p900);
+  font-size: 1.8rem;
+  font-weight: 900;
+}
+
+.orderDetailMetaGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 11px;
+}
+
+.orderDetailInfo {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--white);
+}
+
+.orderDetailInfo > span {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--muted);
+  font-size: .64rem;
+  font-weight: 850;
+  letter-spacing: .06em;
+}
+
+.orderDetailInfo > strong {
+  display: block;
+  color: var(--p900);
+  font-size: .83rem;
+  overflow-wrap: anywhere;
+}
+
+.orderDetailInfo > small {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: .72rem;
+  overflow-wrap: anywhere;
+}
+
+.orderDetailItems {
+  padding-top: 17px;
+  border-top: 1px solid var(--border);
+}
+
+.orderDetailItemsHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.orderDetailItemsHead h4 {
+  color: var(--p900);
+  font-size: .96rem;
+  font-weight: 900;
+}
+
+.orderDetailItemsHead span {
+  color: var(--muted);
+  font-size: .75rem;
+}
+
+.orderDetailItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.orderDetailItemIcon {
+  display: flex;
+  width: 43px;
+  height: 43px;
+  flex: 0 0 43px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  background: #fff1e8;
+  font-size: 19px;
+}
+
+.orderDetailItemInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.orderDetailItemInfo strong {
+  display: block;
+  color: var(--p900);
+  font-size: .84rem;
+  overflow-wrap: anywhere;
+}
+
+.orderDetailItemInfo span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: .73rem;
+}
+
+.orderDetailItemPrice {
+  color: var(--p700);
+  font-size: .85rem;
+  white-space: nowrap;
+}
+
+.orderDetailTotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 17px;
+  border-radius: 11px;
+  background: #10204b;
+  color: white;
+}
+
+.orderDetailTotal strong {
+  font-size: 1.25rem;
+  font-weight: 900;
+}
+
+@media (max-width: 560px) {
+  .orderDetailHeader {
+    padding: 17px;
+  }
+
+  .orderDetailBody {
+    padding: 15px;
+    gap: 14px;
+  }
+
+  .orderDetailMetaGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .orderDetailSummary strong {
+    font-size: 1.5rem;
+  }
+}
