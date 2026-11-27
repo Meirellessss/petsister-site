@@ -2658,3 +2658,181 @@ textarea.fc {
     min-width: 540px;
   }
 }
+
+
+/* =========================================
+   PETSISTER - INDICADORES DO CATÁLOGO
+   ========================================= */
+
+.productAdminMetrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin: 20px;
+}
+
+.productMetricCard {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+  min-height: 100px;
+  padding: 17px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 3px 12px rgba(12, 24, 64, .035);
+  transition: transform .18s, box-shadow .18s;
+}
+
+.productMetricCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 18px rgba(12, 24, 64, .07);
+}
+
+.productMetricIcon {
+  display: flex;
+  flex: 0 0 43px;
+  width: 43px;
+  height: 43px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-size: 19px;
+}
+
+.productMetricTotal .productMetricIcon {
+  color: #17336f;
+  background: #edf3ff;
+}
+
+.productMetricEmpty .productMetricIcon {
+  color: #b42318;
+  background: #fff0ed;
+}
+
+.productMetricLow .productMetricIcon {
+  color: #b76515;
+  background: #fff4e5;
+}
+
+.productMetricOk .productMetricIcon {
+  color: #168348;
+  background: #eaf7ef;
+}
+
+.productMetricInfo {
+  min-width: 0;
+}
+
+.productMetricLabel {
+  color: var(--muted);
+  font-size: .73rem;
+  font-weight: 750;
+  line-height: 1.4;
+}
+
+.productMetricValue {
+  display: block;
+  margin-top: 4px;
+  color: var(--p900);
+  font-size: 1.65rem;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.productMetricHint {
+  display: block;
+  margin-top: 4px;
+  color: var(--soft);
+  font-size: .68rem;
+}
+
+/* Prévia das fotos na tabela */
+.productAdminProductCell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 220px;
+}
+
+.productAdminThumb {
+  display: flex;
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: #fffaf6;
+  color: var(--p700);
+  font-size: 20px;
+}
+
+.productAdminThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 3px;
+}
+
+.productAdminProductInfo {
+  min-width: 0;
+}
+
+.productAdminProductTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.productAdminProductTag {
+  padding: 3px 7px;
+  border-radius: 5px;
+  background: #fff1e8;
+  color: #b94b13;
+  font-size: .64rem;
+  font-weight: 800;
+}
+
+/* Tabela do catálogo */
+.productAdminTable .table tbody td {
+  padding-top: 13px;
+  padding-bottom: 13px;
+}
+
+.productAdminTable .table tbody tr:hover {
+  background: #fffaf6;
+}
+
+@media (max-width: 1050px) {
+  .productAdminMetrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .productAdminMetrics {
+    grid-template-columns: minmax(0, 1fr);
+    margin: 14px;
+    gap: 9px;
+  }
+
+  .productMetricCard {
+    min-height: 82px;
+    padding: 12px 14px;
+  }
+}
+
+:global([data-theme="dark"]) .productMetricCard {
+  background: var(--white);
+  border-color: var(--border);
+}
+
+:global([data-theme="dark"]) .productAdminThumb {
+  background: var(--p50);
+  border-color: var(--border);
+}
