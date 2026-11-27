@@ -3032,3 +3032,174 @@ textarea.fc {
   font-weight: 850;
   white-space: nowrap;
 }
+
+
+/* =========================================
+   PETSISTER — DESIGN DA PÁGINA DE PEDIDOS
+   ========================================= */
+
+.ordersStats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.ordersStat {
+  position: relative;
+  min-width: 0;
+  min-height: 112px;
+  justify-content: center;
+  gap: 8px;
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  border-top: 3px solid #17336f;
+  border-radius: 14px;
+  background: var(--white);
+  box-shadow: 0 3px 12px rgba(12, 24, 64, .035);
+  transition: transform .18s, box-shadow .18s;
+}
+
+.ordersStat:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 18px rgba(12, 24, 64, .06);
+}
+
+.ordersStat:nth-child(2) {
+  border-top-color: #e99436;
+  border-left: 1px solid var(--border);
+}
+
+.ordersStat:nth-child(3) {
+  border-top-color: #29945a;
+  border-left: 1px solid var(--border);
+}
+
+.ordersStat:nth-child(4) {
+  border-top-color: #d95043;
+  border-left: 1px solid var(--border);
+}
+
+.ordersStatLabel {
+  color: var(--muted);
+  font-size: .75rem;
+  font-weight: 750;
+  letter-spacing: .025em;
+}
+
+.ordersStatValue {
+  color: var(--p900);
+  font-size: 1.85rem;
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+.ordersStatHint {
+  color: var(--soft);
+  font-size: .71rem;
+  line-height: 1.4;
+}
+
+/* Barra de pesquisa e título da listagem */
+.ordersToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 22px 0 14px;
+  padding: 17px 19px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: var(--white);
+}
+
+.ordersToolbarText h3 {
+  color: var(--p900);
+  font-size: 1rem;
+  font-weight: 850;
+}
+
+.ordersToolbarText p {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: .76rem;
+}
+
+.ordersSearch {
+  width: 100%;
+  max-width: 420px;
+}
+
+.ordersSearch input {
+  min-height: 43px;
+  border-radius: 10px;
+  background: #fffdfb;
+}
+
+/* Filtros de status */
+.ordersFilters {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.ordersFilters a {
+  min-width: 86px;
+  border-radius: 9px;
+  text-align: center;
+}
+
+/* Mensagem de erro */
+.ordersError {
+  margin-bottom: 16px;
+  padding: 13px 16px;
+  border: 1px solid #f0c7c1;
+  border-radius: 10px;
+  background: #fff3f0;
+  color: #a52f24;
+  font-size: .83rem;
+}
+
+/* Responsividade */
+@media (max-width: 950px) {
+  .ordersStats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ordersFilters {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  .ordersStats {
+    gap: 10px;
+  }
+
+  .ordersStat {
+    min-height: 92px;
+    padding: 13px;
+  }
+
+  .ordersStatValue {
+    font-size: 1.5rem;
+  }
+
+  .ordersToolbar {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 14px;
+  }
+
+  .ordersSearch {
+    max-width: none;
+  }
+
+  .ordersFilters a {
+    flex: 1;
+    min-width: 0;
+  }
+}
