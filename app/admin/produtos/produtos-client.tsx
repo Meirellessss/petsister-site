@@ -255,12 +255,6 @@ export default function ProdutosClient({
           </div>
         </div>
 
-            <strong style={{ color: "#166534", fontSize: "1.5rem" }}>
-              {totalDisponiveis}
-            </strong>
-          </div>
-        </div>
-
         <p style={{ color: "var(--muted)", marginBottom: ".8rem" }}>
           Exibindo {produtosFiltrados.length} de {produtos.length} produtos
         </p>
