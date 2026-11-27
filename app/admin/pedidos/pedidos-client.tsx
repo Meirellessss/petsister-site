@@ -50,6 +50,11 @@ export default function PedidosClient({
   const [aberto, setAberto] = useState<number | null>(null);
   const [detalhe, setDetalhe] = useState<Detalhe | null>(null);
   const [carregandoDetalhe, setCarregandoDetalhe] = useState(false);
+  const pedidoAberto = pedidos.find((p) => p.id === aberto);
+
+const clienteAberto = pedidoAberto
+  ? infoUsuario[pedidoAberto.usuario_id]
+  : undefined;
 
   
 const termo = busca.trim().toLocaleLowerCase("pt-BR");
