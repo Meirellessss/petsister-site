@@ -2913,3 +2913,24 @@ textarea.fc {
     height: auto;
   }
 }
+
+/* Cores dos novos indicadores de produtos */
+.productAdminMetrics > div.productMetricTotal {
+  background: #edf3ff !important;
+  border-color: #dbe7ff !important;
+}
+
+.productAdminMetrics > div.productMetricEmpty {
+  background: #fff0ed !important;
+  border-color: #f2cbc5 !important;
+}
+
+.productAdminMetrics > div.productMetricLow {
+  background: #fff5e8 !important;
+  border-color: #f3dfbd !important;
+}
+
+.productAdminMetrics > div.productMetricOk {
+  background: #eef8f0 !important;
+  border-color: #cde8d2 !important;
+}
