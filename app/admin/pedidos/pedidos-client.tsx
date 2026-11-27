@@ -181,9 +181,20 @@ const pedidosFiltrados = pedidos.filter((p) => {
         </div>
       )}
 
+      
       <div className={styles.card}>
+        <div className={styles.ordersCardTitle}>
+          <div>
+            <strong>Pedidos da loja</strong>
+            <span>Consulte valores, clientes e situação das vendas.</span>
+          </div>
+
+          <span>{pedidosFiltrados.length} pedidos</span>
+        </div>
+
         <div className={styles.tw}>
           <table className={styles.table}>
+
             <thead>
               <tr>
                 <th>Pedido</th>
@@ -268,14 +279,7 @@ const pedidosFiltrados = pedidos.filter((p) => {
                     </td>
 
                     <td>
-                      <div
-                        style={{
-                          display: "flex",
-                          flexWrap: "wrap",
-                          gap: ".4rem",
-                          alignItems: "center",
-                        }}
-                      >
+                      <div className={styles.ordersActions}>
                         <button
                           type="button"
                           className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
@@ -286,13 +290,7 @@ const pedidosFiltrados = pedidos.filter((p) => {
 
                         <select
                           aria-label={`Status do pedido ${p.id}`}
-                          className={styles.fc}
-                          style={{
-                            padding: ".35rem .45rem",
-                            fontSize: ".78rem",
-                            width: "auto",
-                            minWidth: "120px",
-                          }}
+                           className={`${styles.fc} ${styles.ordersStatusSelect}`}
                           value={p.status}
                           disabled={salvando || p.status !== "pendente"}
                           onChange={(e) =>
