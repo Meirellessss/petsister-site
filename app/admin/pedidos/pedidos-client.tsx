@@ -330,6 +330,7 @@ const pedidosFiltrados = pedidos.filter((p) => {
         </div>
       </div>
 
+     
       {aberto !== null && (
         <div
           className={styles.overlay}
@@ -339,11 +340,18 @@ const pedidosFiltrados = pedidos.filter((p) => {
           }}
         >
           <div
-            className={styles.modal}
+            className={`${styles.modal} ${styles.orderDetailModal}`}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className={styles.modalHead}>
-              <h3>Detalhes do pedido #{aberto}</h3>
+            <div className={styles.orderDetailHeader}>
+              <div>
+                <span className={styles.orderDetailEyebrow}>
+                  PETSISTER · GESTÃO DE VENDAS
+                </span>
+                <h3>Pedido #{aberto}</h3>
+                <p>Resumo e informações da compra</p>
+              </div>
+
               <button
                 type="button"
                 className={styles.modalClose}
@@ -357,10 +365,10 @@ const pedidosFiltrados = pedidos.filter((p) => {
               </button>
             </div>
 
-            <div className={styles.modalBody} style={{ gap: ".5rem" }}>
+            <div className={styles.orderDetailBody}>
               {carregandoDetalhe || !detalhe ? (
                 <p style={{ color: "var(--muted)" }}>
-                  Carregando detalhes...
+                  Carregando detalhes do pedido...
                 </p>
               ) : "erro" in detalhe ? (
                 <p role="alert" style={{ color: "#b91c1c" }}>
@@ -368,61 +376,111 @@ const pedidosFiltrados = pedidos.filter((p) => {
                 </p>
               ) : (
                 <>
-                  {detalhe.itens.map((item, index) => (
-                    <div
-                      key={index}
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "flex-start",
-                        gap: "1rem",
-                        padding: ".75rem 0",
-                        borderBottom: "1px solid var(--border)",
-                      }}
-                    >
-                      <div>
-                        <strong style={{ fontSize: ".9rem" }}>
-                          {item.nome}
-                        </strong>
-                        <div
-                          style={{
-                            marginTop: ".2rem",
-                            fontSize: ".78rem",
-                            color: "var(--muted)",
-                          }}
-                        >
-                          Quantidade: {item.quantidade}
-                        </div>
-                      </div>
-
-                      <span
-                        style={{
-                          fontWeight: 750,
-                          color: "var(--p700)",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {formatarMoeda(
-                          item.preco_unitario * item.quantidade
-                        )}
+                  <div className={styles.orderDetailSummary}>
+                    <div>
+                      <span className={styles.orderDetailEyebrow}>
+                        VALOR TOTAL DA COMPRA
                       </span>
-                    </div>
-                  ))}
 
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      gap: "1rem",
-                      fontSize: "1.05rem",
-                      fontWeight: 800,
-                      paddingTop: ".8rem",
-                    }}
-                  >
-                    <span>Total do pedido</span>
-                    <span style={{ color: "var(--p700)" }}>
-                      {formatarMoeda(detalhe.total)}
+                      <strong>
+                        {formatarMoeda(detalhe.total)}
+                      </strong>
+                    </div>
+
+                    <span
+                      className={styles.badge}
+                      style={
+                        badgeStyle[detalhe.status] ??
+                        badgeStyle.pendente
+                      }
+                    >
+                      {statusLabel[
+                        detalhe.status as StatusPedido
+                      ] ?? detalhe.status}
                     </span>
+                  </div>
+
+                  <div className={styles.orderDetailMetaGrid}>
+                    <div className={styles.orderDetailInfo}>
+                      <span>CLIENTE</span>
+                      <strong>
+                        {clienteAberto?.nome || "Cliente não identificado"}
+                      </strong>
+                      <small>
+                        {clienteAberto?.email || "E-mail não disponível"}
+                      </small>
+                    </div>
+
+                    <div className={styles.orderDetailInfo}>
+                      <span>DATA DO PEDIDO</span>
+                      <strong>
+                        {new Date(detalhe.criado_em).toLocaleString("pt-BR")}
+                      </strong>
+                    </div>
+
+                    <div className={styles.orderDetailInfo}>
+                      <span>STATUS DO PAGAMENTO</span>
+                      <strong>
+                        {detalhe.mp_status || "Não informado"}
+                      </strong>
+                      <small>
+                        {detalhe.mp_status_detail || "Sem detalhe adicional"}
+                      </small>
+                    </div>
+
+                    <div className={styles.orderDetailInfo}>
+                      <span>AMBIENTE DE PAGAMENTO</span>
+                      <strong>
+                        {detalhe.mp_ambiente === "teste"
+                          ? "Teste"
+                          : detalhe.mp_ambiente === "producao"
+                            ? "Produção"
+                            : detalhe.mp_ambiente || "Não informado"}
+                      </strong>
+                    </div>
+                  </div>
+
+                  <section className={styles.orderDetailItems}>
+                    <div className={styles.orderDetailItemsHead}>
+                      <h4>Produtos do pedido</h4>
+                      <span>{detalhe.itens.length} itens</span>
+                    </div>
+
+                    {detalhe.itens.length === 0 ? (
+                      <p style={{ color: "var(--muted)", fontSize: 13 }}>
+                        Nenhum produto encontrado neste pedido.
+                      </p>
+                    ) : (
+                      detalhe.itens.map((item, index) => (
+                        <div
+                          key={index}
+                          className={styles.orderDetailItem}
+                        >
+                          <div className={styles.orderDetailItemIcon}>
+                            🐾
+                          </div>
+
+                          <div className={styles.orderDetailItemInfo}>
+                            <strong>{item.nome}</strong>
+                            <span>
+                              {item.quantidade} ×{" "}
+                              {formatarMoeda(item.preco_unitario)}
+                            </span>
+                          </div>
+
+                          <strong className={styles.orderDetailItemPrice}>
+                            {formatarMoeda(
+                              item.preco_unitario * item.quantidade
+                            )}
+                          </strong>
+                        </div>
+                      ))
+                    )}
+                  </section>
+
+                  <div className={styles.orderDetailTotal}>
+                    <span>Total do pedido</span>
+                    <strong>{formatarMoeda(detalhe.total)}</strong>
                   </div>
                 </>
               )}
@@ -430,6 +488,7 @@ const pedidosFiltrados = pedidos.filter((p) => {
           </div>
         </div>
       )}
+
     </>
   );
 }
