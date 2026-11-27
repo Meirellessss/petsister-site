@@ -2934,3 +2934,42 @@ textarea.fc {
   background: #eef8f0 !important;
   border-color: #cde8d2 !important;
 }
+
+/* Restaurar indicadores originais do catálogo */
+.productAdminMetrics {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+  margin: 0 20px 18px !important;
+}
+
+.productAdminMetrics > div {
+  min-height: 92px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  gap: 7px !important;
+  padding: 15px 18px !important;
+}
+
+.productAdminMetrics > div:nth-child(1) {
+  background: #fff3f1 !important;
+  border-color: #f2c9c3 !important;
+}
+
+.productAdminMetrics > div:nth-child(2) {
+  background: #fff7ed !important;
+  border-color: #f4dfc1 !important;
+}
+
+.productAdminMetrics > div:nth-child(3) {
+  background: #f0f9f2 !important;
+  border-color: #c9e6d0 !important;
+}
+
+@media (max-width: 800px) {
+  .productAdminMetrics {
+    grid-template-columns: 1fr !important;
+  }
+}
