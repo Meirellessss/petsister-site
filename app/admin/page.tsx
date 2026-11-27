@@ -367,90 +367,52 @@ export default async function AdminDashboardPage() {
               </div>
             </div>
 
-            <div style={{ padding: "20px 18px 12px" }}>
-              <div className={styles.tw}>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-end",
-                    justifyContent: "space-around",
-                    gap: 12,
-                    minWidth: 590,
-                    height: 245,
-                    padding: "12px 8px 0",
-                    borderBottom: "1px solid var(--border)",
-                    backgroundImage:
-                      "repeating-linear-gradient(to top, transparent 0, transparent calc(25% - 1px), #edf0f4 calc(25% - 1px), #edf0f4 25%)",
-                  }}
-                >
-                  {resumoRegioes.map((item) => {
-                    const altura =
-                      item.faturamento_pago > 0
-                        ? Math.max(
-                            5,
-                            (item.faturamento_pago / valorMaximoGrafico) * 100
-                          )
-                        : 2;
+            <div className={styles.dashboardChartViewport}>
+  <div className={styles.dashboardChart}>
+    {resumoRegioes.map((item) => {
+      const altura =
+        item.faturamento_pago > 0
+          ? Math.max(
+              5,
+              (item.faturamento_pago / valorMaximoGrafico) * 100
+            )
+          : 2;
 
-                    const semLocalizacao =
-                      item.zona === "Localização não informada";
+      const semLocalizacao =
+        item.zona === "Localização não informada";
 
-                    return (
-                      <div
-                        key={item.zona}
-                        style={{
-                          flex: "1 0 75px",
-                          height: "100%",
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "flex-end",
-                          alignItems: "center",
-                          gap: 6,
-                        }}
-                      >
-                        <strong
-                          style={{
-                            color: "var(--ink)",
-                            fontSize: 10,
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {moeda(item.faturamento_pago)}
-                        </strong>
+      return (
+        <div
+          key={item.zona}
+          className={styles.dashboardChartItem}
+        >
+          <strong className={styles.dashboardChartValue}>
+            {moeda(item.faturamento_pago)}
+          </strong>
 
-                        <div
-                          style={{
-                            width: "min(42px, 72%)",
-                            height: `${altura}%`,
-                            minHeight: 3,
-                            borderRadius: "7px 7px 0 0",
-                            background: semLocalizacao
-                              ? "#aab4c3"
-                              : "linear-gradient(180deg, #f08030, #e84030)",
-                            boxShadow: item.faturamento_pago > 0
-                              ? "0 3px 10px rgba(232,64,48,.13)"
-                              : "none",
-                          }}
-                        />
+          <div className={styles.dashboardChartBarArea}>
+            <div
+              className={styles.dashboardChartBar}
+              style={{
+                height: `${altura}%`,
+                background: semLocalizacao
+                  ? "#aab4c3"
+                  : "linear-gradient(180deg, #f08030, #e84030)",
+              }}
+            />
+          </div>
 
-                        <span
-                          style={{
-                            minHeight: 32,
-                            color: "var(--muted)",
-                            fontSize: 10,
-                            textAlign: "center",
-                            lineHeight: 1.3,
-                          }}
-                        >
-                          {item.zona === "Localização não informada"
-                            ? "Sem localização"
-                            : item.zona}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
+          <span className={styles.dashboardChartLabel}>
+            {semLocalizacao
+              ? "Sem localização"
+              : item.zona}
+          </span>
+        </div>
+      );
+    })}
+  </div>
+</div>
+                  
 
               <div
                 style={{
