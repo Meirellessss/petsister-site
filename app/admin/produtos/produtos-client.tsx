@@ -277,22 +277,55 @@ export default function ProdutosClient({
               {produtosOrdenados.map((p) => (
                 <tr key={p.id}>
                   <td>{p.id}</td>
-                  <td>
-                    <div className={styles.productAdminName}>{p.nome}</div>
-                    <div className={styles.productAdminDescription}>
-                      {(p.descricao ?? "").slice(0, 50)}…
-                    </div>
-                  </td>
+                 <td>
+  <div className={styles.productAdminProductCell}>
+    <div className={styles.productAdminThumb}>
+      {(p.imagem ?? "").trim() ? (
+        <img
+          src={
+            (p.imagem ?? "")
+              .split(/\r?\n/)
+              .map((url) => url.trim())
+              .find(Boolean) ?? ""
+          }
+          alt={p.nome}
+          loading="lazy"
+        />
+      ) : (
+        <span>🐾</span>
+      )}
+    </div>
+
+    <div className={styles.productAdminProductInfo}>
+      <div className={styles.productAdminName}>
+        {p.nome}
+      </div>
+
+      <div className={styles.productAdminDescription}>
+        {p.descricao || "Sem descrição cadastrada"}
+      </div>
+
+      <div className={styles.productAdminProductMeta}>
+        {p.destaque && <span>Destaque</span>}
+
+        {Number(p.desconto_percentual) > 0 && (
+          <span>
+            {p.desconto_percentual}% de desconto
+          </span>
+        )}
+      </div>
+    </div>
+  </div>
+</td>
                   <td>{p.categoria ?? "—"}</td>
                   <td>
                     <span className={styles.badge} style={{ background: "var(--p50)", color: "var(--p700)" }}>
                       {p.porte === "Medio" ? "Médio" : p.porte}
                     </span>
                   </td>
-                  <td style={{ fontWeight: 700, color: "var(--p700)" }}>
-                    R$ {p.preco.toFixed(2).replace(".", ",")}
-                  </td>
-                  <td>
+                  <td className={styles.productAdminPrice}>
+  R$ {p.preco.toFixed(2).replace(".", ",")}
+</td>
                     <span
                       className={styles.badge}
                       style={
