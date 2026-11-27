@@ -457,9 +457,10 @@ export default async function AdminDashboardPage() {
                 </div>
               </div>
             </div>
-          </div>
+         
 
-                    <section className={styles.attentionSection}>
+                   
+          <section className={styles.attentionSection}>
             <div className={styles.attentionHeading}>
               <div>
                 <span className={styles.attentionEyebrow}>
@@ -475,15 +476,11 @@ export default async function AdminDashboardPage() {
                 href="/admin/pedidos?status=pendente"
                 className={styles.dashboardHighlightRow}
               >
-                <div className={styles.dashboardHighlightIcon}>
-                  🛒
-                </div>
-
+                <div className={styles.dashboardHighlightIcon}>🛒</div>
                 <div className={styles.dashboardHighlightText}>
                   <strong>Pedidos pendentes</strong>
                   <span>Aguardando pagamento ou processamento</span>
                 </div>
-
                 <strong className={styles.dashboardHighlightCount}>
                   {pedidosPendentes.length}
                 </strong>
@@ -493,15 +490,11 @@ export default async function AdminDashboardPage() {
                 href="/admin/produtos"
                 className={styles.dashboardHighlightRow}
               >
-                <div className={styles.dashboardHighlightIcon}>
-                  ⚠️
-                </div>
-
+                <div className={styles.dashboardHighlightIcon}>⚠️</div>
                 <div className={styles.dashboardHighlightText}>
                   <strong>Estoque baixo</strong>
                   <span>Produtos no limite de estoque</span>
                 </div>
-
                 <strong className={styles.dashboardHighlightCount}>
                   {estoqueBaixo.length}
                 </strong>
@@ -511,23 +504,20 @@ export default async function AdminDashboardPage() {
                 href="/admin/agendamentos"
                 className={styles.dashboardHighlightRow}
               >
-                <div
-                  className={`${styles.dashboardHighlightIcon} ${styles.dashboardHighlightIconBlue}`}
-                >
+                <div className={`${styles.dashboardHighlightIcon} ${styles.dashboardHighlightIconBlue}`}>
                   📅
                 </div>
-
                 <div className={styles.dashboardHighlightText}>
                   <strong>Agendamentos de hoje</strong>
                   <span>Atendimentos previstos para hoje</span>
                 </div>
-
                 <strong className={styles.dashboardHighlightCount}>
                   {agendamentosHoje.length}
                 </strong>
               </Link>
             </div>
           </section>
+
         </section>
 
         {/* RANKING E CLIENTES */}
