@@ -356,7 +356,7 @@ export default async function AdminDashboardPage() {
         </section>
 
         {/* DESEMPENHO E DESTAQUES */}
-        <section className={styles.grid2} style={{ marginBottom: 22 }}>
+       <section className={styles.dashboardPrimaryGrid} style={{ marginBottom: 22 }}>
           <div className={styles.card}>
             <div className={styles.cardHead}>
               <div>
@@ -459,7 +459,7 @@ export default async function AdminDashboardPage() {
             </div>
           </div>
 
-          <section className={styles.attentionSection}>
+                    <section className={styles.attentionSection}>
             <div className={styles.attentionHeading}>
               <div>
                 <span className={styles.attentionEyebrow}>
@@ -470,119 +470,68 @@ export default async function AdminDashboardPage() {
               </div>
             </div>
 
-           <div className={styles.dashboardHighlightsList}>
-  <Link
-    href="/admin/pedidos?status=pendente"
-    className={styles.dashboardHighlightRow}
-  >
-    <div className={styles.dashboardHighlightIcon}>🛒</div>
-
-    <div className={styles.dashboardHighlightText}>
-      <strong>Pedidos pendentes</strong>
-      <span>Aguardando pagamento ou processamento</span>
-    </div>
-
-    <strong className={styles.dashboardHighlightCount}>
-      {pedidosPendentes.length}
-    </strong>
-  </Link>
-
-  <Link
-    href="/admin/produtos"
-    className={styles.dashboardHighlightRow}
-  >
-    <div className={styles.dashboardHighlightIcon}>⚠️</div>
-
-    <div className={styles.dashboardHighlightText}>
-      <strong>Estoque baixo</strong>
-      <span>Produtos no limite de estoque</span>
-    </div>
-
-    <strong className={styles.dashboardHighlightCount}>
-      {estoqueBaixo.length}
-    </strong>
-  </Link>
-
-  <Link
-    href="/admin/agendamentos"
-    className={styles.dashboardHighlightRow}
-  >
-    <div className={`${styles.dashboardHighlightIcon} ${styles.dashboardHighlightIconBlue}`}>
-      📅
-    </div>
-
-    <div className={styles.dashboardHighlightText}>
-      <strong>Agendamentos de hoje</strong>
-      <span>Atendimentos previstos para hoje</span>
-    </div>
-
-    <strong className={styles.dashboardHighlightCount}>
-      {agendamentosHoje.length}
-    </strong>
-  </Link>
-</div>
-                <div className={styles.attentionCardTop}>
-                  <div className={`${styles.attentionIcon} ${styles.attentionIconOrange}`}>
-                    🛒
-                  </div>
-                  <strong className={styles.attentionCount}>
-                    {pedidosPendentes.length}
-                  </strong>
+            <div className={styles.dashboardHighlightsList}>
+              <Link
+                href="/admin/pedidos?status=pendente"
+                className={styles.dashboardHighlightRow}
+              >
+                <div className={styles.dashboardHighlightIcon}>
+                  🛒
                 </div>
-                <h4>Pedidos pendentes</h4>
-                <p>Aguardando pagamento ou processamento.</p>
-                <span className={styles.attentionLink}>
-                  Ver pedidos →
-                </span>
+
+                <div className={styles.dashboardHighlightText}>
+                  <strong>Pedidos pendentes</strong>
+                  <span>Aguardando pagamento ou processamento</span>
+                </div>
+
+                <strong className={styles.dashboardHighlightCount}>
+                  {pedidosPendentes.length}
+                </strong>
               </Link>
 
               <Link
                 href="/admin/produtos"
-                className={styles.attentionCard}
-                style={{ textDecoration: "none" }}
+                className={styles.dashboardHighlightRow}
               >
-                <div className={styles.attentionCardTop}>
-                  <div className={`${styles.attentionIcon} ${styles.attentionIconOrange}`}>
-                    ⚠️
-                  </div>
-                  <strong className={styles.attentionCount}>
-                    {estoqueBaixo.length}
-                  </strong>
+                <div className={styles.dashboardHighlightIcon}>
+                  ⚠️
                 </div>
-                <h4>Estoque baixo</h4>
-                <p>
-                  Produtos com estoque igual ou inferior a {limiteEstoque} unidades.
-                </p>
-                <span className={styles.attentionLink}>
-                  Ver catálogo →
-                </span>
+
+                <div className={styles.dashboardHighlightText}>
+                  <strong>Estoque baixo</strong>
+                  <span>Produtos no limite de estoque</span>
+                </div>
+
+                <strong className={styles.dashboardHighlightCount}>
+                  {estoqueBaixo.length}
+                </strong>
               </Link>
 
               <Link
                 href="/admin/agendamentos"
-                className={styles.attentionCard}
-                style={{ textDecoration: "none" }}
+                className={styles.dashboardHighlightRow}
               >
-                <div className={styles.attentionCardTop}>
-                  <div className={`${styles.attentionIcon} ${styles.attentionIconBlue}`}>
-                    📅
-                  </div>
-                  <strong className={styles.attentionCount}>
-                    {agendamentosHoje.length}
-                  </strong>
+                <div
+                  className={`${styles.dashboardHighlightIcon} ${styles.dashboardHighlightIconBlue}`}
+                >
+                  📅
                 </div>
-                <h4>Agendamentos de hoje</h4>
-                <p>Atendimentos previstos para hoje.</p>
-                <span className={styles.attentionLink}>
-                  Abrir agenda →
-                </span>
+
+                <div className={styles.dashboardHighlightText}>
+                  <strong>Agendamentos de hoje</strong>
+                  <span>Atendimentos previstos para hoje</span>
+                </div>
+
+                <strong className={styles.dashboardHighlightCount}>
+                  {agendamentosHoje.length}
+                </strong>
               </Link>
             </div>
           </section>
         </section>
 
         {/* RANKING E CLIENTES */}
-        <section className={styles.grid2} style={{ marginBottom: 22 }}>
+        <section className={styles.dashboardTablesGrid} style={{ marginBottom: 22 }}>
           <div className={styles.card}>
             <div className={styles.cardHead}>
               <div>
@@ -693,7 +642,7 @@ export default async function AdminDashboardPage() {
         </section>
 
         {/* PEDIDOS E AGENDAMENTOS */}
-        <section className={styles.grid2}>
+        <section className={styles.dashboardOrdersGrid}>
           <div className={styles.card}>
             <div className={styles.cardHead}>
               <h3>Pedidos recentes</h3>
