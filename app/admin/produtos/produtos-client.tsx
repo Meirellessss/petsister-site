@@ -323,26 +323,30 @@ export default function ProdutosClient({
                       {p.porte === "Medio" ? "Médio" : p.porte}
                     </span>
                   </td>
+                 
                   <td className={styles.productAdminPrice}>
-  R$ {p.preco.toFixed(2).replace(".", ",")}
-</td>
+                    R$ {p.preco.toFixed(2).replace(".", ",")}
+                  </td>
+
+                  <td>
                     <span
                       className={styles.badge}
                       style={
-  p.estoque === 0
-    ? { background: "#fef2f2", color: "#991b1b" }
-    : p.estoque <= limiteEstoqueBaixo
-      ? { background: "#fff7ed", color: "#9a3412" }
-      : { background: "#f0fdf4", color: "#166534" }
-}
+                        p.estoque === 0
+                          ? { background: "#fef2f2", color: "#991b1b" }
+                          : p.estoque <= limiteEstoqueBaixo
+                            ? { background: "#fff7ed", color: "#9a3412" }
+                            : { background: "#f0fdf4", color: "#166534" }
+                      }
                     >
                       {p.estoque === 0
-  ? "Esgotado"
-  : p.estoque <= limiteEstoqueBaixo
-    ? `${p.estoque} — Estoque baixo`
-    : `${p.estoque} — Disponível`}
+                        ? "Esgotado"
+                        : p.estoque <= limiteEstoqueBaixo
+                          ? `${p.estoque} — Estoque baixo`
+                          : `${p.estoque} — Disponível`}
                     </span>
                   </td>
+
                   <td>{p.destaque ? "⭐" : "—"}</td>
                   <td>
                     <div className={styles.productAdminActions}>
