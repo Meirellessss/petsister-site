@@ -470,12 +470,57 @@ export default async function AdminDashboardPage() {
               </div>
             </div>
 
-            <div style={{ display: "grid", gap: 12 }}>
-              <Link
-                href="/admin/pedidos?status=pendente"
-                className={styles.attentionCard}
-                style={{ textDecoration: "none" }}
-              >
+           <div className={styles.dashboardHighlightsList}>
+  <Link
+    href="/admin/pedidos?status=pendente"
+    className={styles.dashboardHighlightRow}
+  >
+    <div className={styles.dashboardHighlightIcon}>🛒</div>
+
+    <div className={styles.dashboardHighlightText}>
+      <strong>Pedidos pendentes</strong>
+      <span>Aguardando pagamento ou processamento</span>
+    </div>
+
+    <strong className={styles.dashboardHighlightCount}>
+      {pedidosPendentes.length}
+    </strong>
+  </Link>
+
+  <Link
+    href="/admin/produtos"
+    className={styles.dashboardHighlightRow}
+  >
+    <div className={styles.dashboardHighlightIcon}>⚠️</div>
+
+    <div className={styles.dashboardHighlightText}>
+      <strong>Estoque baixo</strong>
+      <span>Produtos no limite de estoque</span>
+    </div>
+
+    <strong className={styles.dashboardHighlightCount}>
+      {estoqueBaixo.length}
+    </strong>
+  </Link>
+
+  <Link
+    href="/admin/agendamentos"
+    className={styles.dashboardHighlightRow}
+  >
+    <div className={`${styles.dashboardHighlightIcon} ${styles.dashboardHighlightIconBlue}`}>
+      📅
+    </div>
+
+    <div className={styles.dashboardHighlightText}>
+      <strong>Agendamentos de hoje</strong>
+      <span>Atendimentos previstos para hoje</span>
+    </div>
+
+    <strong className={styles.dashboardHighlightCount}>
+      {agendamentosHoje.length}
+    </strong>
+  </Link>
+</div>
                 <div className={styles.attentionCardTop}>
                   <div className={`${styles.attentionIcon} ${styles.attentionIconOrange}`}>
                     🛒
