@@ -7,6 +7,13 @@ import { excluirProduto, salvarProduto } from "../actions";
 import styles from "../admin.module.css";
 
 const PORTES: Porte[] = ["Todos", "Pequeno", "Medio", "Grande"];
+function normalizarBusca(valor: string | null | undefined) {
+  return (valor ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("pt-BR")
+    .trim();
+}
 
 export default function ProdutosClient({
   produtos,
@@ -27,17 +34,20 @@ export default function ProdutosClient({
   const [filtroEstoque, setFiltroEstoque] = useState("todos");
   const [ordenacao, setOrdenacao] = useState("estoque-menor");
 
-  const produtosFiltrados = produtos.filter((produto) => {
-    const termo = busca.trim().toLocaleLowerCase("pt-BR");   
+   const produtosFiltrados = produtos.filter((produto) => {
+    const termo = normalizarBusca(busca);
+    const nome = normalizarBusca(produto.nome);
+    const descricao = normalizarBusca(produto.descricao);
+
     const correspondeBusca =
-      produto.nome.toLocaleLowerCase("pt-BR").includes(termo) ||
-      (produto.descricao ?? "").toLocaleLowerCase("pt-BR").includes(termo);
+      !termo ||
+      nome.includes(termo) ||
+      descricao.includes(termo);
 
     const correspondeCategoria =
       filtroCategoria === "Todas" ||
       produto.categoria === filtroCategoria;
 
-    
     const correspondeEstoque =
       filtroEstoque === "todos" ||
       (filtroEstoque === "baixo" &&
@@ -53,7 +63,6 @@ export default function ProdutosClient({
       correspondeEstoque
     );
   });
-
   
   const produtosOrdenados = [...produtosFiltrados].sort((a, b) => {
     switch (ordenacao) {
@@ -183,50 +192,69 @@ export default function ProdutosClient({
         </div>
 
        
+        
         <div className={styles.productAdminMetrics}>
-          <div
-            style={{
-              padding: "1rem",
-              border: "1px solid var(--border)",
-              borderRadius: "12px",
-              background: "var(--bg)",
-            }}
-          >
-            <div style={{ color: "var(--muted)", fontSize: ".85rem" }}>
-              Produtos esgotados
+          <div className={`${styles.productMetricCard} ${styles.productMetricTotal}`}>
+            <div className={styles.productMetricIcon}>🐾</div>
+            <div className={styles.productMetricInfo}>
+              <span className={styles.productMetricLabel}>
+                Produtos cadastrados
+              </span>
+              <strong className={styles.productMetricValue}>
+                {produtos.length}
+              </strong>
+              <span className={styles.productMetricHint}>
+                Total no catálogo
+              </span>
             </div>
-            <strong style={{ color: "#991b1b", fontSize: "1.5rem" }}>
-              {totalEsgotados}
-            </strong>
           </div>
 
-          <div
-            style={{
-              padding: "1rem",
-              border: "1px solid var(--border)",
-              borderRadius: "12px",
-              background: "var(--bg)",
-            }}
-          >
-            <div style={{ color: "var(--muted)", fontSize: ".85rem" }}>
-              Estoque baixo
+          <div className={`${styles.productMetricCard} ${styles.productMetricEmpty}`}>
+            <div className={styles.productMetricIcon}>🚫</div>
+            <div className={styles.productMetricInfo}>
+              <span className={styles.productMetricLabel}>
+                Produtos esgotados
+              </span>
+              <strong className={styles.productMetricValue}>
+                {totalEsgotados}
+              </strong>
+              <span className={styles.productMetricHint}>
+                Precisam de reposição
+              </span>
             </div>
-            <strong style={{ color: "#9a3412", fontSize: "1.5rem" }}>
-              {totalEstoqueBaixo}
-            </strong>
           </div>
 
-          <div
-            style={{
-              padding: "1rem",
-              border: "1px solid var(--border)",
-              borderRadius: "12px",
-              background: "var(--bg)",
-            }}
-          >
-            <div style={{ color: "var(--muted)", fontSize: ".85rem" }}>
-              Estoque normal
+          <div className={`${styles.productMetricCard} ${styles.productMetricLow}`}>
+            <div className={styles.productMetricIcon}>⚠️</div>
+            <div className={styles.productMetricInfo}>
+              <span className={styles.productMetricLabel}>
+                Estoque baixo
+              </span>
+              <strong className={styles.productMetricValue}>
+                {totalEstoqueBaixo}
+              </strong>
+              <span className={styles.productMetricHint}>
+                Próximos do limite mínimo
+              </span>
             </div>
+          </div>
+
+          <div className={`${styles.productMetricCard} ${styles.productMetricOk}`}>
+            <div className={styles.productMetricIcon}>✓</div>
+            <div className={styles.productMetricInfo}>
+              <span className={styles.productMetricLabel}>
+                Estoque normal
+              </span>
+              <strong className={styles.productMetricValue}>
+                {totalDisponiveis}
+              </strong>
+              <span className={styles.productMetricHint}>
+                Produtos disponíveis
+              </span>
+            </div>
+          </div>
+        </div>
+
             <strong style={{ color: "#166534", fontSize: "1.5rem" }}>
               {totalDisponiveis}
             </strong>
