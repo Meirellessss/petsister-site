@@ -181,12 +181,9 @@ export default async function UsuariosAdminPage() {
                 </div>
 
                 <div>
-                  <div
-                    className={styles.statNum}
-                    style={{ fontSize: "1.25rem" }}
-                  >
-                    {moeda(faturamentoRegional)}
-                  </div>
+                  <div className={styles.statNum}>
+  {moeda(faturamentoRegional)}
+</div>
 
                   <div className={styles.statLbl}>
                     Faturamento regional
